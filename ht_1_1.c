@@ -4,7 +4,7 @@
 */
 #include <stdio.h>
 
-const int inf = 1024;
+#define MAX_SIZE 1024
 
 // Сортировка при помощи Shell sort:
 void shell_sort(int elements, int *array)
@@ -43,12 +43,21 @@ void shell_sort(int elements, int *array)
 
 int main()
 {
-    int numb;
-    int array[inf];
-    scanf("%d", &numb);
-    
-    for(int i = 0; i < numb; i++){
-        scanf("%d", &array[i]);
+    int numb; /* кол-во элементов */
+    int array[MAX_SIZE];
+    for(numb = 0; numb < MAX_SIZE; numb++){
+        int tmp;
+        tmp = scanf("%d", &array[numb]);
+        
+        if(tmp == EOF){
+            break;
+        } else if (tmp == 0){
+            fprintf(stderr, "Input error\n");
+            return 1;
+        } else if (numb == MAX_SIZE){
+            fprintf(stderr, "Too much data\n");
+            return 2;
+        }
     }
     
     printf("Initial array: ");
