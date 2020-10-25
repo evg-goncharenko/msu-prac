@@ -1,34 +1,37 @@
 /*
-    Программа считывает последовательность целых чисел
-    (длина не более 1024) и печатает их по возрастанию.
+    The program reads a sequence of integers
+    (no longer than 1024) and prints them in ascending order.
 */
 #include <stdio.h>
 
 #define MAX_SIZE 1024
 
-// Сортировка при помощи Shell sort:
+/* Shell sort: */
 void shell_sort(int elements, int *array)
 {
     /*
-        inner - левый элемент, при сравнении в интервале
-        outer - правый элемент, при сравнении в интервале (фикс.)
+         inner - left element, when comparing in the interval
+         outer - the right element, when comparing in the interval (fixed)
     */
     int inner, outer;
-    int value_to_insert; /* значение для вставки */
-    int interval = 1; /* интервал между элементами */
+    int value_to_insert; /* value to insert */
+    int interval = 1; /* the spacing between elements */
    
-    /* Максимальный промежуток должен быть < кол-ву элементов: */
-    while(3 * interval <= elements){
+    /* The maximum interval must be < number of elements: */
+    while(3 * interval <= elements)
+    {
       interval = interval*3 +1;
     }
 
-    while(interval > 0){
-        for(outer = interval; outer < elements; outer++){
+    while(interval > 0)
+    {
+        for(outer = interval; outer < elements; outer++)
+        {
             value_to_insert = array[outer];
             inner = outer;
             
-            while(inner > interval-1 && array[inner - interval]
-            >= value_to_insert){
+            while(inner > interval-1 && array[inner - interval] >= value_to_insert)
+            {
                 array[inner] = array[inner - interval];
                 inner -= interval;
             }
@@ -36,32 +39,39 @@ void shell_sort(int elements, int *array)
             array[inner] = value_to_insert;
         }
         
-        /* Уменьшаем интервал. При interval=1 - классическая сортировка */
+        /* Reducing the interval. When interval=1 - classic sorting */
         interval = (interval - 1) / 3;
     }
 }
 
 int main()
 {
-    int numb; /* кол-во элементов */
+    int numb; /* number of elements */
     int array[MAX_SIZE];
-    for(numb = 0; numb < MAX_SIZE; numb++){
+    for(numb = 0; numb < MAX_SIZE; numb++)
+    {
         int tmp;
         tmp = scanf("%d", &array[numb]);
         
-        if(tmp == EOF){
+        if(tmp == EOF)
+        {
             break;
-        } else if (tmp == 0){
+        }
+        else if (tmp == 0)
+        {
             fprintf(stderr, "Input error\n");
             return 1;
-        } else if (numb == MAX_SIZE){
+        }
+        else if (numb == MAX_SIZE)
+        {
             fprintf(stderr, "Too much data\n");
             return 2;
         }
     }
     
     printf("Initial array: ");
-    for(int i = 0; i < numb; i++){
+    for(int i = 0; i < numb; i++)
+    {
         printf("%d ", array[i]);
     }
     printf("\n");
@@ -69,7 +79,8 @@ int main()
     shell_sort(numb, array);
     
     printf("Sorted array: ");
-    for(int i = 0; i < numb; i++){
+    for(int i = 0; i < numb; i++)
+    {
         printf("%d ", array[i]);
     }
     printf("\n");
