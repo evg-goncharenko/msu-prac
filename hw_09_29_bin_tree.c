@@ -1,16 +1,17 @@
 /*
-    Реализовать двоичное дерево поиска для целых (без балансировки)
-    с операциями вставки, удаления, поиска и обхода
+    Implement a binary search tree for integers (without balancing)
+    with insert, delete, search, and crawl operations
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node {
+struct node{
     int val;
     struct node *left, *right;
 }*tree;
 
-/* Печать всех чисел, хранящихся в дереве: */
+/* Print all numbers stored in the tree: */
 void print_bin_tree(struct node *root)
 {
     if(!root) return;
@@ -20,35 +21,44 @@ void print_bin_tree(struct node *root)
     print_bin_tree(root->right);
 }
 
-/* Вставка нового элемента: */
+/* Inserting a new element: */
 struct node *add_elem_bin_tree(struct node *root, struct node *r, int n)
 {
-    if(!r){
+    if(!r)
+    {
         r = (struct node*) malloc(sizeof(struct node));
-        if(!r){
-            fprintf(stderr, "Недостаточно памяти!\n");
+        if(!r)
+        {
+            fprintf(stderr, "Enough memory\n");
             exit(0);
         }
         r->val = n;
         r->left = NULL;
         r->right = NULL;
-        if(!root) return r; /* первый вход */
-        if(n < root->val){
+        if(!root) return r; /* the first entrance */
+        
+        if(n < root->val)
+        {
             root->left = r;
-        } else{
+        }
+        else
+        {
             root->right = r;
         }
         return r;
     }
-    if(n < root->val){
+    if(n < root->val)
+    {
         add_elem_bin_tree(r, root->left, n);
-    } else {
+    }
+    else
+    {
         add_elem_bin_tree(r, root->right, n);
     }
     return root;
 }
 
-/* Обход дерева в ширину: */
+/* Traversing the tree in width: */
 void width_traversing_bin_tree(struct node *root)
 {
     if(!root) return;
@@ -58,7 +68,7 @@ void width_traversing_bin_tree(struct node *root)
     width_traversing_bin_tree(root->right);
 }
 
-/* Обход дерева в глубину: */
+/* Traversing the tree in depth: */
 void depth_traversing_bin_tree(struct node *root)
 {
     if(!root) return;
@@ -68,14 +78,18 @@ void depth_traversing_bin_tree(struct node *root)
     if(root->val) printf("%d ", root->val);
 }
 
-/* Поиск элемента в дереве (NULL - если такой вершины нет): */
+/* Search for an element in the tree (NULL - if there is no such vertex): */
 struct node *find_elem_bin_tree(struct node *root, int numb)
 {
-    if(!root) return root; /* пустое дерево */
+    if(!root) return root; /* empty tree */
     while(root->val != numb){
-        if(numb < root->val){
+        
+        if(numb < root->val)
+        {
             root = root->left;
-        } else{
+        }
+        else
+        {
             root = root->right;
         }
         if(root == NULL) break;
@@ -83,40 +97,55 @@ struct node *find_elem_bin_tree(struct node *root, int numb)
     return root;
 }
 
-/* Удаление элемента numb в дереве: */
+/* Deleting the numb element in the tree: */
 struct node *delete_elem_bin_tree(struct node *root, int numb)
 {
     struct node *p,*p2;
     
-    if(!root) return root; /* вершина не найдена */
-
-    if(root->val == numb) { /* удаление корня */
-    /* это означает пустое дерево */
-    if(root->left == root->right){
-        free(root);
-        return NULL;
-    } else if(root->left == NULL){ /* или если одно из поддеревьев пустое */
-        p = root->right;
-        free(root);
-        return p;
-    } else if(root->right == NULL){
-        p = root->left;
-        free(root);
-        return p;
-    } else{ /* или есть оба поддерева */
-        p2 = root->right;
-        p = root->right;
-        while(p->left){ p = p->left; }
-        
-        p->left = root->left;
-        free(root);
-        return p2;
+    if(!root) return root; /* vertex wasn't found */
+    
+    /* Removing the root: */
+    if(root->val == numb)
+    {
+        if(root->left == root->right)
+        {
+            free(root);
+            return NULL;
+        }
+        else if(root->left == NULL) /* if one of the subtrees is empty */
+        {
+            p = root->right;
+            free(root);
+            return p;
+        }
+        else if(root->right == NULL)
+        {
+            p = root->left;
+            free(root);
+            return p;
+        }
+        else /* there are both subtrees */
+        {
+            p2 = root->right;
+            p = root->right;
+            
+            while(p->left)
+            {
+                p = p->left;
+            }
+            
+            p->left = root->left;
+            free(root);
+            return p2;
         }
     }
     
-    if(root->val < numb){
+    if(root->val < numb)
+    {
         root->right = delete_elem_bin_tree(root->right, numb);
-    } else{
+    }
+    else
+    {
         root->left = delete_elem_bin_tree(root->left, numb);
     }
     return root;
@@ -127,8 +156,9 @@ int main()
     int numb;
     scanf("%d", &numb);
     
-    /* Создание дерева: */
-    for(int i = 0; i < numb; i++){
+    /* Creating a tree: */
+    for(int i = 0; i < numb; i++)
+    {
         int tmp;
         scanf("%d", &tmp);
         tree = add_elem_bin_tree(tree, tree, tmp);
