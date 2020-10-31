@@ -14,15 +14,14 @@
 
 #define IS_LITTLE 0
 #define IS_BIG 1
-#define NO_BOM 2
 
 int main(int argc, char **argv)
 {
     FILE *file_in;
     FILE *file_out;
 
-    unsigned char bom = IS_LITTLE, correct_output = 0;
-    unsigned short bom_out = 0; /* output file BOM */
+    unsigned char correct_output = 0;
+    int bom = BIG_ENDIANS;
     unsigned short utf16_symb;
     unsigned char utf8_symb;
     
@@ -38,10 +37,9 @@ int main(int argc, char **argv)
             exit(INPUT_ERROR);
         }
 
-        /* Open BOM output file for reading: */
         if(argc > 2)
         {
-            if((file_out = fopen(argv[2], "r")) == NULL)
+            if((file_out = fopen(argv[2], "w")) == NULL)
             {
                 /* If there isn't output file - create and make a warning: */
                 perror(argv[2]);
@@ -63,48 +61,7 @@ int main(int argc, char **argv)
         fseek(file_in, 0, SEEK_SET);
     }
     
-    /* If it isn't stdout: */
-    if(argc > 2)
-    {
-        /*
-             Reading presumably the BOM:
-             We close the file and open it for writing to completely clear the contents.
-             If we counted the BOM, we should write it at the beginning of the file.
-        */
-        if(file_out)
-        {
-            fread(&bom_out, 2, 1, file_out);
-            fclose(file_out);
-        }
-        
-        /*
-            The inversion of endian conditions is due
-            to the inversion operation of fread/fwrite
-        */
-        if(bom_out == BIG_ENDIANS)
-        {
-            bom = IS_LITTLE;
-        }
-        else if(bom_out == LITTLE_ENDIANS)
-        {
-            bom = IS_BIG;
-        }
-        else
-        {
-            bom = NO_BOM;
-        }
-        
-        if((file_out = fopen(argv[2], "w")) == NULL)
-        {
-            perror(argv[2]);
-            exit(OUTPUT_ERROR);
-        }
-        if(bom != NO_BOM)
-        {
-            fwrite(&bom_out, 2, 1, file_out);
-        }
-    }
-    
+    fwrite(&bom, 2, 1, file_out);
     fread(&utf8_symb, 1, 1, file_in);
     
     /*
