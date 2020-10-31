@@ -20,7 +20,8 @@ int main(int argc, char **argv)
     FILE *file_in;
     FILE *file_out;
 
-    char utf8_symb1, utf8_symb2, utf8_symb3, bom;
+    char utf8_symb1, utf8_symb2, utf8_symb3;
+    int bom = BIG_ENDIANS;
     int pair_bytes = 2;
     unsigned short utf16_symb;
 
@@ -35,11 +36,10 @@ int main(int argc, char **argv)
             perror(argv[1]);
             exit(INPUT_ERROR);
         }
-
-        /* Open BOM output file for reading: */
+        
         if(argc > 2)
         {
-            if((file_out = fopen(argv[2], "r")) == NULL)
+            if((file_out = fopen(argv[2], "w")) == NULL)
             {
                 /* If there isn't output file - create and make a warning: */
                 perror(argv[2]);
@@ -68,40 +68,13 @@ int main(int argc, char **argv)
         fprintf(stderr, "BOM isn't found\n");
     }
     
-    /* If it isn't stdout: */
-    if(argc > 2)
-    {
-        unsigned char tmp_symb1 = 0;
-        unsigned char tmp_symb2 = 0;
-        unsigned char tmp_symb3 = 0;
-        
-        /*
-             Reading presumably the BOM:
-             We close the file and open it for writing to completely clear the contents.
-             If we counted the BOM, we should write it at the beginning of the file.
-        */
-        if(file_out)
-        {
-            fread(&tmp_symb1, 1, 1, file_out);
-            fread(&tmp_symb2, 1, 1, file_out);
-            fread(&tmp_symb3, 1, 1, file_out);
-            fclose(file_out);
-        }
-        
-        if((file_out = fopen(argv[2], "w")) == NULL)
-        {
-            perror(argv[2]);
-            exit(OUTPUT_ERROR);
-        }
-        
-        /* If it is a BOM: */
-        if((tmp_symb1 == 0xEF) && (tmp_symb2 == 0xBB) && (tmp_symb3 == 0xBF))
-        {
-            fwrite(&tmp_symb1, 1, 1, file_out);
-            fwrite(&tmp_symb2, 1, 1, file_out);
-            fwrite(&tmp_symb3, 1, 1, file_out);
-        }
-    }
+    unsigned char tmp_byte1 = 0xEF;
+    unsigned char tmp_byte2 = 0xBB;
+    unsigned char tmp_byte3 = 0xBF;
+    
+    fwrite(&tmp_byte1, 1, 1, file_out);
+    fwrite(&tmp_byte2, 1, 1, file_out);
+    fwrite(&tmp_byte3, 1, 1, file_out);
     
     pair_bytes = fread(&utf16_symb, sizeof(char), 2, file_in);
     
