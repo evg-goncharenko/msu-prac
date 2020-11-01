@@ -1,6 +1,7 @@
 # Программирование в ОС UNIX на языке Си
 ### Практикумы
-- Создание частотного словаря для некоторого текста (branch -prac1).
+- Создание частотного словаря для некоторого текста ([frequency dictionary](.//projects/frequency_dictionary));
+- Разработка программ-конвертеров кодировок UTF16-UTF8 ([converter of character encodings](.//projects/converter_of_character_encodings)).
 ### Домашние задания
 - Сортировка Shell ([ht_1_1.c](./ht_1_1.c));
 - Вывод самой длинной строки ([ht_2.c](./ht_2.c));
@@ -13,5 +14,3 @@
 - Сравнение двух файлов и печать первой различной строки ([hw_09_29_cross_references.c](./hw_09_29_cross_references.c));
 - Реализация аналога функции fgets() ([hw_10_27_fgets.c](./hw_10_27_fgets.c));
 - Сортировка бинарного файла из целых чисел ([hw_10_27_sort_bin_file.c](./hw_10_27_sort_bin_file.c)).
-
-Каждый практикум лежит в своей ветви `prac..`
