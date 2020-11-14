@@ -203,11 +203,12 @@ int is_cd(char **arr)
     {
         if(arr[1] == NULL)
         {
-            chdir("/home");
+            chdir(getenv("HOME"));
         }
-        else
+        else if((arr[2] != NULL) || chdir(arr[1]))
         {
-            chdir(arr[1]);
+            printf("Error in changing directory\n");
+            return -1;
         }
         return 1;
     }
