@@ -29,15 +29,21 @@ int main(int argc, char **argv)
     int success_user = 0;
     int success_comp = 0;
     
-    pid_t pid;
-    
     /* Running all processes in parallel: */
     for(int i = 1; i < argc; i++)
     {
-        if((pid = fork()) == 0)
+        pid_t pid = fork();
+        switch(pid)
         {
-            execlp(argv[i], argv[i], (char*)0);
-            exit(1);
+            case -1:
+                perror("System error");
+                exit(1);
+            case 0:
+                execlp(argv[i], argv[i], (char*)0);
+                perror("Error with exec");
+                exit(2);
+            default:
+                break;
         }
     }
     
@@ -58,13 +64,13 @@ int main(int argc, char **argv)
             success_comp++;
         }
         /* The process ended abnormally: */
-        else if(!WEXITSTATUS(status))
+        else if(!WIFEXITED(status))
         {
             errors++;
         }
     }
-    
+    printf("User: %d, computer: %d, errors: %d\n", success_user, success_comp, errors);
     result = success_user + success_comp + errors;
-    printf("%d\n", result);
+    printf("Sum: %d\n", result);
     return 0;
 }
