@@ -44,7 +44,7 @@ const char special_characters[5] = "&|<>\0";
 
 tree *main_tree = NULL;
 node *main_list = NULL;
-node *processed_proc = NULL;
+node *processed_proc = NULL; /* processes processed in the background */
 node *deleted_proc = NULL;
 
 void add_to_sequence_of_quotes(char **sequence, int *index, int *flag, int tmp_c, int end_symbol)
@@ -247,7 +247,7 @@ void kill_all_processes()
     while(tmp)
     {
         pid = tmp->spec_symb;
-        printf("Killing process: %s \t [pid:%d]\n", tmp->elem, tmp->spec_symb);
+        printf("Killing process: %s [pid:%d]\n", tmp->elem, tmp->spec_symb);
         kill(pid, 9);
         waitpid(pid, &status, 0);
         tmp = tmp->next;
@@ -497,15 +497,15 @@ int work(node *l, int rd, int wr, int *exit_code)
             if(rd != -1)
             {
                 rd = open("/dev/null", O_RDONLY);
-                dup2(rd,0);
+                dup2(rd, 0);
             }
             if(wr != -1)
             {
                 wr = open("/dev/null", O_WRONLY);
-                dup2(wr,1);
+                dup2(wr, 1);
             }
         }
-        execvp(*argv,argv);
+        execvp(*argv, argv);
         perror("Incorrect command");
         exit(2);
     }
@@ -532,6 +532,8 @@ int work(node *l, int rd, int wr, int *exit_code)
         else
         {
             flag_is_spec_symb = pid;
+            
+            /* Add the command in the background to the list: */
             processed_proc = add_to_list(processed_proc, argv[0]);
             
             if(rd != -1)
@@ -648,7 +650,6 @@ int work_tree(tree *t, int p)
             delete_list(deleted_proc);
             kill_all_processes();
             delete_tree(t);
-            printf("End of the program\n");
             exit(0);
         }
         int exit_code = 0;
@@ -693,8 +694,70 @@ void quotes_error(node *l)
     perror("Incorrect sequence of quotes");
 }
 
+
+node* find_pid_proc(node *l, int pid, node **buf)
+{
+    if(!l)
+    {
+        return NULL;
+    }
+    else if(l->spec_symb == pid) /* this process will be deleted */
+    {
+        *buf = l;
+        node *ret = l;
+        
+        /* Freeing processed_proc from the current process to be deleted: */
+        ret = l->next;
+        return ret;
+    }
+    else
+    {
+        node *ret = l;
+        node *pr = l;
+        l = l->next;
+        
+        while(l)
+        {
+            if(l->spec_symb == pid) /* this process will be deleted */
+            {
+                /* Freeing processed_proc from the current process to be deleted: */
+                pr->next = l->next;
+                *buf = l;
+            }
+            l = l->next;
+            pr = pr->next;
+        }
+        return ret;
+    }
+}
+
+void sig_handler(int sig)
+{
+    int status;
+    node* buf = NULL;
+    
+    /*
+        WNOHANG - means immediate return of control
+        if no child process has completed execution.
+    */
+    int pid = waitpid(-1, &status, WNOHANG);
+    processed_proc = find_pid_proc(processed_proc, pid, &buf);
+    
+    if(buf)
+    {
+        flag_is_spec_symb = buf->spec_symb;
+        deleted_proc = add_to_list(deleted_proc, buf->elem); /* adding a process to delete */
+        free(buf->elem);
+        free(buf);
+    }
+    return;
+}
+
 int main(int argc, char **argv)
 {
+    /* When the command that was running in the background has finished, processing is required: */
+    signal(SIGCHLD, sig_handler);
+    
     char *word = NULL;
     int is_correct_quotes = 1;
     while(!flag_eof)
@@ -741,5 +804,9 @@ int main(int argc, char **argv)
         flag_exec_in_background = 0;
         flag_new_line = 0;
     }
+    
+    delete_list(main_list);
+    kill_all_processes();
+    printf("End of the program\n");
     return 0;
 }
