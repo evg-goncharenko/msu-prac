@@ -14,6 +14,9 @@
 #define COLOR_RED "\e[1;31m"
 #define RESET "\e[m"
 
+#define ERROR_CODE 0
+#define SUCCESS_CODE 1
+
 typedef struct node
 {
     int spec_symb;  /* 1 - ">", ";", '|", ">>", etc */
@@ -41,6 +44,7 @@ int flag_is_spec_symb = 0;
 int flag_exec_in_background = 0; /* 1 - if in the background */
 
 const char special_characters[5] = "&|<>\0";
+const char separate_special_characters[4] = ";()\0";
 
 tree *main_tree = NULL;
 node *main_list = NULL;
@@ -119,6 +123,7 @@ char *read_word()
                 {
                     flag_new_line = 1;
                     free(word);
+                    word = NULL;
                     return NULL;
                 }
                 continue; /* ignore it and move on */
@@ -156,7 +161,7 @@ char *read_word()
                 i++;
             }
         }
-        else if(tmp_c == ';')
+        else if(strchr(separate_special_characters, tmp_c))
         {
             if(flag_is_command) /* '; ' at the end of the command */
             {
@@ -184,7 +189,7 @@ char *read_word()
     }
     
     flag_eof = 1;
-    if(!strlen(word))
+    if(word != NULL)
     {
         free(word);
         return NULL;
@@ -198,35 +203,84 @@ char *read_word()
 
 void delete_array(char **arr)
 {
+    if(arr == NULL)
+    {
+        return;
+    }
+    
     int i = 0;
-    while(arr[i])
+    while(arr[i] != NULL)
     {
         free(arr[i]);
+        arr[i] = NULL;
         i++;
     }
     free(arr[i]);
+    arr[i] = NULL;
     free(arr);
+    arr = NULL;
 }
+
+void print_list(node *l)
+ {
+     while(l)
+     {
+         printf("%s ", l->elem);
+         l = l->next;
+     }
+ }
 
 void delete_list(node *l)
 {
-    if(l)
+    if(l != NULL)
     {
-        delete_list(l->next);
-        free(l->elem);
+        if(l->next != NULL)
+        {
+            delete_list(l->next);
+        }
+        if(l->elem != NULL)
+        {
+            free(l->elem);
+            l->elem = NULL;
+        }
         free(l);
+        l = NULL;
     }
 }
 
 void delete_tree(tree *t)
 {
-    if(t)
+    if(t != NULL)
     {
-        delete_tree(t->left);
-        delete_tree(t->right);
+        if(t->left != NULL)
+        {
+            delete_tree(t->left);
+        }
+        if(t->right != NULL)
+        {
+            delete_tree(t->right);
+        }
         delete_list(t->key);
+        t->key = NULL;
         free(t);
+        t = NULL;
     }
+}
+
+
+void delete_all_struct()
+{
+    delete_tree(main_tree);
+    main_tree = NULL;
+    
+    print_list(main_list);
+    
+    delete_list(main_list);
+    main_list = NULL;
+    delete_list(processed_proc);
+    processed_proc = NULL;
+    delete_list(deleted_proc);
+    deleted_proc = NULL;
 }
 
 void print_kill_proc(node *l)
@@ -289,12 +343,63 @@ char **list_to_array(node *l)
     return res;
 }
 
+node *popend(node *l)
+{
+    node *ret = l;
+    node *tmp;
+    
+    if(!l)
+    {
+        return NULL;
+    }
+    if(!(l->next))
+    {
+        return NULL;
+    }
+    
+    do{
+        tmp = l;
+        l = l->next;
+    }while(l->next);
+    
+    free(l->elem);
+    free(l);
+    tmp->next = NULL;
+    
+    return ret;
+}
+
+node *popstart(node *l)
+{
+    node *tmp = l;
+    
+    l = l->next;
+    free(tmp->elem);
+    free(tmp);
+    
+    return l;
+}
+
 node *proc_list(node *l, int *rd, int *wr)
 {
+    int sk = 0;
     node* res = NULL;
     while(l)
     {
-        if(l->spec_symb == 1)
+        int fl = 1;
+        
+        if(!strcmp(l->elem, "("))
+        {
+            fl = 0;
+            ++sk;
+        }
+        else if (!strcmp(l->elem, ")"))
+        {
+            fl = 0;
+            --sk;
+        }
+        
+        if((l->spec_symb == 1) && !sk && fl)
         {
             if(!strcmp(l->elem, ">>"))
             {
@@ -337,6 +442,7 @@ node *proc_list(node *l, int *rd, int *wr)
 /* fl - '1' if you don't need to work with the file and '0' if you need to */
 tree *make_tree(node *l, int rd, int wr, int fl)
 {
+    int sk = 0;
     int new_rd;
     int new_wr;
     tree * res = NULL;
@@ -352,22 +458,41 @@ tree *make_tree(node *l, int rd, int wr, int fl)
     }
     while(tmp->next)
     {
-        if(!(strcmp(tmp->next->elem, ";")))
+        if (!strcmp(tmp->elem, "("))
         {
-            fend = tmp;
+            sk++;
         }
-        else if(!(strcmp(tmp->next->elem, "||")) || !(strcmp(tmp->next->elem, "&&")))
+        else if (!strcmp(tmp->elem, ")"))
         {
-            if(!fend || strcmp(fend->next->elem, ";"))
+            sk--;
+        }
+        if (!sk)
+        {
+            
+            if(!(strcmp(tmp->next->elem, ";")))
             {
                 fend = tmp;
             }
-        }
-        else if(!(strcmp(tmp->next->elem, "|")))
-        {
-            if(!fend || !strcmp(fend->next->elem, "|"))
+            else if(!(strcmp(tmp->next->elem, "&")))
             {
-                fend = tmp;
+                if(!fend || strcmp(fend->next->elem, ";"))
+                {
+                    fend = tmp;
+                }
+            }
+            else if(!(strcmp(tmp->next->elem, "||")) || !(strcmp(tmp->next->elem, "&&")))
+            {
+                if(!fend || strcmp(fend->next->elem, ";"))
+                {
+                    fend = tmp;
+                }
+            }
+            else if(!(strcmp(tmp->next->elem, "|")))
+            {
+                if(!fend || !strcmp(fend->next->elem, "|"))
+                {
+                    fend = tmp;
+                }
             }
         }
         
@@ -426,7 +551,18 @@ tree *make_tree(node *l, int rd, int wr, int fl)
         new_wr = wr;
     }
     
-    if(l) delete_list(l);
+    if(l)
+    {
+        delete_list(l);
+        l = NULL;
+    }
+    
+    if (!strcmp(parse->elem, "("))
+    {
+        parse = popend(parse);
+        parse = popstart(parse);
+        return make_tree(parse, new_rd, new_wr, 1);
+    }
     
     res = (tree*)malloc(sizeof(tree));
     res->key = parse;
@@ -456,20 +592,26 @@ int is_cd(char **arr)
     return 0;
 }
 
-int work(node *l, int rd, int wr, int *exit_code)
+int work(node *l, int rd, int wr)
 {
     char **argv;
     argv = list_to_array(l);
     
     if(is_cd(argv))
     {
-        return 1;
+        return SUCCESS_CODE;
     }
     
-    int pid;
-    if((pid = fork()) == -1)
+    int pid = fork();
+    
+    if(pid < 0)
     {
         perror("Error with fork()");
+        delete_list(l);
+        delete_array(argv);
+        l = NULL;
+        argv = NULL;
+        
         if(rd != -1)
         {
             close(rd);
@@ -478,9 +620,9 @@ int work(node *l, int rd, int wr, int *exit_code)
         {
             close(wr);
         }
-        return -1;
+        return ERROR_CODE;
     }
-    if(!pid)
+    else if(pid == 0)
     {
         if(rd != -1)
         {
@@ -492,34 +634,24 @@ int work(node *l, int rd, int wr, int *exit_code)
             dup2(wr, 1);
             close(wr);
         }
-        if(flag_exec_in_background)
-        {
-            if(rd != -1)
-            {
-                rd = open("/dev/null", O_RDONLY);
-                dup2(rd, 0);
-            }
-            if(wr != -1)
-            {
-                wr = open("/dev/null", O_WRONLY);
-                dup2(wr, 1);
-            }
-        }
         execvp(*argv, argv);
         perror("Incorrect command");
-        exit(2);
+        
+        delete_array(argv);
+        delete_all_struct();
+        
+        exit(0);
     }
     else
     {
+        int status = 0;
+        int result_status = 0;
+        
         if(!flag_exec_in_background)
         {
-            int status = 0;
-            wait(&status);
+            waitpid(pid, &status, 0);
+            result_status = (WIFEXITED(status) && !WEXITSTATUS(status));
             
-            if(WIFEXITED(status))
-            {
-                *exit_code = WEXITSTATUS(status);
-            }
             if(rd != -1)
             {
                 close(rd);
@@ -545,10 +677,11 @@ int work(node *l, int rd, int wr, int *exit_code)
                 close(wr);
             }
         }
+        
+        delete_array(argv);
+        argv = NULL;
+        return result_status;
     }
-    
-    delete_array(argv);
-    return pid;
 }
 
 int work_tree(tree *t, int p)
@@ -577,6 +710,28 @@ int work_tree(tree *t, int p)
     }
     else if(!strcmp(t->key->elem, "&&"))
     {
+        left_tr = work_tree(t->left, p);
+        if(left_tr != -1)
+        {
+            right_tr = work_tree(t->right, p);
+        }
+        else
+        {
+            return -1;
+        }
+        
+        if(right_tr == -1)
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    else if(!strcmp(t->key->elem, "&"))
+    {
+        flag_exec_in_background = 1;
         left_tr = work_tree(t->left, p);
         if(left_tr != -1)
         {
@@ -631,7 +786,9 @@ int work_tree(tree *t, int p)
     }
     else if(!strcmp(t->key->elem, ";"))
     {
+        //t->left->write = t->write;
         work_tree(t->left, p);
+        //t->right->read = t->read;
         right_tr = work_tree(t->right, p);
         if(right_tr == -1)
         {
@@ -646,15 +803,18 @@ int work_tree(tree *t, int p)
     {
         if(!strcmp(t->key->elem, "exit"))
         {
+            flag_eof = 1;
             print_kill_proc(deleted_proc);
             delete_list(deleted_proc);
+            deleted_proc = NULL;
             kill_all_processes();
             delete_tree(t);
+            t = NULL;
+            printf("End of the program\n");
             exit(0);
         }
-        int exit_code = 0;
-        work(t->key, t->read, t->write, &exit_code);
-        if(exit_code == 2)
+        
+        if(work(t->key, t->read, t->write) == ERROR_CODE)
         {
             return -1;
         }
@@ -662,7 +822,14 @@ int work_tree(tree *t, int p)
     return 1;
 }
 
-void check_ampersand(node *l)
+void quotes_error(node *l)
+{
+    delete_list(l);
+    l = NULL;
+    perror("Incorrect sequence of quotes");
+}
+
+void check_bad_ampersand(node *l)
 {
     node *tmp;
     tmp = l;
@@ -678,30 +845,17 @@ void check_ampersand(node *l)
             perror("& ERROR!");
             flag_exec_in_background = -1;
         }
-        else
-        {
-            flag_exec_in_background = 1;
-            free(tmp);
-            l->next = NULL;
-        }
     }
-    return;
 }
-
-void quotes_error(node *l)
-{
-    delete_list(l);
-    perror("Incorrect sequence of quotes");
-}
-
 
 node* find_pid_proc(node *l, int pid, node **buf)
 {
-    if(!l)
+    if(l == NULL)
     {
         return NULL;
     }
-    else if(l->spec_symb == pid) /* this process will be deleted */
+    
+    if(l->spec_symb == pid) /* this process will be deleted */
     {
         *buf = l;
         node *ret = l;
@@ -747,6 +901,7 @@ void sig_handler(int sig)
     {
         flag_is_spec_symb = buf->spec_symb;
         deleted_proc = add_to_list(deleted_proc, buf->elem); /* adding a process to delete */
+        
         free(buf->elem);
         free(buf);
     }
@@ -760,11 +915,18 @@ int main(int argc, char **argv)
     
     char *word = NULL;
     int is_correct_quotes = 1;
+    int count = 0;
+    
     while(!flag_eof)
     {
-        printf("%s> %s ", COLOR_RED, RESET); /* color shell */
         main_list = NULL;
         main_tree = NULL;
+        flag_exec_in_background = 0;
+        flag_new_line = 0;
+        flag_is_spec_symb = 0;
+        
+        printf("%s> %s ", COLOR_RED, RESET); /* color shell */
+        
         while(!flag_eof && !flag_new_line)
         {
             is_correct_quotes = 1;
@@ -774,6 +936,8 @@ int main(int argc, char **argv)
                 main_list = add_to_list(main_list, word);
                 free(word);
             }
+            word = NULL;
+            count++;
         }
         
         if(flag_single_quotes || flag_double_quotes || flag_apostrophe)
@@ -791,21 +955,21 @@ int main(int argc, char **argv)
         
         if(!flag_eof && is_correct_quotes && main_list && (flag_exec_in_background != -1))
         {
-            check_ampersand(main_list);
+            check_bad_ampersand(main_list);
             main_tree = make_tree(main_list, -1, -1, 1);
+            main_list = NULL;
             work_tree(main_tree, 0);
             delete_tree(main_tree);
+            main_tree = NULL;
         }
         
         print_kill_proc(deleted_proc);
         delete_list(deleted_proc);
         deleted_proc = NULL;
-        
-        flag_exec_in_background = 0;
-        flag_new_line = 0;
+        delete_list(main_list);
+        main_list = NULL;
     }
-    
-    delete_list(main_list);
+    delete_all_struct();
     kill_all_processes();
     printf("End of the program\n");
     return 0;
