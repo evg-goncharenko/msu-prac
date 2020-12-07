@@ -343,7 +343,7 @@ char **list_to_array(node *l)
     return res;
 }
 
-node *popend(node *l)
+node *pop_end(node *l)
 {
     node *ret = l;
     node *tmp;
@@ -369,7 +369,7 @@ node *popend(node *l)
     return ret;
 }
 
-node *popstart(node *l)
+node *pop_start(node *l)
 {
     node *tmp = l;
     
@@ -559,8 +559,8 @@ tree *make_tree(node *l, int rd, int wr, int fl)
     
     if (!strcmp(parse->elem, "("))
     {
-        parse = popend(parse);
-        parse = popstart(parse);
+        parse = pop_end(parse);
+        parse = pop_start(parse);
         return make_tree(parse, new_rd, new_wr, 1);
     }
     
@@ -624,6 +624,11 @@ int work(node *l, int rd, int wr)
     }
     else if(pid == 0)
     {
+        if(!flag_exec_in_background)
+        {
+            signal(SIGINT, SIG_DFL);
+        }
+        
         if(rd != -1)
         {
             dup2(rd, 0);
@@ -912,6 +917,7 @@ int main(int argc, char **argv)
 {
     /* When the command that was running in the background has finished, processing is required: */
     signal(SIGCHLD, sig_handler);
+    signal(SIGINT, SIG_IGN);
     
     char *word = NULL;
     int is_correct_quotes = 1;
