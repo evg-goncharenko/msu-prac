@@ -1,7 +1,9 @@
 # Программирование в ОС UNIX на языке Си
 ### Практикумы
-- Создание частотного словаря для некоторого текста ([frequency dictionary](.//projects/frequency_dictionary));
-- Разработка программ-конвертеров кодировок UTF16-UTF8 ([converter of character encodings](.//projects/converter_of_character_encodings)).
+- Создание частотного словаря для некоторого текста ([frequency_dictionary](.//projects/frequency_dictionary));
+- Разработка программ-конвертеров кодировок UTF16-UTF8 ([converter_of_character_encodings](.//projects/converter_of_character_encodings));
+- Модельный Shell-интерпретатор ([shell](.//projects/shell)).
+
 ### Домашние задания
 - Сортировка Shell ([ht_1_1.c](./hw_09_08/ht_1_1.c));
 - Вывод самой длинной строки ([ht_2.c](./hw_09_15/ht_2.c));
@@ -13,4 +15,5 @@
 - Таблица "перекрестных ссылок" ([hw_09_29_cross_references.c](./hw_09_29/hw_09_29_cross_references.c));
 - Реализация аналога функции fgets() ([hw_10_27_fgets.c](./hw_10_27/hw_10_27_fgets.c));
 - Сортировка бинарного файла из целых чисел ([hw_10_27_sort_bin_file.c](./hw_10_27/hw_10_27_sort_bin_file.c));
-- Реализация программ, моделирующих команды SHELL ([hw_11_10](./hw_11_10)).
+- Реализация программ, моделирующих команды SHELL ([hw_11_10](./hw_11_10));
+- Реализация команд SHELL; подсчет поступивших сигналов SIGTRAP ([hw_11_17](./hw_11_17)).
