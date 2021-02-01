@@ -1,10 +1,10 @@
-## Домашнее задание на 17.11
+## Homework by 17.11
 
 <b> [task_1](./task_1.c): </b><br>
     
-    Программа моделирует команду SHELL: 
-    (здесь pr_i – имена процессов, arg_j- аргументы процессов, f.dat – файл входных данных, f.res – файл результатов).
-    Аргументы, необходимые этой программе, задаются в командной строке:
+    The program simulates the SHELL command:
+    (here pr_i – process names, arg_j-process arguments, f.dat - input data file, f.res - results file).
+    The arguments required by this program are set on the command line:
         a) pr1 arg1 arg2 | pr2; pr3 >> f.res
         b) pr1 < f.dat | pr2 > f.res; pr3
         c) pr1 | pr2 | ... | pr_n
@@ -12,5 +12,5 @@
 
 <br> <b> [task_2](./task_2.c): </b><br>
     
-    Программа подсчитывает поступившие сигналы SIGTRAP между 2-ым и 4-ым нажатием CTRL+C. 
-    Завершает работу по 7-му нажатию CTRL+C.
+    The program counts the received SIGTRAP signals between the 2nd and 4th pressing of CTRL+C.
+    Exits on the 7th press of CTRL+C.

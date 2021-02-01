@@ -1,28 +1,31 @@
-## Контрольная работа №2
+## Test No. 2
 <b> [task_1](./task1.c): </b><br>
 
-    Программа моделирует команду SHELL: pr1 < f.dat; pr2 | pr3
-    (здесь pr_i – имена процессов, f.dat – файл входных данных).
-    Аргументы, необходимые этой программе, задаются в командной строке:
+    The program simulates the SHELL command: pr1 < f.dat; pr2 | pr3
+    (here pr_i – process names, f.dat - input data file).
+    The arguments required by this program are set on the command line:
     ./prog pr1 pr2 pr3 f.dat
     
 <br> <b> [task_2](./task2.c): </b><br>
 
-    В командной строке задано имя файла.
-    Программа удаляет пустые строки заданного файла.
-    Никакая дополнительная память для хранения строк и дополнительные файлы не используются.
-    Для работы с файлом разрешено пользоваться только системными вызовами низкоуровневого ввода-вывода.
-    Для «обрезки» файла до нужной длины можно использовать системные вызовы truncate() или ftruncate().
-
+    The command line specifies the file name. Leave in the file only those lines
+    of the specified file that contain at least two identical characters.
+    No additional memory for storing strings and additional files can be used.
+    Only low-level I/O system calls are allowed to work with the file.
+    To "trim" the file to the desired length,
+    use the truncate() or ftruncate() system calls.
     
 <br> <b> [task_3](./task3.c): </b><br>
     
-    Программа порождает дочерний процесс.
-    Процесс-отец открывает файл (его имя задано в командной строке), в котором содержатся
-    имена других файлов — по одному в строке, и через неименованный канал передает эти имена дочернему процессу.
-    Дочерний процесс открывает полученный файл, печатает его имя, определяет длину файла, 
-    закрывает и результат передает отцу через ТОТ ЖЕ канал. Отец печатает длину соответствующего
-    файла и перевод строки. Когда исходный файл заканчивается, отец закрывает канал и дожидается завершения
-    дочернего процесса, а дочерний процесс, получив сигнал, печатает количество обработанных файлов и завершается.
-    Синхронизация процессов (при выводе в стандартный канал и работе с неименованным каналом)
-    осуществляется с помощью сигналов.
+    The program spawns a child process.
+    The father process opens a file (its name is set on the command line)
+    that contains the names of other files, one per line,
+    and passes these names to the child process through an unnamed channel.
+    The child process opens the received file, prints its name, determines
+    the length of the file, closes it, and passes the result to the father
+    through the SAME channel. The father prints the length of the corresponding
+    file and the line feed. When the source file ends, the father closes
+    the channel and waits for the child process to finish, and the child process,
+    after receiving the signal, prints the number of processed files and terminates.
+    Synchronization of processes (when outputting to a standard channel
+    and working with an unnamed channel) is carried out using signals.

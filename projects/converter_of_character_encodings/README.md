@@ -1,87 +1,89 @@
-## Разработка программ-конвертеров кодировок UTF16-UTF8
+## Development of UTF16 - UTF8 encoding converter programs
 
-Первая программа читает из канала ввода текст в кодировке UTF-16, переводит его в кодировку UTF-8 и выводит перекодированный текст в канал вывода ([converting_utf16_to_utf8.c](./converting_utf16_to_utf8.c)). Вторая программа читает из канала ввода текст в кодировке UTF-8, переводит его в кодировку UTF-16 и выводит перекодированный текст в канал вывода ([converting_utf8_to_utf16.c](./converting_utf8_to_utf16.c)). <br>
-Если при запуске программы задан аргумент командной строки — имя файла, то вместо стандартного ввода текст берется из этого файла. Если задано два аргумента, то первый рассматривается как имя файла ввода, а второй — как имя файла вывода. Стандартные потоки ввода/вывода в этом случае не используются. В случае неправильного имени файла программа выдает сообщение об ошибке и завершается. <br>
-Обе программы корректно обрабатывают маркер порядка байтов (byte order mark – BOM) – символ с кодом `0xFEFF` — в начале файла. Первая программа читает текст в UTF-16, а вторая программа — генерирует текст в UTF-16 в соответствии с прочитанным маркером. В случае отсутствия маркера принимается LE-порядок (то есть по умолчанию BOM представлен байтами `0xFF 0xFE` в начале файла). <br>
-Также программы обрабатывают случаи некорректного представления входного текста — нечетное количество байтов в UTF-16, некорректные последовательности в UTF-8. В этих случаях программы  выдают в стандартный канал вывода сообщения об ошибках (stderr) диагностику, включающую в себя значение некорректного символа (последовательности), а также его смещение относительно начала файла. После этого программы «восстанавливаются» и продолжают чтение и перекодировку входной последовательности.
+The first program reads UTF-16 encoded text from the input channel, converts it to UTF-8 encoding, and outputs the recoded text to the output channel ([converting_utf16_to_utf8.c](./converting_utf16_to_utf8.c)). The second program reads UTF-8 encoded text from the input channel, converts it to UTF-16 encoding, and outputs the transcoded text to the output channel ([converting_utf8_to_utf16.c](./converting_utf8_to_utf16.c)). <br>
+If the command — line argument-the file name-is specified at program startup, then the text is taken from this file instead of the standard input. If two arguments are given, the first is treated as the input file name and the second as the output file name. Standard I/O streams are not used in this case. If the file name is incorrect, the program returns an error message and terminates. <br>
+Both programs correctly process the byte order mark (BOM) - the character with the code `0xFEFF` - at the beginning of the file. The first program reads the text in UTF-16, and the second program generates the text in UTF-16 according to the "read" marker. If there is no marker, the LE-order is assumed (that is, by default, the BOM is represented by the bytes `0xFF 0xFE` at the beginning of the file). <br>
+The programs also handle cases of incorrect representation of the input text — an odd number of bytes in UTF-16, incorrect sequences in UTF-8. In these cases, programs issue diagnostics to the standard error message output channel (stderr), which includes the value of an incorrect character (sequence), as well as its offset relative to the beginning of the file. After that, the programs are "restored" and continue reading and recoding the input sequence.
 
 ---
 
-Для хранения UTF16-символов используется тип данных unsigned short, а для UTF-8 символов - char.
+The unsigned short data type is used to store UTF-16 characters, and the char data type is used for UTF-8 characters.
 
-Двоичный образ файла (побайтно) можно посмотреть программой od (octal dump). `od le.utf`
-покажет содержимое файла `le.utf` порциями по 2 байта в восьмеричном формате. Для вывода файла в 16-ичном формате побайтно используется следующий набор опций:
+The binary image of the file (byte-by-byte) can be viewed by the od (octal dump) program. `od le. utf` will display the contents of the `le.utf` file in 2-byte chunks in octal format. To output a file in 16-bit format, the following set of options is used:
 ```
 od -A x -t x1z -v le.utf
 ```
-В восьмеричном формате байтов:
+In octal byte format:
 ```
 od -c le.utf
 ```
-Если в системе установлена кодировка UTF-8 (что верно для многих установок), то файл в UTF-8 кодировке можно просто выдать на экран командой `cat имя_файла` или же просмотреть в любом текстовом редакторе.
-Для того, чтобы просмотреть содержимое файла в любой кодировке, можно использовать редактор vim. После открытия файла командой `vim имя_файла` указывается кодировка файла командой:
+
+
+If the system is set to UTF-8 encoding (which is true for many installations), then the file in UTF-8 encoding can simply be displayed with the command  `cat file_name` or viewed in any text editor.
+To view the contents of a file in any encoding, you can use the vim editor. After opening the file with the `vim file_name` command, the file encoding is specified with the command:
+
 ```
 :set fileencoding=ucs-2
 ```
-Заметим, что кодировка ucs-2 использует прямой порядок байтов (big-endian). При чтении файла с обратным порядком байтов (little-endian) нужно использовать имя `ucs-2le`. Вместо `ucs-2` и `ucs-2le` можно использовать имена `utf-16` и `utf-16le`. Различия в этих кодировках не проявляются в тестовых файлах.
+Note that the ucs-2 encoding uses direct byte order (big-endian). When reading a file with reverse byte order (little-endian), use the name `ucs-2le`. Instead of `ucs-2` and `ucs-2le`, you can use the names `utf-16` and `utf-16le`. The differences in these encodings do not appear in the test files.
 
-Команда `xxd` создаёт представление файла в виде шестнадцатеричных кодов или выполняет обратное преобразование. Пример использования:
+The `xxd` command creates a representation of the file as hexadecimal codes or performs the reverse conversion. <br>
+Example:
 ```
 xxd tmp.utf
 ```
 
-Команда `hexedit` просмотривает и редактирует файлы в шестнадцатеричном формате или в формате ASCII. Пример использования:
+The `hexedit` command views and edits files in hexadecimal or ASCII format. Usage Example:
 ```
 hexedit tmp.utf
 ```
 
-Команда `diff` ищет различия между двумя файлами. Флаг `-s` сообщает, что два файла являются одинаковыми. Пример использования:
+The `diff` command looks for differences between two files. The `-s` flag indicates that the two files are the same. <br>
+Example:
 ```
 diff ./tests/letext.ucs tmp.ucs -s
 ```
 
-### Тестовые файлы
+### Test files
 
-Для тестирования и отладки написан следующий (минимальный) набор файлов, который находится в каталоге `/tests`.
+For testing and debugging, the following (minimal) set of files is written, which is located in the `/tests` directory.
 
-<b> UTF-16 файлы </b>
+< b> UTF-16 files </b>
 
-    - letext.ucs – текст в UTF-16 в перевернутом представлении (LE-порядок) с меткой BOM
-    - betext.ucs – текст в UTF-16 в прямом представлении (BE-порядок) с меткой BOM
-    - letextbad1.ucs – текст в UTF-16 в перевернутом представлении (LE-порядок) без
-    метки BOM
-    - betextbad1.ucs – текст в UTF-16 в прямом представлении (BE-порядок) без метки
-    BOM
-    - letextbad2.ucs – текст в UTF-16 в перевернутом представлении (LE-порядок) с меткой
-    BOM, но с неверным символом (однобайтовым)
-    - betextbad2.ucs – текст в UTF-16 в прямом представлении (BE-порядок) с меткой BOM,
-    но с неверным символом (однобайтовым)
-    - leempty.ucs – пустой текст в UTF-16 в перевернутом представлении (LE-порядок) с
-    меткой BOM
-    - beempty.ucs – пустой текст в UTF-16 в прямом представлении (BE-порядок) с меткой
-    BOM
-    - le30.ucs – односимвольный (код=0x30 – символ 0) текст в UTF-16 в перевернутом
-    представлении (LE-порядок) с меткой BOM
-    - be30.ucs – односимвольный (код=0x30 – символ 0) текст в UTF-16 в прямом
-    представлении (BE-порядок) с меткой BOM
-    - le42f.ucs – односимвольный (код=0x042F – символ Я) текст в UTF-16 в перевернутом
-    представлении (LE-порядок) с меткой BOM
-    - be42f.ucs – односимвольный (код=0x042F – символ Я) текст в UTF-16 в прямом
-    представлении (BE-порядок) с меткой BOM
-    - le263A.ucs – односимвольный (код=0x263A – символ ☺) текст в UTF-16 в
-    перевернутом представлении (LE-порядок) с меткой BOM
-    - be262A.ucs – односимвольный (код=0x263A – символ ☺ текст в UTF-16 в прямом
-    представлении (BE-порядок) с меткой BOM
+    - letext.ucs - text in UTF-16 in an inverted view (LE-order) with a BOM
+    - betext.ucs - text in UTF-16 live view (BE-order) with a BOM
+    - letextbad1.ucs - text in UTF-16 in an inverted view (LE-right) without
+    tags BOM
+    - betextbad1.ucs - text in UTF-16 in direct representation (BE-order)
+    without a label BOM
+    - letextbad2.ucs - text in UTF-16 in an inverted view (LE-order) labeled
+    BOM, but with the wrong character (BE-order)
+    - betextbad2.ucs - text in UTF-16 live view (BE-order) with a BOM,
+    but with the wrong character (BE-order)
+    - leempty.ucs – empty text in UTF-16 in an inverted view (LE-order) with BOM
+    - beempty.ucs – empty text in UTF-16 live view (BE-order) labelled BOM
+    - le30.ucs – a single character (code=0x30 symbol 0) the text in UTF-16
+    in an inverted the performance (LE-order) with a BOM
+    - be30.ucs – a single character (code=0x30 symbol 0) the text in UTF-16 live
+    performance (BE-order) with a BOM
+    - le42f.ucs – a single character (code=0x042F – symbol I) text to UTF-16
+    in an inverted the performance (LE-right) with a BOM
+    - be42f.ucs – a single character (code=0x042F – symbol I) the text in UTF-16
+    live performance (BE-order) with a BOM
+    - le263A.ucs – a single character (code=0x263A symbol ☺) text to UTF-16
+    the inverted representation (LE-order) with a BOM
+    - be262A.ucs – a single character (code=0x263A symbol ☺) text in UTF-16
+    live performance (BE-order) with a BOM
+    
+<b> UTF-8 files </b>
 
-<b> UTF-8 файлы </b>
-
-    - text.utf – текст в UTF-8 с меткой BOM (кодированной)
-    - text2.utf – текст в UTF-8 без метки BOM
-    - textbad1.utf – текст в UTF-8 с неверной последовательностью (начинается с байта
-    продолжения) без метки BOM
-    - textbad2.utf – текст в UTF-8 с неверной последовательностью (отсутствует байт
-    продолжения) без метки BOM
-    - empty.utf – пустой текст в UTF-8 с меткой BOM
-    - 30.utf – односимвольный (код=0x30 – символ 0) текст в UTF-8
-    - 42f.utf – односимвольный (код=0x042F – символ Я) текст в UTF-8
-    - 263A.utf – односимвольный (код=0x263A – символ ☺) текст в UTF-8
+    - text.utf - text in UTF-8 with the BOM label (encoded)
+    - text2.utf - text in UTF-8 without the BOM label
+    - textbad1.utf - text in UTF-8 with the wrong sequence (starts with a byte
+    continuation) without the BOM label
+    - textbad2.utf - text in UTF-8 with the wrong sequence (missing byte
+    continuation) without the label BOM
+    - empty.utf - empty text in UTF-8 with the label BOM
+    - 30.utf - single-character (code=0x30 – character 0) text in UTF-8
+    - 42f.utf - single-character (code=0x042F - character I) text in UTF-8
+    - 263A.utf - single-character (code=0x263A - character ☺) text in UTF-8

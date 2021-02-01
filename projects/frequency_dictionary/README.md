@@ -1,23 +1,22 @@
-## Создание частотного словаря для некоторого текста
+## Creating a frequency dictionary for some text
 
-Программа создает частотный словарь для заданного текста. Запускается с помощью командной строки вида:
+The program creates a frequency dictionary for a given text. It is started using the command line of the form:
 ```
 ./prog -i f.txt -o dict.txt
 ```
-Опция `-i` задает файл с входным текстом, опция `-o` задает выходной файл, в который выводится частотный словарь. При отсутствии опции `-i` ввод происходит из стандартного канала ввода, при отсутствии опции `-o` вывод происходит в стандартный канал вывода. <br>
-Входной текст разбивается на слова, в качестве разделителей считаются пробельные символы и концы строк. Для каждого слова считается число его вхождений в текст. Программа выводит в словарь все слова текста без повторений, упорядоченные по убыванию числа вхождений в текст. Формат выдачи: <br>
+The `-i` option specifies the input text file, and the `-o` option specifies the output file to which the frequency dictionary is print. In the absence of the `-i` option, the input comes from the standard input channel, in the absence of the `-o` option, the output goes to the standard output channel. <br>
+The input text is divided into words, with whitespace characters and line ends as delimiters. For each word, the number of its occurrences in the text is calculated. The program outputs to the dictionary all the words of the text without repetition, ordered in descending order of the number of occurrences in the text. Output format: <br>
 
-<b> Слово1 | число-вхождений | частота-вхождений-слова </b> <br>
-<b> Слово2 | число-вхождений | частота-вхождений-слова </b> <br><br>
-Например:
+<b> Word1 | number of occurrences | frequency of occurrences of word </b> <br>
+<b> Word2 | number of occurrences | frequency of occurrences of word </b> <br><br>
+For example:
 ```
 .....
 а 19 0.000432
 в 12 0.000319
-Москва 6 0.00016
+Moscow 6 0.00016
 .....
 ```
-`Частота вхождений слова` — это отношение числа вхождений слова к общему числу слов
-в тексте. <br>
-Каждое слово выдается только один раз. Знаки препинания (точка, тире, запятая и т.д.), а также знаки типа вопроса, восклицания и т.п. считаются отдельными словами. Слова считаются различными, если есть хотя бы один различающийся символ. Приведение слов к одному регистру отсутствует. <br>
-Для эффективности работы программы словарь хранится в бинарном дереве поиска, ключом служит само слово, информационной частью — счетчик вхождений.
+`The frequency of occurrences of a word` is the ratio of the number of occurrences of a word to the total number of words in the text. <br>
+Each word is issued only once. Punctuation marks (dot, dash, comma, etc.), as well as signs such as questions, exclamations, etc. are considered separate words. Words are considered different if there is at least one different character. There is no reduction of words to the same case. <br>
+For the efficiency of the program, the dictionary is stored in a binary search tree, the key is the word itself, the information part is the occurrence counter.

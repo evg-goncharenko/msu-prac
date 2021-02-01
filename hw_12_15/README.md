@@ -1,36 +1,35 @@
-## Домашнее задание на 15.12
+## Homework by 15.12
 <b> [task_1](./task_1.c): </b><br>
     
-    В командной строке задано имя файла. Оставить в файле только те
-    строки заданного файла, которые содержат хотя бы два одинаковых символа.
-    Никакую дополнительную память для хранения строк и дополнительные файлы
-    использовать нельзя. Для работы с файлом разрешено пользоваться
-    только системными вызовами низкоуровневого ввода-вывода.
-    Для «обрезки» файла до нужной длины использовать системные вызовы
-    truncate() или ftruncate().
+    The command line specifies the file name. Leave in the file only those lines
+    of the specified file that contain at least two identical characters.
+    No additional memory for storing strings and additional files can be used.
+    Only low-level I/O system calls are allowed to work with the file.
+    To "trim" the file to the desired length,
+    use the truncate() or ftruncate() system calls.
     
 <br> <b> [task_2](./task_2.c): </b><br>
 
-    Программа порождает дочерний процесс.
-    Процесс-отец открывает файл (его имя задано в командной строке),
-    в котором содержатся имена других файлов — по одному в строке,
-    и через неименованный канал передает эти имена дочернему процессу.
-    Дочерний процесс открывает полученный файл, печатает его имя,
-    определяет длину файла, закрывает и результат передает отцу через ТОТ ЖЕ канал.
-    Отец печатает длину соответствующего файла и перевод строки.
-    Когда исходный файл заканчивается, отец закрывает канал и дожидается завершения
-    дочернего процесса, а дочерний процесс, получив сигнал, печатает количество 
-    обработанных файлов и завершается. Синхронизация процессов
-    (при выводе в стандартный канал и работе с неименованным каналом)
-    осуществляется с помощью сигналов.
+    The program spawns a child process.
+    The parent process opens a file (its name is set on the command line),
+    which contains the names of other files — one per line,
+    and through an unnamed pipe passes these names to the child process.
+    The child process opens the received file, prints its name,
+    determines the length of the file, closes it,
+    and passes the result to the parent via the SAME channel.
+    The parent prints the length of the corresponding file and the line feed.
+    When the source file ends, the parent closes the channel and waits for it to finish
+    the child process, and the child process, after receiving the signal, prints the quantity
+    processed files and completes. Synchronization of processes
+    (when outputting to a standard channel and working with an unnamed channel)
+    is carried out using signals.
     
 <br> <b> [task_3](./task_3.c): </b><br>
     
-    В программе процесс-отец порождает 3-х сыновей.
-    В начальный момент все сыновья заблокированы с помощью
-    системного вызова pause(). На каждое нажатие ctrl+C (SIGINT)
-    отец по очереди в цикле разблокирует одного сына (другие в этот момент
-    продолжают быть заблокированными). В активном состоянии каждый сын раз
-    в секунду печатает свой PID. Через 10 секунд отец посылает всем сыновьям
-    сигнал SIGKILL и сам завершается. Процессы «зомби» не остаются.
-
+    In the program, the parent process generates 3 childs.
+    At the initial moment, all the childs are blocked using the pause () system call.
+    For each ctrl+C (SIGINT) press, the parent unlocks one childs
+    in turn in the loop (the others continue to be blocked at this moment).
+    In the active state, each childs prints its PID once a second.
+    After 10 seconds, the parent sends all the childs
+    a SIGKILL signal and completes itself. The "zombie" processes do not remain.
