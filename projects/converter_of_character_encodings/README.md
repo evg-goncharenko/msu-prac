@@ -1,8 +1,8 @@
 ## Development of UTF16 - UTF8 encoding converter programs
 
-The first program reads UTF-16 encoded text from the input channel, converts it to UTF-8 encoding, and outputs the recoded text to the output channel ([converting_utf16_to_utf8.c](./converting_utf16_to_utf8.c)). The second program reads UTF-8 encoded text from the input channel, converts it to UTF-16 encoding, and outputs the transcoded text to the output channel ([converting_utf8_to_utf16.c](./converting_utf8_to_utf16.c)). <br>
+The first program reads UTF-16 encoded text from the input channel, converts it to UTF-8 encoding, and outputs the recoded text to the output channel ([converting_utf16_to_utf8.c](./converting_utf16_to_utf8.c)). The second program reads UTF-8 encoded text from the input channel, converts it to UTF-16 encoding, and outputs the transcoded text to the output channel ([converting_utf8_to_utf16.c](./converting_utf8_to_utf16.c)). <br><br>
 If the command — line argument-the file name-is specified at program startup, then the text is taken from this file instead of the standard input. If two arguments are given, the first is treated as the input file name and the second as the output file name. Standard I/O streams are not used in this case. If the file name is incorrect, the program returns an error message and terminates. <br>
-Both programs correctly process the byte order mark (BOM) - the character with the code `0xFEFF` - at the beginning of the file. The first program reads the text in UTF-16, and the second program generates the text in UTF-16 according to the "read" marker. If there is no marker, the LE-order is assumed (that is, by default, the BOM is represented by the bytes `0xFF 0xFE` at the beginning of the file). <br>
+Both programs correctly process the byte order mark (BOM) - the character with the code `0xFEFF` - at the beginning of the file. The first program reads the text in UTF-16, and the second program generates the text in UTF-16 according to the "read" marker. If there is no marker, the LE-order is assumed (that is, by default, the BOM is represented by the bytes `0xFF 0xFE` at the beginning of the file). <br><br>
 The programs also handle cases of incorrect representation of the input text — an odd number of bytes in UTF-16, incorrect sequences in UTF-8. In these cases, programs issue diagnostics to the standard error message output channel (stderr), which includes the value of an incorrect character (sequence), as well as its offset relative to the beginning of the file. After that, the programs are "restored" and continue reading and recoding the input sequence.
 
 ---
@@ -48,7 +48,7 @@ diff ./tests/letext.ucs tmp.ucs -s
 
 For testing and debugging, the following (minimal) set of files is written, which is located in the `/tests` directory.
 
-< b> UTF-16 files </b>
+<b> UTF-16 files </b>
 
     - letext.ucs - text in UTF-16 in an inverted view (LE-order) with a BOM
     - betext.ucs - text in UTF-16 live view (BE-order) with a BOM
