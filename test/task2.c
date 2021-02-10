@@ -13,18 +13,15 @@
 
 int count = 0;
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     int file, file2;
     
-    if((file = open(argv[1], O_RDONLY)) == -1)
-    {
+    if ((file = open(argv[1], O_RDONLY)) == -1) {
         perror(argv[1]);
         exit(1);
     }
     
-    if((file2 = open(argv[1], O_WRONLY)) == -1)
-    {
+    if ((file2 = open(argv[1], O_WRONLY)) == -1) {
         perror(argv[1]);
         exit(1);
     }
@@ -32,19 +29,14 @@ int main(int argc, char **argv)
     int tmp_c;
     int flag = 0;
     
-    while((read(file, &tmp_c, sizeof(char))) > 0)
-    {
+    while ((read(file, &tmp_c, sizeof(char))) > 0) {
         
-        if(tmp_c == '\n')
-        {
-            if(flag)
-            {
+        if (tmp_c == '\n') {
+            if (flag) {
                 continue;
             }
             flag = 1;
-        }
-        else
-        {
+        } else {
             flag = 0;
         }
         count++;

@@ -6,15 +6,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node{
+struct Node {
     int val;
-    struct node *left, *right;
+    struct Node *left, *right;
 }*tree;
 
 /* Print all numbers stored in the tree: */
-void print_bin_tree(struct node *root)
-{
-    if(!root) return;
+void print_bin_tree(struct Node *root) {
+    if (!root) return;
     
     print_bin_tree(root->left);
     printf("%d ", root->val);
@@ -22,115 +21,90 @@ void print_bin_tree(struct node *root)
 }
 
 /* Inserting a new element: */
-struct node *add_elem_bin_tree(struct node *root, struct node *r, int n)
-{
-    if(!r)
-    {
-        r = (struct node*) malloc(sizeof(struct node));
-        if(!r)
-        {
+struct Node *add_elem_bin_tree(struct Node *root, struct Node *r, int n) {
+    if (!r) {
+        r = (struct Node*) malloc(sizeof(struct Node));
+        if (!r) {
             fprintf(stderr, "Enough memory\n");
             exit(0);
         }
         r->val = n;
         r->left = NULL;
         r->right = NULL;
-        if(!root) return r; /* the first entrance */
+        if (!root) return r; /* the first entrance */
         
-        if(n < root->val)
-        {
+        if (n < root->val) {
             root->left = r;
-        }
-        else
-        {
+        } else {
             root->right = r;
         }
         return r;
     }
-    if(n < root->val)
-    {
+    if (n < root->val) {
         add_elem_bin_tree(r, root->left, n);
-    }
-    else
-    {
+    } else {
         add_elem_bin_tree(r, root->right, n);
     }
     return root;
 }
 
 /* Traversing the tree in width: */
-void width_traversing_bin_tree(struct node *root)
-{
-    if(!root) return;
+void width_traversing_bin_tree(struct Node *root) {
+    if (!root) return;
     
-    if(root->val) printf("%d ", root->val);
+    if (root->val) printf("%d ", root->val);
     width_traversing_bin_tree(root->left);
     width_traversing_bin_tree(root->right);
 }
 
 /* Traversing the tree in depth: */
-void depth_traversing_bin_tree(struct node *root)
+void depth_traversing_bin_tree(struct Node *root)
 {
-    if(!root) return;
+    if (!root) return;
     
     depth_traversing_bin_tree(root->left);
     depth_traversing_bin_tree(root->right);
-    if(root->val) printf("%d ", root->val);
+    if (root->val) printf("%d ", root->val);
 }
 
 /* Search for an element in the tree (NULL - if there is no such vertex): */
-struct node *find_elem_bin_tree(struct node *root, int numb)
-{
-    if(!root) return root; /* empty tree */
-    while(root->val != numb){
-        
-        if(numb < root->val)
-        {
+struct Node *find_elem_bin_tree(struct Node *root, int numb) {
+    if (!root) return root; /* empty tree */
+    while (root->val != numb) {
+        if (numb < root->val) {
             root = root->left;
-        }
-        else
-        {
+        } else {
             root = root->right;
         }
-        if(root == NULL) break;
+        
+        if (root == NULL) break;
     }
     return root;
 }
 
 /* Deleting the numb element in the tree: */
-struct node *delete_elem_bin_tree(struct node *root, int numb)
-{
-    struct node *p,*p2;
-    
-    if(!root) return root; /* vertex wasn't found */
+struct Node *delete_elem_bin_tree(struct Node *root, int numb) {
+    struct Node *p,*p2;
+    if (!root) return root; /* vertex wasn't found */
     
     /* Removing the root: */
-    if(root->val == numb)
-    {
-        if(root->left == root->right)
-        {
+    if (root->val == numb) {
+        if (root->left == root->right) {
             free(root);
             return NULL;
-        }
-        else if(root->left == NULL) /* if one of the subtrees is empty */
-        {
+        } else if (root->left == NULL) { /* if one of the subtrees is empty */
             p = root->right;
             free(root);
             return p;
-        }
-        else if(root->right == NULL)
-        {
+        } else if (root->right == NULL) {
             p = root->left;
             free(root);
             return p;
-        }
-        else /* there are both subtrees */
-        {
+        } else { /* there are both subtrees */
             p2 = root->right;
             p = root->right;
             
-            while(p->left)
-            {
+            while (p->left) {
                 p = p->left;
             }
             
@@ -140,25 +114,20 @@ struct node *delete_elem_bin_tree(struct node *root, int numb)
         }
     }
     
-    if(root->val < numb)
-    {
+    if (root->val < numb) {
         root->right = delete_elem_bin_tree(root->right, numb);
-    }
-    else
-    {
+    } else {
         root->left = delete_elem_bin_tree(root->left, numb);
     }
     return root;
 }
 
-int main()
-{
+int main() {
     int numb;
     scanf("%d", &numb);
     
     /* Creating a tree: */
-    for(int i = 0; i < numb; i++)
-    {
+    for (int i = 0; i < numb; i++) {
         int tmp;
         scanf("%d", &tmp);
         tree = add_elem_bin_tree(tree, tree, tmp);

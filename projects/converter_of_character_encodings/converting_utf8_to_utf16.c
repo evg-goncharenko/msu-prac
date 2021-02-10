@@ -1,10 +1,10 @@
+#include <ctype.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
 #include <unistd.h>
-#include <ctype.h>
-#include <errno.h>
 
 #define LITTLE_ENDIANS 0xFFFE
 #define BIG_ENDIANS 0xFEFF
@@ -15,8 +15,7 @@
 #define IS_LITTLE 0
 #define IS_BIG 1
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     FILE *file_in;
     FILE *file_out;
 
@@ -29,18 +28,14 @@ int main(int argc, char **argv)
     file_in = stdin;
     file_out = stdout;
 
-    if(argc > 1)
-    {
-        if((file_in = fopen(argv[1], "r")) == NULL)
-        {
+    if (argc > 1) {
+        if ((file_in = fopen(argv[1], "r")) == NULL) {
             perror(argv[1]);
             exit(INPUT_ERROR);
         }
 
-        if(argc > 2)
-        {
-            if((file_out = fopen(argv[2], "w")) == NULL)
-            {
+        if (argc > 2) {
+            if ((file_out = fopen(argv[2], "w")) == NULL) {
                 /* If there isn't output file - create and make a warning: */
                 perror(argv[2]);
             }
@@ -56,8 +51,7 @@ int main(int argc, char **argv)
     fread(&tmp_byte3, 1, 1, file_in);
     
     /* Shift to the beginning of the file, if it isn't a BOM: */
-    if(!((tmp_byte1 == 0xEF) && (tmp_byte2 == 0xBB) && (tmp_byte3 == 0xBF)))
-    {
+    if (!((tmp_byte1 == 0xEF) && (tmp_byte2 == 0xBB) && (tmp_byte3 == 0xBF))) {
         fseek(file_in, 0, SEEK_SET);
     }
     
@@ -72,87 +66,62 @@ int main(int argc, char **argv)
      *          3        |     1110xxxx 10xxxxxx 10xxxxxx     |
      **********************************************************
     */
-    while(!feof(file_in))
-    {
+    while (!feof(file_in)) {
         utf16_symb = 0;
         
-        /* 1 symbol is 1 byte: */
-        if((utf8_symb >> 7) == 0)
-        {
+        if ((utf8_symb >> 7) == 0) { /* 1 symbol is 1 byte */
             utf16_symb += utf8_symb;
             correct_output = 1;
-        }
-        /* 1 symbol is 2 bytes: */
-        else if((utf8_symb >> 5) == 0x6)
-        {
+        } else if ((utf8_symb >> 5) == 0x6) { /* 1 symbol is 2 bytes */
             utf8_symb = utf8_symb & 0x1F;
             utf16_symb += utf8_symb;
-
             utf16_symb = utf16_symb << 6;
             
             fread(&utf8_symb, sizeof(char), 1, file_in);
 
-            if((utf8_symb >> 6) == 2)
-            {
+            if ((utf8_symb >> 6) == 2) {
                 utf8_symb = utf8_symb & 0x3F;
                 utf16_symb += utf8_symb;
                 correct_output = 1;
-            }
-            else
-            {
+            } else {
                 fprintf(stderr, "The second byte is incorrect in a two byte sequence, position: %ld\n", ftell(file_in));
             }
 
-        }
-        /* 1 symbol is 3 bytes: */
-        else if((utf8_symb >> 4) == 0xE)
-        {
+        } else if ((utf8_symb >> 4) == 0xE) { /* 1 symbol is 3 bytes */
             utf8_symb = utf8_symb & 0xF;
             utf16_symb += utf8_symb;
             utf16_symb = utf16_symb << 6;
 
             fread(&utf8_symb, sizeof(char), 1, file_in);
 
-            if((utf8_symb >> 6) == 2)
-            {
+            if ((utf8_symb >> 6) == 2) {
                 utf8_symb = utf8_symb & 0x3F;
                 utf16_symb += utf8_symb;
                 utf16_symb = utf16_symb << 6;
 
                 fread(&utf8_symb, sizeof(char), 1, file_in);
 
-                if((utf8_symb >> 6) == 2)
-                {
+                if ((utf8_symb >> 6) == 2) {
                     utf8_symb = utf8_symb & 0x3F;
                     utf16_symb += utf8_symb;
                     correct_output = 1;
-                }
-                else
-                {
+                } else {
                     fprintf(stderr, "The third byte is incorrect in a three byte sequence, position: %ld\n", ftell(file_in));
                 }
-            }
-            else
-            {
+            } else {
                 fprintf(stderr, "The second byte is incorrect in a three byte sequence, position: %ld\n", ftell(file_in));
             }
-        }
-        else
-        {
+        } else {
             fprintf(stderr, "Byte is incorrect, position: %ld\n", ftell(file_in));
         }
 
-        if(correct_output)
-        {
-            if(bom == IS_BIG)
-            {
+        if (correct_output) {
+            if (bom == IS_BIG) {
                 utf8_symb = (char)(utf16_symb >> 8);
                 fwrite(&utf8_symb, sizeof(utf8_symb), 1, file_out);
                 utf8_symb = (char)(utf16_symb);
                 fwrite(&utf8_symb, sizeof(utf8_symb), 1, file_out);
-            }
-            else
-            {
+            } else {
                 fwrite(&utf16_symb, 2, 1, file_out);
             }
             correct_output = 0;

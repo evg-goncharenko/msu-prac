@@ -1,8 +1,3 @@
-/*
-    The program counts the received SIGTRAP signals between
-    the 2nd and 4th pressing of CTRL+C, ends on the 7th pressing of CTRL+C
-*/
-
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -15,28 +10,21 @@
 #include <unistd.h>
 
 int count = 1;
-void sig_handler(int s)
-{
+
+void sig_handler(int s) {
     count++;
-    if(count == 7)
-    {
+    if (count == 7) {
         signal(SIGINT, SIG_DFL);
-    }
-    else
-    {
-        if(count > 2 && count < 4)
-        {
+    } else {
+        if (count > 2 && count < 4) {
             signal(SIGTRAP, sig_handler);
-        }
-        else
-        {
+        } else {
             signal(SIGINT, sig_handler);
         }
     }
 }
 
-int main()
-{
+int main() {
     signal(SIGINT, sig_handler);
     for(;;);
     return 0;

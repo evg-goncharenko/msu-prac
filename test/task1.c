@@ -6,23 +6,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/msg.h>
 #include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 /* pr1 < fname; pr2 | pr3 */
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     int file_in = 0;
-    if(fork() == 0)
-    {
-        if((file_in = open(argv[4], O_RDONLY, 0777)) == -1)
-        {
+    if (fork() == 0) {
+        if ((file_in = open(argv[4], O_RDONLY, 0777)) == -1) {
             perror(argv[4]);
             exit(1);
         }
-        
         dup2(file_in, 0);
         
         execlp(argv[1], argv[1], (char*)0);
@@ -34,8 +30,7 @@ int main(int argc, char **argv)
     int fd[2];
     pipe(fd);
     
-    if(fork() == 0)
-    {
+    if (fork() == 0) {
         dup2(fd[1], 1);
         close(fd[1]);
         close(fd[0]);
@@ -44,8 +39,7 @@ int main(int argc, char **argv)
     }
     wait(NULL);
     
-    if(fork() == 0)
-    {
+    if (fork() == 0) {
         dup2(fd[0], 0);
         close(fd[1]);
         close(fd[0]);
@@ -56,7 +50,7 @@ int main(int argc, char **argv)
     close(fd[1]);
     close(fd[0]);
     
-    while(wait(NULL) != -1);
+    while (wait(NULL) != -1);
     
     return 0;
 }

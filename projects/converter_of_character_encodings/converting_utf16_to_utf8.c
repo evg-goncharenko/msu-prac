@@ -1,10 +1,10 @@
+#include <ctype.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
 #include <unistd.h>
-#include <ctype.h>
-#include <errno.h>
 
 #define LITTLE_ENDIANS 0xFFFE
 #define BIG_ENDIANS 0xFEFF
@@ -15,8 +15,7 @@
 #define IS_LITTLE 0
 #define IS_BIG 1
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     FILE *file_in;
     FILE *file_out;
 
@@ -29,18 +28,14 @@ int main(int argc, char **argv)
     file_in = stdin;
     file_out = stdout;
 
-    if(argc > 1)
-    {
-        if((file_in = fopen(argv[1], "r")) == NULL)
-        {
+    if (argc > 1) {
+        if ((file_in = fopen(argv[1], "r")) == NULL) {
             perror(argv[1]);
             exit(INPUT_ERROR);
         }
         
-        if(argc > 2)
-        {
-            if((file_out = fopen(argv[2], "w")) == NULL)
-            {
+        if (argc > 2) {
+            if ((file_out = fopen(argv[2], "w")) == NULL) {
                 /* If there isn't output file - create and make a warning: */
                 perror(argv[2]);
             }
@@ -53,16 +48,11 @@ int main(int argc, char **argv)
         The inversion of endian conditions is due
         to the inversion operation of fread/fwrite
     */
-    if(utf16_symb == LITTLE_ENDIANS)
-    {
+    if (utf16_symb == LITTLE_ENDIANS) {
         bom = IS_BIG;
-    }
-    else if(utf16_symb == BIG_ENDIANS)
-    {
+    } else if (utf16_symb == BIG_ENDIANS) {
         bom = IS_LITTLE;
-    }
-    else
-    {
+    } else {
         bom = IS_LITTLE;
         fseek(file_in, 0, SEEK_SET);
         fprintf(stderr, "BOM isn't found\n");
@@ -87,22 +77,17 @@ int main(int argc, char **argv)
      **********************************************************
     */
     
-    while(pair_bytes == 2)
-    {
-        if(bom == IS_BIG)
-        {
+    while (pair_bytes == 2) {
+        if (bom == IS_BIG) {
             utf8_symb1 = (char)(utf16_symb >> 8);
             utf16_symb = utf16_symb << 8;
             utf16_symb += utf8_symb1;
         }
 
-        if(utf16_symb < 128)
-        {
+        if (utf16_symb < 128) {
             utf8_symb1 = (char)utf16_symb;
             fwrite(&utf8_symb1, 1, 1, file_out);
-        }
-        else if(utf16_symb < 2048)
-        {
+        } else if (utf16_symb < 2048) {
             utf8_symb2 = (char)(utf16_symb & 0x3F);
             utf8_symb2 = utf8_symb2 + 128;
             utf16_symb = utf16_symb >> 6;
@@ -112,9 +97,7 @@ int main(int argc, char **argv)
             
             fwrite(&utf8_symb1, 1, 1, file_out);
             fwrite(&utf8_symb2, 1, 1, file_out);
-        }
-        else
-        {
+        } else {
             utf8_symb3 = (char)(utf16_symb & 0x3F);
             utf8_symb3 = utf8_symb3 + 128;
             utf16_symb = utf16_symb >> 6;
@@ -133,7 +116,7 @@ int main(int argc, char **argv)
         pair_bytes = fread(&utf16_symb, sizeof(char), 2, file_in);
     }
     
-    if(pair_bytes == 1) fprintf(stderr, "Odd number of bytes\n");
+    if (pair_bytes == 1) fprintf(stderr, "Odd number of bytes\n");
 
     fclose(file_in);
     fclose(file_out);

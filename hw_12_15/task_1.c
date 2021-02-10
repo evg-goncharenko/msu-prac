@@ -12,18 +12,15 @@
 #include <sys/ipc.h>
 #include <unistd.h>
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     int file, file2;
     
-    if((file = open(argv[1], O_RDONLY)) == -1)
-    {
+    if ((file = open(argv[1], O_RDONLY)) == -1) {
         perror(argv[1]);
         exit(1);
     }
     
-    if((file2 = open(argv[1], O_WRONLY)) == -1)
-    {
+    if ((file2 = open(argv[1], O_WRONLY)) == -1) {
         perror(argv[1]);
         exit(1);
     }
@@ -37,46 +34,36 @@ int main(int argc, char **argv)
     
     pos_last_wr = lseek(file, 0, SEEK_SET);
     
-    while((read(file, &tmp_l, sizeof(char))) > 0)
-    {
+    while ((read(file, &tmp_l, sizeof(char))) > 0) {
         int flag = 0; /* flag is true if the string contains at least two identical characters */
-        if(tmp_l != '\n')
-        {
-            if(flag_new_line)
-            {
+        if (tmp_l != '\n') {
+            if (flag_new_line) {
                 numb_in_line = 0; /* analysis of a new line */
             }
             int cur_numb_in_line = 1;
             
             /* Go to the end of the line: */
-            while((read(file, &tmp_r, sizeof(char))) > 0)
-            {
+            while ((read(file, &tmp_r, sizeof(char))) > 0) {
                 cur_numb_in_line++;
                 
-                if(flag_new_line)
-                {
+                if (flag_new_line) {
                     numb_in_line++;
                 }
                 
-                if(tmp_l == tmp_r)
-                {
+                if (tmp_l == tmp_r) {
                     flag = 1;
                 }
                 
-                if(tmp_r == '\n')
-                {
+                if (tmp_r == '\n') {
                     break;
                 }
             }
+            
             flag_new_line = 0;
-            if(!flag)
-            {
-                if(cur_numb_in_line == 2)
-                {
+            if (!flag) {
+                if(cur_numb_in_line == 2) {
                     flag_new_line = 1;
-                }
-                else if(cur_numb_in_line != 2)
-                {
+                } else if(cur_numb_in_line != 2) {
                     lseek(file, -numb_in_line, SEEK_CUR);
                 }
                 continue;
@@ -85,8 +72,7 @@ int main(int argc, char **argv)
             total_numb += numb_in_line + 1;
             lseek(file, - numb_in_line - 1, SEEK_CUR);
             
-            for(int i = 0; i <= numb_in_line; i++)
-            {
+            for (int i = 0; i <= numb_in_line; i++) {
                 read(file, &tmp_l, sizeof(char));
                 pos_file = lseek(file, 0, SEEK_CUR);
                 
@@ -97,9 +83,7 @@ int main(int argc, char **argv)
                 lseek(file, pos_file, SEEK_SET);
             }
             flag_new_line = 1;
-        }
-        else
-        {
+        } else {
             flag_new_line = 1;
         }
         
