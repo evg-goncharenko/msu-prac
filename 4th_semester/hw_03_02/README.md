@@ -1,6 +1,6 @@
 ## Homework by 03.02
 
-<b> [vector](./vector.c): </b><br>
+<b> [vector](./vector.cpp): </b><br>
     
 The program simulates the implementation of vectors:
 1) Initialization: `Vector v1(10, 2), v2(v1), v3(10);`
