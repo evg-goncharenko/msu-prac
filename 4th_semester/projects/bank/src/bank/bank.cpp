@@ -2,98 +2,111 @@
 
 using std::string;
 
-// SAVINGS_ACCOUNTS
+// ACCOUNT
 
-Savings_accounts::Savings_accounts(const string &id, const double rate, const double money) {
+Account::Account(const string &id, const double money) {
     ID_ = id;
-    interest_rate_ = rate;
     amount_of_money_ = money;
 }
 
-std::ostream& operator << (std::ostream &out, Savings_accounts &c) {
-    out << "{ID: " << c.ID_ << ", interest_rate: " << c.interest_rate_ << ", amount_of_money: " << c.amount_of_money_ << "}";
+Account::Account(const Account &c) {
+    ID_ = c.ID_;
+    amount_of_money_ = c.amount_of_money_;
+}
+
+Account& Account::operator = (Account &c) {
+    ID_ = c.ID_;
+    amount_of_money_ = c.amount_of_money_;
+    return (*this);
+}
+
+string Account::get_id() const {
+    return ID_;
+}
+
+double Account::get_money() const {
+    return amount_of_money_;
+}
+
+void Account::set_money(double new_value) {
+    amount_of_money_ = new_value;
+}
+
+// SAVINGS_ACCOUNT
+
+Savings_account::Savings_account(const double rate) {
+    interest_rate_ = rate;
+}
+
+std::ostream& operator << (std::ostream &out, Savings_account &c) {
+    out << "{interest_rate: " << c.interest_rate_ << "}";
     return out;
 }
 
-std::istream& operator >> (std::istream &in, Savings_accounts &c) {
-    in >> c.ID_ >> c.interest_rate_ >> c.amount_of_money_;
+std::istream& operator >> (std::istream &in, Savings_account &c) {
+    in >> c.interest_rate_;
     return in;
 }
 
-void Savings_accounts::account_capitalization() {
-    amount_of_money_ *= (1 + interest_rate_ / 100);
+void Savings_account::account_capitalization() {
+    set_money(this->get_money() * (1 + interest_rate_ / 100));
 }
 
-string Savings_accounts::get_id() const {
-    return ID_;
-}
-double Savings_accounts::get_interest_rate() const {
+double Savings_account::get_interest_rate() const {
     return interest_rate_;
 }
-double Savings_accounts::get_money() const {
-    return amount_of_money_;
+
+// CARD
+
+Card::Card(const string &cv, const string &card_numb) {
+    cv_code_ = cv;
+    card_number_ = card_numb;
 }
 
-void Savings_accounts::set_money(double new_value) {
-    amount_of_money_ = new_value;
-}
-
-// CARDS
-
-Cards::Cards(const string &id, const double money) {
-    ID_ = id;
-    amount_of_money_ = money;
-}
-
-std::ostream& operator << (std::ostream &out, Cards &c) {
-    out << "{ID: " << c.ID_ << ", limit: " << c.limit_ << ", amount_of_money: " << c.amount_of_money_ << "}";
+std::ostream& operator << (std::ostream &out, Card &c) {
+    out << "{cv_code: " << c.cv_code_ << ", card_number: " << c.card_number_ << "}";
     return out;
 }
 
-std::istream& operator >> (std::istream &in, Cards &c) {
-    in >> c.ID_ >> c.limit_ >> c.amount_of_money_;
+std::istream& operator >> (std::istream &in, Card &c) {
+    in >> c.cv_code_ >> c.card_number_;
     return in;
 }
 
-string Cards::get_id() const {
-    return ID_;
-}
-double Cards::get_money() const {
-    return amount_of_money_;
+string Card::get_cv_code() const {
+    return cv_code_;
 }
 
-void Cards::set_money(double new_value) {
-    amount_of_money_ = new_value;
+string Card::get_card_numb() const {
+    return card_number_;
 }
 
 // CLIENT
 
 Client::Client(const string &new_name, const int new_client_type,
-               const int new_ID){
+                     const int new_ID, const int new_login, const int new_password) {
     full_name_ = new_name;
     client_type_ = new_client_type;
     ID_ = new_ID;
+    login_ = new_login;
+    password_ = new_password;
 }
 
 Client::Client(const Client &other) {
     full_name_ = other.full_name_;
     client_type_ = other.client_type_;
     ID_ = other.ID_;
-    accounts_ = other.accounts_;
-    cards_ = other.cards_;
+    login_ = other.login_;
+    password_ = other.password_;
+    accounts_IDs = other.accounts_IDs;
 }
 
 Client& Client::operator = (const Client &other) {
     full_name_ = other.full_name_;
     client_type_ = other.client_type_;
     ID_ = other.ID_;
-    accounts_ = other.accounts_;
-    cards_ = other.cards_;
+    accounts_IDs = other.accounts_IDs;
     return *this;
-}
-
-Savings_accounts& Client::operator[](const string &ID) {
-    return accounts_.at(ID);
 }
 
 std::ostream& operator << (std::ostream &out, Client &cl) {
@@ -106,57 +119,61 @@ std::istream& operator >> (std::istream &in, Client &cl) {
     return in;
 }
 
-void Client::add_new_account(string ID_account, double interest_rate) {
-    Savings_accounts new_account(ID_account, interest_rate, 0);
-    accounts_.insert(std::pair<string, Savings_accounts>(ID_account, new_account));
+void Client::add_new_savings_account(string ID_account, double interest_rate) {
 }
-void Client::add_new_card(string ID_card) {
-    Cards new_card(ID_card, 0);
-    cards_.insert(std::pair<string, Cards>(ID_card, new_card));
-}
+
+void Client::add_new_card(string ID_card) {}
 
 const string Client::get_name() {
     return full_name_;
 }
+
 const int Client::get_ID() {
     return ID_;
 }
+
 const int Client::get_client_type() {
     return client_type_;
+}
+
+const int Client::get_login() {
+    return login_;
+}
+
+const int Client::get_password() {
+    return password_;
 }
 
 void Client::set_name(const string name) {
     full_name_ = name;
 }
+
 void Client::set_ID(const int ID) {
     ID_ = ID;
 }
+
 void Client::set_client_type(const int client_type) {
     client_type_ = client_type;
 }
 
-void Client::get_accounts() {
-    if (accounts_.empty()) {
-        std::cout << "This customer doesn't have any savings accounts yet" << std::endl;
+void Client::print_accounts() {
+    if (accounts_IDs.empty()) {
+        std::cout << "This customer doesn't have any accounts yet" << std::endl;
     } else {
-        for (auto it = accounts_.begin(); it != accounts_.end(); ++it) {
-            std::cout << "account ID: " << it -> first << std::endl;
-            std::cout << "account interes_rate: " << it -> second.get_interest_rate()
-            << std::endl;
-            std::cout << "account amount_of_money: " << it -> second.get_money()
-            << std::endl << std::endl;
+        for (int i = 0; i < accounts_IDs.size(); ++i) {
+            std::cout << "IDs: " << accounts_IDs[i] << " ";
         }
+        std::cout << std::endl;
     }
 }
+
+std::vector<string> Client::get_accounts() {
+    return accounts_IDs;
+}
+
 void Client::get_cards() {
-    if (cards_.empty()) {
+    if (accounts_IDs.empty()) {
         std::cout << "This customer doesn't have any cards yet" << std::endl;
-    } else {
-        for (auto it = cards_.begin(); it != cards_.end(); ++it) {
-            std::cout << "card ID: " << it -> first << std::endl;
-            std::cout << "card amount_of_money: " << it -> second.get_money()
-            << std::endl << std::endl;
-        }
     }
 }
 
@@ -174,66 +191,105 @@ void Client::get_info() {
     get_cards();
 }
 
-void Client::withdraw_money(string account_ID, double value, int type_storage) {
-    if (value <= 0) {
-        std::cout << "The entered amount of money must be positive" << std::endl;
-    } else if (value > LARGE_SUM_OF_MONEY && client_type_ == LEGAL_ENTITY) {
-        std::cout << "An individual can't make a transaction for more than 8 million" << std::endl;
-        return;
-    }
+// TRANSACTION
+
+bool Transaction::is_legal_transaction() {
+    // TODO
     
-    double current_amount_of_money;
-    if (type_storage == CARD) {
-        current_amount_of_money = cards_.at(account_ID).get_money();
-        if (current_amount_of_money < value) {
-            std::cout << "There are not enough funds on the card" << std::endl;
-        } else {
-            cards_.at(account_ID).set_money(current_amount_of_money - value);
-        }
-    } else if (type_storage == SAVINGS_ACCOUNT) {
-        current_amount_of_money = accounts_.at(account_ID).get_money();
-        if (current_amount_of_money < value) {
-            std::cout << "There are not enough funds on the savings account" << std::endl;
-        } else {
-            accounts_.at(account_ID).set_money(current_amount_of_money - value);
-        }
-    }
-}
-void Client::add_money(string account_ID, double value, int type_storage) {
-    if (value <= 0) {
-        std::cout << "The entered amount of money must be positive" << std::endl;
-    } else if (value > LARGE_SUM_OF_MONEY && client_type_ == INDIVIDUAL) {
-        std::cout << "An individual can't make a transaction for more than 8 million" << std::endl;
-        return;
-    }
-    
-    double current_amount_of_money;
-    if (type_storage == CARD) {
-        current_amount_of_money = cards_.at(account_ID).get_money();
-        cards_.at(account_ID).set_money(current_amount_of_money + value);
-        
-    } else if (type_storage == SAVINGS_ACCOUNT) {
-        current_amount_of_money = accounts_.at(account_ID).get_money();
-        accounts_.at(account_ID).set_money(current_amount_of_money + value);
-    }
+    return true;
 }
 
-Savings_accounts &Client::return_account(string ID) {
-    return accounts_.at(ID);
+bool Transaction::enough_money() {
+    // TODO
+    
+    return true;
+}
+
+bool Transaction::is_limited(int type_transaction) {
+    if (type_transaction == INTERNAL_TRANSACTION) {
+        if (amount_of_money_transfer_ > LIMIT_INTERNAL_TRANSACTION) {
+            return true;
+        }
+    }
+    
+    if (type_transaction == EXTERNAL_TRANSACTION) {
+        if (amount_of_money_transfer_ > LIMIT_EXTERNAL_TRANSACTION) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Transaction::set_addressee(string addressee) {
+    addressee_ = addressee;
+}
+
+void Transaction::set_sender(string sender) {
+    sender_ = sender;
+}
+
+// EXTERNAL_TRANSACTION
+
+// INTERNAL TRANSACTION
+
+void Internal_transaction::add_money(Account &S, double current_amount) {
+    if (current_amount <= 0) {
+        std::cout << "The entered amount of money must be positive" << std::endl;
+        return;
+    }
+    S.set_money(S.get_money() + current_amount);
+}
+
+void Internal_transaction::c2c_transaction(Account &S, Account &A, double current_amount) {
+    if (current_amount <= 0) {
+        std::cout << "The entered amount of money must be positive" << std::endl;
+        return;
+    } else if (S.get_money() - current_amount < 0) {
+        std::cout << "Insufficient funds" << std::endl;
+    }
+    
+    S.set_money(S.get_money() - current_amount);
+    A.set_money(A.get_money() + current_amount);
 }
 
 // BANK
 
-Bank::Bank() : ID_(0) {};
+void Bank::my_realloc() {
+        Transaction **new_transactions = new Transaction* [++transactions_number];
+        for (auto i = 0; i < transactions_number - 1; ++i) {
+            new_transactions[i] = transactions_array[i];
+        }
+        
+        delete [] transactions_array;
+        transactions_array = new_transactions;
+}
 
-void Bank::add_client(const string &name, const int type) {
-    Client new_client(name, type, ID_);
+Bank::Bank() : transactions_array{nullptr}, transactions_number{0}, ID_(0) {};
+
+void Bank::add_client(const string &name, const int type, const int login, const int password) {
+    Client new_client(name, type, ID_, login, password);
     clients_.insert(std::pair<int, Client>(ID_, new_client));
     ++ID_;
 };
 
 Client &Bank::return_client(const int ID) {
     return clients_.at(ID);
+}
+
+bool Bank::is_authorization(const int login, const int password) {
+    for (auto it = clients_.begin(); it != clients_.end(); ++it) {
+        if ((it->second.get_login() == login) && (it->second.get_password() == password)) {
+            return true;
+        }
+    }
+    return false;
+}
+Client &Bank::client_authorization(const int login, const int password) {
+    for (auto it = clients_.begin(); it != clients_.end(); ++it) {
+        if ((it->second.get_login() == login) && (it->second.get_password() == password)) {
+            return clients_.at(it->second.get_ID());
+        }
+    }
 }
 
 void Bank::all_bank_information() {
@@ -256,4 +312,16 @@ void Bank::print_of_lost_people(string name) {
             }
         }
     }
+}
+
+void Bank::internal_transaction(int ID1, int ID2, double current_amount) {
+    std::cout << "choose your account number" << std::endl;
+    clients_[ID1].print_accounts();
+    std::string num1, num2;
+    std::cin >> num1;
+    
+    Internal_transaction new_transaction;
+    
+    my_realloc();
+    transactions_array[transactions_number - 1] = &new_transaction;
 }
