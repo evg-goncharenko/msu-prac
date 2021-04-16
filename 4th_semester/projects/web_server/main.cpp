@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sys/_endian.h>
+#include <sys/_types/_socklen_t.h>
 #include <vector>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -11,16 +13,30 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define SD_BOTH 2
+const int SD_BOTH =  2;
 const int BACKLOG = 5;
 const std::string DELIMITER = "/r/n";
 
 class SocketAddress {
     struct sockaddr_in saddr;
 public:
-    SocketAddress();
-    SocketAddress(std::string, short port);
-    const struct sock_addr* GetAddr() const { return (sock_addr*)&saddr; } // для void Bind()
+    SocketAddress() {
+        saddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+        saddr.sin_family = AF_INET;
+        saddr.sin_port = htons(8080);
+    }
+    SocketAddress(const char* ip, short port) {
+        saddr.sin_addr.s_addr = inet_addr(ip);
+        saddr.sin_family = AF_INET;
+        saddr.sin_port = htons(port);
+    }
+    SocketAddress(unsigned int ip, short port) {
+        saddr.sin_addr.s_addr = htonl(ip);
+        saddr.sin_family = AF_INET;
+        saddr.sin_port = htons(port);
+    }
+    int GetSize() const { return sizeof(saddr); }
+    struct sockaddr* GetAddr() const { return (sockaddr*)&saddr; } // for void Bind()
     // ...
 };
 
@@ -30,44 +46,69 @@ protected:
     explicit Socket(int sd) : sd_(sd) {}
 public:
     Socket() {
-        sd_ = socket(AF_INET, SOCK_STREAM, 0);
+        sd_ = socket(AF_INET, SOCK_STREAM, 0); // AF_INET - IPv4 protocol; SOCK_STREAM - TCP(reliable, connection oriented)
         if (sd_ == -1) {
             throw; // TODO
         }
     }
-    void Shutdown() { shutdown(sd_, SD_BOTH); }
+    
+    void Shutdown() { shutdown(sd_, SD_BOTH); } // shutdown to end read/write; 
+
     ~Socket() { close(sd_); }
 };
 
 class ServerSocket: public Socket{
 public:
     void Bind(const SocketAddress& ipaddr) {
-        // TODO
+        if (bind(sd_, ipaddr.GetAddr(), ipaddr.GetSize()) < 0) {
+            throw;
+            // TODO
+        }
     }
-    int Accept(SocketAddress& clAddr) {
-        // TODO
-        return 0;
+
+    int Accept(SocketAddress& client_addr) {
+        size_t len = client_addr.GetSize();
+        int res = accept(sd_, client_addr.GetAddr(), (socklen_t *)&len);
+        if (res < 0) {
+            throw;
+            // TODO
+        }
+        return res;
     }
 
     void Listen(int backlog) {
-        // TODO
+        if (listen(sd_, backlog) < 0) {
+            throw;
+            // TODO
+        }
     }
 };
 
 class ConnectedSocket : public Socket {
 public:
     ConnectedSocket() = default;
-    explicit ConnectedSocket(int sd) : Socket(sd) {}
-    void Write(const std::string& str);
-    void Write(const std::vector<uint8_t>& bytes);
-    void Read(std::string& str);
-    void Read(std::vector<uint8_t>& bytes);
+    explicit ConnectedSocket(int sd) : Socket(sd) {} // TODO
+    void Write(const std::string& str) {
+        //write(sd_, const void *__buf, size_t __nbyte)
+    } // TODO
+    void Write(const std::vector<uint8_t>& bytes) {} // TODO
+    void Read(std::string& str) {
+        const int buflen = 1024;
+        char buf[buflen];
+        if (recv(sd_, buf, buflen, 0) < 0) {
+            throw;
+            // TODO
+        }
+        str = buf;
+    }
+    // TODO  
+    void Read(std::vector<uint8_t>& bytes) {} // TODO
     // ...
 };
 
 class ClientSocket : public ConnectedSocket {
 public:
-    void Connect(const SocketAddress& serverAddr);
+    void Connect(const SocketAddress& serverAddr) {}
 };
 
 class HttpHeader {
@@ -98,6 +139,12 @@ void ProcessConnection(int cd, const SocketAddress& clAddr) {
     std::string request;
     cs.Read(request);
     std::vector<std::string> lines = split_lines(request);
+    if (lines.size() > 0) {
+        std::cout << lines[0] << std::endl;
+    } else {
+        std::cout << "size <= 0" << std::endl;
+    }
+    
     // lines[0] - RequestHeader
     // lines[i] i = 1, ... - HttpHeader
     // lines[lines[lines.size() - 1]] <=> empty line
@@ -122,11 +169,11 @@ void ServerLoop() {
 
 void ClientConnection() {
     ClientSocket s;
-    SocketAddress saddr("127.0.0.1", 1234);
+    SocketAddress saddr("127.0.0.1", 8080);
     s.Connect(saddr);
 
     //HttpRequest rq;
-    // make request ...
+    //make request ...
     //s.Write(rq.ToString());
     std::string strResponce;
     s.Read(strResponce);
@@ -138,7 +185,6 @@ void ClientConnection() {
 
 int main() {
     std::cout << "Start program" << std::endl;
-    //Socket s = Socket(10);
     ServerLoop();
     return 0;
 }
