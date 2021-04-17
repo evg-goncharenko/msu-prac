@@ -2,6 +2,6 @@
 #include "src/client/client.h"
 
 int main() {
-    ClientConnection();
+    client_connection();
     return 0;
 }
