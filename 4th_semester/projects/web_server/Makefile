@@ -1,3 +1,5 @@
+PROG ?= SERVER
+
 BUILD ?= debug
 #BUILD = release
 
@@ -11,6 +13,8 @@ endif
 ifeq ($(BUILD), release)
 CXXFLAGS += -O3
 endif
+
+ifeq ($(PROG), SERVER)
 
 all: clean prog_server
 
@@ -28,3 +32,24 @@ client.o:
 
 clean:
 	rm -f main_server.o server.o client.o prog_server
+
+else
+
+all: clean prog_client
+
+prog_client: main_client.o server.o client.o
+	$(CXX) main_client.o server.o client.o -o prog_client
+
+main_client.o:
+	$(CXX) $(CXXFLAGS) main_client.cpp
+
+server.o:
+	$(CXX) $(CXXFLAGS) src/server/server.cpp
+
+client.o:
+	$(CXX) $(CXXFLAGS) src/client/client.cpp
+
+clean:
+	rm -f main_client.o server.o client.o prog_client
+
+endif

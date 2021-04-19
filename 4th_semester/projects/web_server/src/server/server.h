@@ -37,6 +37,7 @@
 #define SERVER_NAME     "www.primarysite.com"
 #define SERVER_PORT     "SERVER_PORT=8080"
 #define SERVER_PROTOCOL "SERVER_PROTOCOL=HTTP/1.0"
+#define SCRIPT_NAME     "SCRIPT_NAME="
 
 class SocketAddress {
     struct sockaddr_in saddr; // can store a pair: IP address + port
@@ -76,12 +77,13 @@ public:
     void to_read(std::vector<uint8_t>& bytes) {}
 };
 
-std::vector<std::string> split_lines(std::string str);
-std::string parse_path(std::string str);
-std::string get_file_name(std::string path);
-std::string get_query(std::string path);
-std::string get_path(std::string from);
-char** create_array(std::vector<std::string> &v);
+std::vector<std::string> split_lines(std::string str); // splitting request into lines
+std::string parse_path(std::string str);               // extracting the path to an object
+std::vector<uint8_t> to_vector(int fd);                // reading from a file descriptor to a vector
+std::string get_cgi_file_name(std::string path);
+std::string get_cgi_query(std::string path);
+char** create_array(std::vector<std::string> &v);      // create array char** from vector<string>
+void check_error(ConnectedSocket cs);                  // errors handling
 bool is_cgi_connection(std::string str);
 void cgi_connection(std::string path, int cd, const SocketAddress& client_addr, ConnectedSocket cs);
 void default_connection(std::string path, ConnectedSocket cs);

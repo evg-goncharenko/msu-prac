@@ -45,7 +45,7 @@ HttpHeader HttpHeader::parse_header(const std::string& line) {
 //class HttpRequest:
     
 HttpRequest::HttpRequest() {
-    lines_ = {"GET /cgi-bin/testcgi?name=eugene&surname=goncharenko&mail=evg_goncharenko HTTP/1.1\r\0"};
+    lines_ = {"GET /cgi/testcgi?name=eugene&surname=goncharenko&mail=evg_goncharenko HTTP/1.1\r\0"};
 }
 
 std::string HttpRequest::string_concat() const {

@@ -38,6 +38,7 @@ Socket::Socket() {
 void ServerSocket::bind_to(const SocketAddress& ipaddr) { // binding sockets to a specific address:
     if (bind(sd_, ipaddr.get_addr(), ipaddr.get_addr_len()) < 0) { // returns 0 if successful
         std::cout << "Error: Can't bind in ServerSocket" << std::endl;
+        exit(1);
     }
 }
 
@@ -46,6 +47,7 @@ int ServerSocket::accept_to(SocketAddress& client_addr) {
     int res = accept(sd_, client_addr.get_addr(), (socklen_t *)&len);
     if (res < 0) {
         std::cout << "Error: Can't accept in ServerSocket" << std::endl;
+        exit(1);
     }
     return res;
 }
@@ -53,6 +55,7 @@ int ServerSocket::accept_to(SocketAddress& client_addr) {
 void ServerSocket::listen_to(int backlog) { // listening state:
     if (listen(sd_, backlog) < 0) {
         std::cout << "Error: Can't listen in ServerSocket" << std::endl;
+        exit(1);
     }
 }
 
@@ -61,12 +64,14 @@ void ServerSocket::listen_to(int backlog) { // listening state:
 void ConnectedSocket::to_write(const std::string& str) {
     if (send(sd_, str.c_str(), str.length(), 0) < 0) { // or write(sd_, buf, buflen)
         std::cout << "Error: Can't write in ConnectedSocket" << std::endl;
+        exit(1);
     }
 }
 
 void ConnectedSocket::to_write(const std::vector<uint8_t>& bytes) {
     if (send(sd_, bytes.data(), bytes.size(), 0) < 0) { // or write(sd_, buf, buflen)
         std::cout << "Error: Can't write in ConnectedSocket" << std::endl;
+        exit(1);
     }
 }
 
@@ -75,11 +80,13 @@ void ConnectedSocket::to_read(std::string& str) { // TODO - rebuild
     char buf[buflen];
     if (recv(sd_, buf, buflen, 0) < 0) { // or read(sd_, buf, buflen)
         std::cout << "Error: Can't read in ConnectedSocket" << std::endl;
+        exit(1);
     }
     str = buf;
 }
 
 std::vector<std::string> split_lines(std::string str) {
+    // splits the request into sentences, delimiter - indicates the end of the sentence
     std::string delimiter= "\r\n";
     int pos_start = 0, pos_end, delim_len = delimiter.length();
     std::string token;
@@ -118,7 +125,7 @@ std::vector<uint8_t> to_vector(int fd) {
     return v;
 }
 
-std::string get_file_name(std::string path) {
+std::string get_cgi_file_name(std::string path) {
     std::string temp;
     int i = 0;
     while(path[i] != '?') {
@@ -128,22 +135,14 @@ std::string get_file_name(std::string path) {
     return temp;
 }
 
-std::string get_query(std::string path) {
+std::string get_cgi_query(std::string path) {
     std::string temp;
-    int i = get_file_name(path).length() + 1;
+    int i = get_cgi_file_name(path).length() + 1;
     while(i != path.length()) {
         temp += path[i];
         i++;
     }
     return temp;
-}
-
-std::string get_path(std::string from) {
-    int i = 4; // because the word Get has three letters
-    std::string res = "src/";
-    if (from[i] == ' ') i++;
-    while (from[i] != ' ') res += from[i++];
-    return res;
 }
 
 char** create_array(std::vector<std::string> &v) {
@@ -155,11 +154,28 @@ char** create_array(std::vector<std::string> &v) {
     return env;
 }
 
+void check_error(ConnectedSocket cs) {
+    std::string error_str;
+    switch (errno) {
+        case EACCES: // permission denied
+            error_str = "HTTP/1.1 403 Forbidden\n";
+            break;
+        case ENETRESET: // connection aborted by network
+            error_str = "HTTP/1.1 503 Service Unavailable\n";
+            break;
+        default:
+            error_str = "HTTP/1.1 404 Not Found\n";
+            break;
+    }
+    std::cout << error_str << std::endl;
+    cs.to_write(error_str);
+}
+
 bool is_cgi_connection(std::string str) { 
     return !(str.find('?') == -1); // true - if the '?' character is found
 }
 
-void cgi_connection(std::string path, int cd, const SocketAddress& client_addr, ConnectedSocket cs) {
+void cgi_connection(std::string path, int cd, const SocketAddress& client_addr, ConnectedSocket cs, std::string request) {
     int fd;
     pid_t pid = fork();
     switch (pid) {
@@ -175,27 +191,31 @@ void cgi_connection(std::string path, int cd, const SocketAddress& client_addr, 
             - redirecting standard input (for the POST method)
             - actually starting the program
             */
-            fd = open("tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            fd = open("log", O_WRONLY | O_CREAT | O_TRUNC, 0644);
             if (fd < 0) {
                 std::cout << "Error: Can't open a new file" << std::endl;
             }
             dup2(fd, 1);
             close(fd);
-            std::string file_name = get_file_name(path);
-            std::string query = get_query(path);
+            std::string file_name = get_cgi_file_name(path);
+            std::string query = get_cgi_query(path);
             char* argv[] = { (char*)file_name.c_str(), NULL};
             
             std::vector<std::string> v;
+            v.push_back(request);
             v.push_back(SERVER_ADDR);
             v.push_back(SERVER_PORT);
             v.push_back(SERVER_PROTOCOL);
             v.push_back(CONTENT_TYPE);
-            v.push_back(QUERY_STRING);
-            v.push_back(file_name);
+            v.push_back(QUERY_STRING + query);
+            v.push_back(SCRIPT_NAME+file_name);
 
             char** env = create_array(v);
 
             execve(file_name.c_str(), argv, env);
+
+            check_error(cs);
+
             perror("exec");
             exit(2);
         }
@@ -203,14 +223,12 @@ void cgi_connection(std::string path, int cd, const SocketAddress& client_addr, 
             int status;
             wait(&status);
 
-            if (WIFEXITED(status)) {
-                fd = open("tmp", O_RDONLY);
+            if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+                fd = open("log", O_RDONLY);
                 std::vector<uint8_t> vect = to_vector(fd);
                 cs.to_write("HTTP/1.1 200 OK\0");
                 std::cout << "HTTP/1.1 200 OK" << std::endl;
-
                 std::string str = "\r\nVersion: HTTP/1.1\r\nContent-length: " + std::to_string(vect.size()) + "\r\n\r\n";
-
                 std::cout << "Version: " << "HTTP/1.1" << std::endl;
                 std::cout << "Content-length: " << std::to_string(vect.size()) << std::endl;
 
@@ -218,12 +236,6 @@ void cgi_connection(std::string path, int cd, const SocketAddress& client_addr, 
                 cs.to_write(vect);
                 close(fd);
                 cs.shutting_down();
-            } else {
-                std::cout << "HTTP/1.1 404 Not Found" << std::endl;
-                cs.to_write("HTTP/1.1 404 Not Found\r");
-                if ((fd = open(ERROR_PAGE, O_RDONLY)) < 0) {
-                    std::cout << "Error: Page 404 is missing" << std::endl;
-                }
             }
             break;
         }
@@ -271,7 +283,7 @@ void process_connection(int cd, const SocketAddress& client_addr) {
     std::cout << "Path: " << path << std::endl;
 
     if (is_cgi_connection(path)) {
-        cgi_connection(path, cd, client_addr, cs);
+        cgi_connection(path, cd, client_addr, cs, request);
     } else {
         default_connection(path, cs);
     }
@@ -280,9 +292,9 @@ void process_connection(int cd, const SocketAddress& client_addr) {
 void server_loop() {
     SocketAddress server_address(BASE_ADDR, PORT);
     ServerSocket server_socket;
-    server_socket.bind_to(server_address); // bind to an address - what port am I on?
+    server_socket.bind_to(server_address);   // bind to an address - what port am I on?
     std::cout << "The client was successfully binded" << std::endl;
-    server_socket.listen_to(BACKLOG); // listen on a port, and wait for a connection to be established
+    server_socket.listen_to(BACKLOG);        // listen on a port, and wait for a connection to be established
     for (;;) {
         SocketAddress client_addr;
         int cd = server_socket.accept_to(client_addr);
