@@ -1,4 +1,6 @@
 #include "server.h"
+#include <sys/fcntl.h>
+#include <sys/wait.h>
 
 // class SocketAddress:
 
@@ -116,26 +118,120 @@ std::vector<uint8_t> to_vector(int fd) {
     return v;
 }
 
-void process_connection(int cd, const SocketAddress& clAddr) {
-    ConnectedSocket cs(cd);
-    std::string request;
-    cs.to_read(request);
-    std::vector<std::string> lines = split_lines(request);
-    // lines[0] - RequestHeader
-    // lines[i] i = 1, ... - HttpHeader
-    // lines[lines[lines.size() - 1]] <=> empty line or body
-    if (lines.size() > 0) {
-        std::cout << lines[0] << std::endl;
-    } else {
-        std::cout << "Error: lines.size() <= 0 in process_connection()" << std::endl;
+std::string get_file_name(std::string path) {
+    std::string temp;
+    int i = 0;
+    while(path[i] != '?') {
+        temp += path[i];
+        i++;
     }
+    return temp;
+}
 
-    std::string path = parse_path(lines[0]);
-    std::cout << "Path: " << path << std::endl;
-    
-    // Process request:
+std::string get_query(std::string path) {
+    std::string temp;
+    int i = get_file_name(path).length() + 1;
+    while(i != path.length()) {
+        temp += path[i];
+        i++;
+    }
+    return temp;
+}
+
+std::string get_path(std::string from) {
+    int i = 4; // because the word Get has three letters
+    std::string res = "src/";
+    if (from[i] == ' ') i++;
+    while (from[i] != ' ') res += from[i++];
+    return res;
+}
+
+char** create_array(std::vector<std::string> &v) {
+    char** env = new char*[v.size() + 1];
+    for (auto i = 0; i < v.size(); ++i) {
+        env[i] = (char *)v[i].c_str();
+    }
+    env[v.size()] = NULL;
+    return env;
+}
+
+bool is_cgi_connection(std::string str) { 
+    return !(str.find('?') == -1); // true - if the '?' character is found
+}
+
+void cgi_connection(std::string path, int cd, const SocketAddress& client_addr, ConnectedSocket cs) {
+    int fd;
+    pid_t pid = fork();
+    switch (pid) {
+        case -1: {
+            perror("System error with pid");
+            exit(1);
+        }
+        case 0: {
+            /*
+            Descendant-processing of a CGI program:
+            - forming an array of environment variables env
+            - redirecting standard output to a temporary file 
+            - redirecting standard input (for the POST method)
+            - actually starting the program
+            */
+            fd = open("tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd < 0) {
+                std::cout << "Error: Can't open a new file" << std::endl;
+            }
+            dup2(fd, 1);
+            close(fd);
+            std::string file_name = get_file_name(path);
+            std::string query = get_query(path);
+            char* argv[] = { (char*)file_name.c_str(), NULL};
+            
+            std::vector<std::string> v;
+            v.push_back(SERVER_ADDR);
+            v.push_back(SERVER_PORT);
+            v.push_back(SERVER_PROTOCOL);
+            v.push_back(CONTENT_TYPE);
+            v.push_back(QUERY_STRING);
+            v.push_back(file_name);
+
+            char** env = create_array(v);
+
+            execve(file_name.c_str(), argv, env);
+            perror("exec");
+            exit(2);
+        }
+        default: { // case > 0
+            int status;
+            wait(&status);
+
+            if (WIFEXITED(status)) {
+                fd = open("tmp", O_RDONLY);
+                std::vector<uint8_t> vect = to_vector(fd);
+                cs.to_write("HTTP/1.1 200 OK\0");
+                std::cout << "HTTP/1.1 200 OK" << std::endl;
+
+                std::string str = "\r\nVersion: HTTP/1.1\r\nContent-length: " + std::to_string(vect.size()) + "\r\n\r\n";
+
+                std::cout << "Version: " << "HTTP/1.1" << std::endl;
+                std::cout << "Content-length: " << std::to_string(vect.size()) << std::endl;
+
+                cs.to_write(str);
+                cs.to_write(vect);
+                close(fd);
+                cs.shutting_down();
+            } else {
+                std::cout << "HTTP/1.1 404 Not Found" << std::endl;
+                cs.to_write("HTTP/1.1 404 Not Found\r");
+                if ((fd = open(ERROR_PAGE, O_RDONLY)) < 0) {
+                    std::cout << "Error: Page 404 is missing" << std::endl;
+                }
+            }
+            break;
+        }
+    }   
+}
+
+void default_connection(std::string path, ConnectedSocket cs) {
     int fd = 0;
-    
     if ((fd = open(path.c_str(), O_RDONLY)) < 0) {
         std::cout << "HTTP/1.1 404 Not Found" << std::endl;
         cs.to_write("HTTP/1.1 404 Not Found\r");
@@ -155,6 +251,30 @@ void process_connection(int cd, const SocketAddress& clAddr) {
     cs.to_write(vect);
     close(fd);
     cs.shutting_down();
+}
+
+void process_connection(int cd, const SocketAddress& client_addr) {
+    ConnectedSocket cs(cd);
+    std::string request;
+    cs.to_read(request);
+    std::vector<std::string> lines = split_lines(request);
+    // lines[0] - RequestHeader
+    // lines[i] i = 1, ... - HttpHeader
+    // lines[lines[lines.size() - 1]] <=> empty line or body
+    if (lines.size() > 0) {
+        std::cout << lines[0] << std::endl;
+    } else {
+        std::cout << "Error: lines.size() <= 0 in process_connection()" << std::endl;
+    }
+
+    std::string path = parse_path(lines[0]);
+    std::cout << "Path: " << path << std::endl;
+
+    if (is_cgi_connection(path)) {
+        cgi_connection(path, cd, client_addr, cs);
+    } else {
+        default_connection(path, cs);
+    }
 }
 
 void server_loop() {

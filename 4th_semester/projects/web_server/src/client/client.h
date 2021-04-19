@@ -48,8 +48,8 @@ class HttpResponse {
     int length_;
 public:
     HttpResponse(std::vector<std::string> lines);
-    void print_all() const;
     ~HttpResponse();
+    void print_all() const;
 };
 
 void client_connection();

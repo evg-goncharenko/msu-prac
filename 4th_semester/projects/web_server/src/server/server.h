@@ -14,18 +14,29 @@
 #include <unistd.h>
 #include <string>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 
-const int FULL_SHUTDOWN =  2; // in both directions
-const int BACKLOG = 5;
+#define FULL_SHUTDOWN   2 // in both directions
+#define BACKLOG         5
 
-const int PORT = 8080;
-#define BASE_ADDR "127.0.0.1" 
-#define ERROR_PAGE "src/404.html"
+#define PORT            8080
+#define BASE_ADDR       "127.0.0.1" 
+#define ERROR_PAGE      "src/404.html"
 
-#define CLEAR_SCREEN "\033[2J\033[1;1H"
-#define RESET_COLOR "\033[0m"
-#define CYAN_COLOR "\x1b[36m"
+#define CLEAR_SCREEN    "\033[2J\033[1;1H"
+#define RESET_COLOR     "\033[0m"
+#define CYAN_COLOR      "\x1b[36m"
+
+#define CONTENT_TYPE    "CONTENT_TYPE=text/plain"
+#define REMOTE_ADDR     "REMOTE_ADDR=127.0.0.5"
+#define REMOTE_PORT     "REMOTE_PORT=8845"
+#define QUERY_STRING    "QUERY_STRING="
+#define SERVER_ADDR     "SERVER_ADDR=127.0.0.1"
+#define SERVER_NAME     "www.primarysite.com"
+#define SERVER_PORT     "SERVER_PORT=8080"
+#define SERVER_PROTOCOL "SERVER_PROTOCOL=HTTP/1.0"
 
 class SocketAddress {
     struct sockaddr_in saddr; // can store a pair: IP address + port
@@ -58,15 +69,22 @@ public:
 class ConnectedSocket : public Socket {
 public:
     ConnectedSocket() = default;
-    explicit ConnectedSocket(int sd) : Socket(sd) {} // TODO
+    explicit ConnectedSocket(int sd) : Socket(sd) {}
     void to_write(const std::string& str);
     void to_write(const std::vector<uint8_t>& bytes);
     void to_read(std::string& str);
-    void to_read(std::vector<uint8_t>& bytes) {} // TODO
+    void to_read(std::vector<uint8_t>& bytes) {}
 };
 
 std::vector<std::string> split_lines(std::string str);
 std::string parse_path(std::string str);
+std::string get_file_name(std::string path);
+std::string get_query(std::string path);
+std::string get_path(std::string from);
+char** create_array(std::vector<std::string> &v);
+bool is_cgi_connection(std::string str);
+void cgi_connection(std::string path, int cd, const SocketAddress& client_addr, ConnectedSocket cs);
+void default_connection(std::string path, ConnectedSocket cs);
 void process_connection(int cd, const SocketAddress& clAddr);
 void server_loop();
 

@@ -45,7 +45,7 @@ HttpHeader HttpHeader::parse_header(const std::string& line) {
 //class HttpRequest:
     
 HttpRequest::HttpRequest() {
-    lines_ = {"GET /f.txt HTTP/1.1"};
+    lines_ = {"GET /cgi-bin/testcgi?name=eugene&surname=goncharenko&mail=evg_goncharenko HTTP/1.1\r\0"};
 }
 
 std::string HttpRequest::string_concat() const {
@@ -73,7 +73,7 @@ HttpResponse::HttpResponse(std::vector<std::string> lines) {
 }
 
 void HttpResponse::print_all() const {
-    std::cout << CYAN_COLOR << "response_ : " << RESET_COLOR << response_.string_concat() << "'" << std::endl;
+    std::cout << CYAN_COLOR << "response_ : " << RESET_COLOR << response_.string_concat() << std::endl;
     int j = 0;
     while (j < length_) {
         std::cout << CYAN_COLOR << "other[" << j << "] : " << RESET_COLOR << (other_[j]).string_concat() << std::endl;
