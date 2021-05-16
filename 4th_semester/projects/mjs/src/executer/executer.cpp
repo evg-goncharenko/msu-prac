@@ -88,7 +88,7 @@ void Executer::execute(std::vector<Lexeme> &poliz) {
                 from_st(args, one);
                 j = one.get_value();
                 if (TID[j].get_assign()) {
-                    std::cout << one.get_type() << " " << two.get_type() << std::endl;
+                    std::cerr << one.get_type() << " " << two.get_type() << std::endl;
                     if (TID[j].get_type() == LEX_TRUE) {
                         TID[j].put_value(1);
                         TID[j].put_type(LEX_NUM);
@@ -825,5 +825,5 @@ void Executer::execute(std::vector<Lexeme> &poliz) {
         }  // end of switch
         ++index;
     };  // end of while
-    std::cout << CYAN_COLOR << "\n\nExecuter is OK!\n" << RESET_COLOR;
+    std::cerr << CYAN_COLOR << "\n\nExecuter is OK!\n" << RESET_COLOR;
 }

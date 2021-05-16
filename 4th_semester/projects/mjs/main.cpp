@@ -5,10 +5,16 @@
 #include "src/interpreter/interpreter.h"
 #include "src/lexeme/lexeme.h"
 
-int main(int argc, char** argv) {
+#define CLEAR_SCREEN    "\033[2J\033[1;1H"
+#define RESET_COLOR     "\033[0m"
+#define CYAN_COLOR      "\x1b[36m"
+
+int main(int argc, char** argv, char** env) {
+    std::cerr << env[0] << std::endl;
+    std::cerr << CLEAR_SCREEN;
     try {
         Interpreter i;
-        if (argc == 2) {  // if running through a file './prog test_prog.js'
+        if (argc == 2) {         // if running through a file './prog test_prog.js'
             i = Interpreter(argv[1]);
         } else if (argc == 1) {  // if running through a './prog < test_prog.js'
             i = Interpreter();
