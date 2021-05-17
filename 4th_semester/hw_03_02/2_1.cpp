@@ -3,8 +3,9 @@ using namespace std;
 
 class Cls {
     int i;
-    void operator = (const Cls &s) {
+    void operator=(const Cls &s) {
     }
+
 public:
     Cls() { i = 1; }
 };

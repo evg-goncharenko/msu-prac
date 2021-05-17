@@ -6,8 +6,11 @@
 */
 char *sstrcat(char *s, char *t) {
     char *res = s;
-    while (*s) { s++; }
-    while ((*s++ = *t++)) { }
+    while (*s) {
+        s++;
+    }
+    while ((*s++ = *t++)) {
+    }
     *s = 0;
     return res;
 }
@@ -19,7 +22,7 @@ int sstrend(char *s, char *t) {
     for (long pos = strlen(s) - strlen(t), i = 0; pos < strlen(s); pos++, i++) {
         if (s[pos] != t[i]) return 0;
     }
-    return (strlen(t) <= strlen(s)) ;
+    return (strlen(t) <= strlen(s));
 }
 
 /*
@@ -28,7 +31,9 @@ int sstrend(char *s, char *t) {
 */
 char *sstrncpy(char *t, char *s, int n) {
     char *tmp = s;
-    while ((*tmp++ = *t++) && (n > 1)) { n--; }
+    while ((*tmp++ = *t++) && (n > 1)) {
+        n--;
+    }
     *tmp = 0;
     return s;
 }
@@ -39,8 +44,12 @@ char *sstrncpy(char *t, char *s, int n) {
 */
 char *sstrncat(char *s, char *t, int n) {
     char *res = s;
-    while (*s) { s++; }
-    while ((n > 0) && (*s++ = *t++)) { n--; }
+    while (*s) {
+        s++;
+    }
+    while ((n > 0) && (*s++ = *t++)) {
+        n--;
+    }
     *s = 0;
     return res;
 }
@@ -57,6 +66,5 @@ int sstrncmp(char *cs, char *ct, int n) {
 }
 
 int main() {
-    
     return 0;
 }

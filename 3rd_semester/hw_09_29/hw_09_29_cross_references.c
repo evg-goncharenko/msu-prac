@@ -19,10 +19,10 @@ typedef struct Tree {
 /* Adding an element to the tree: */
 Tree *add_elem(Tree *r, char *tmp_word, int line) {
     if (!r) {
-        r = (Tree*)malloc(sizeof(Tree));
+        r = (Tree *)malloc(sizeof(Tree));
         r->size = 1;
-        r->lines = (int*)malloc(sizeof(int));
-        r->word = malloc(strlen(tmp_word)+1);
+        r->lines = (int *)malloc(sizeof(int));
+        r->word = malloc(strlen(tmp_word) + 1);
         strcpy(r->word, tmp_word);
 
         r->numb_lines = 1;
@@ -31,7 +31,7 @@ Tree *add_elem(Tree *r, char *tmp_word, int line) {
         r->right = NULL;
         return r;
     }
-    
+
     /* If that word already exists: */
     if (!strcmp(tmp_word, r->word)) {
         /* If the word is found on a different line:  */
@@ -39,7 +39,7 @@ Tree *add_elem(Tree *r, char *tmp_word, int line) {
             /* It's time to increase the dimension */
             if (r->size == r->numb_lines) {
                 r->size *= 4;
-                r->lines = realloc(r->lines, r->size* sizeof(int));
+                r->lines = realloc(r->lines, r->size * sizeof(int));
             }
             r->lines[r->numb_lines] = line;
             r->numb_lines++;
@@ -59,7 +59,7 @@ void print_elem(Tree *t) {
     if (t) {
         print_elem(t->left);
         printf("%s: ", t->word);
-        
+
         for (i = 0; i < t->numb_lines; i++) {
             printf("%d ", t->lines[i]);
         }
@@ -70,10 +70,10 @@ void print_elem(Tree *t) {
 
 /* Deleting a tree: */
 void delete_tree(Tree *root) {
-    if(!root) return;
+    if (!root) return;
     delete_tree(root->left);
     delete_tree(root->right);
-    
+
     free(root->lines);
     free(root->word);
     free(root);
@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "File '%s' not found\n", argv[2]);
         return 1;
     }
-    
+
     while ((tmp_c = getc(file_in)) != EOF) {
         /* Creating a word: */
         while ((!isspace(tmp_c)) && (tmp_c != EOF)) {
@@ -100,16 +100,16 @@ int main(int argc, char **argv) {
                 size_word *= 2;
                 tmp_word = realloc(tmp_word, size_word);
             }
-            
+
             tmp_word[index_word] = tmp_c;
             index_word++;
             tmp_c = getc(file_in);
         }
-        
+
         if (tmp_word) {
             tmp_word[index_word] = 0; /* don't forget to set the end of line flag */
             t = add_elem(t, tmp_word, lines);
-            
+
             free(tmp_word);
             tmp_word = NULL;
             index_word = 0;
@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
     printf("End of reading\n");
     printf("Words:\n");
     print_elem(t);
-    
+
     delete_tree(t);
     fclose(file_in);
     return 0;

@@ -2,6 +2,7 @@
 
 class A {
     static int numb_;
+
 public:
     static int f() {
         return numb_++;

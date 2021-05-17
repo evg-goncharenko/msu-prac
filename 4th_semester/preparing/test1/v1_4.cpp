@@ -2,6 +2,7 @@
 
 class Counted {
     static int amount_;
+
 public:
     Counted() { amount_++; }
     Counted(const Counted &c) { amount_++; }

@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
             perror(argv[1]);
             exit(INPUT_ERROR);
         }
-        
+
         if (argc > 2) {
             if ((file_out = fopen(argv[2], "w")) == NULL) {
                 /* If there isn't output file - create and make a warning: */
@@ -57,17 +57,17 @@ int main(int argc, char **argv) {
         fseek(file_in, 0, SEEK_SET);
         fprintf(stderr, "BOM isn't found\n");
     }
-    
+
     unsigned char tmp_byte1 = 0xEF;
     unsigned char tmp_byte2 = 0xBB;
     unsigned char tmp_byte3 = 0xBF;
-    
+
     fwrite(&tmp_byte1, 1, 1, file_out);
     fwrite(&tmp_byte2, 1, 1, file_out);
     fwrite(&tmp_byte3, 1, 1, file_out);
-    
+
     pair_bytes = fread(&utf16_symb, sizeof(char), 2, file_in);
-    
+
     /*
      **********************************************************
      *  Number of octets |             Template               |
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
      *          3        |     1110xxxx 10xxxxxx 10xxxxxx     |
      **********************************************************
     */
-    
+
     while (pair_bytes == 2) {
         if (bom == IS_BIG) {
             utf8_symb1 = (char)(utf16_symb >> 8);
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 
             utf8_symb1 = (char)(utf16_symb);
             utf8_symb1 = utf8_symb1 + 128 + 64;
-            
+
             fwrite(&utf8_symb1, 1, 1, file_out);
             fwrite(&utf8_symb2, 1, 1, file_out);
         } else {
@@ -108,18 +108,18 @@ int main(int argc, char **argv) {
 
             utf8_symb1 = (char)(utf16_symb);
             utf8_symb1 = utf8_symb1 + 128 + 64 + 32;
-            
+
             fwrite(&utf8_symb1, 1, 1, file_out);
             fwrite(&utf8_symb2, 1, 1, file_out);
             fwrite(&utf8_symb3, 1, 1, file_out);
         }
         pair_bytes = fread(&utf16_symb, sizeof(char), 2, file_in);
     }
-    
+
     if (pair_bytes == 1) fprintf(stderr, "Odd number of bytes\n");
 
     fclose(file_in);
     fclose(file_out);
-    
+
     return 0;
 }

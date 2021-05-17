@@ -2,9 +2,10 @@
 using namespace std;
 
 struct smartstr {
-    smartstr(int a) { }
+    smartstr(int a) {}
+
 private:
-    smartstr() { }
+    smartstr() {}
 };
 
 int main() {

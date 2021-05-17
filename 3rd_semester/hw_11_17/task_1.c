@@ -15,12 +15,12 @@ void func1(int argc, char **argv) {
         fprintf(stderr, "You should have 7 arguments\n");
         exit(1);
     }
-    
+
     int fd[2];
     pipe(fd);
-    
+
     pid_t pid = fork();
-    
+
     switch (pid) {
         case -1: {
             perror("System error with pid");
@@ -30,9 +30,9 @@ void func1(int argc, char **argv) {
             dup2(fd[1], 1);
             close(fd[1]);
             close(fd[0]);
-            
-            execlp(argv[1], argv[1], argv[2], argv[3], (char*)0);
-            
+
+            execlp(argv[1], argv[1], argv[2], argv[3], (char *)0);
+
             perror("Error with exec pr1");
             exit(3);
         }
@@ -40,7 +40,7 @@ void func1(int argc, char **argv) {
             break;
         }
     }
-    
+
     pid_t pid2 = fork();
     switch (pid2) {
         case -1: {
@@ -51,9 +51,9 @@ void func1(int argc, char **argv) {
             dup2(fd[0], 0);
             close(fd[1]);
             close(fd[0]);
-            
-            execlp(argv[4], argv[4], (char*)0);
-            
+
+            execlp(argv[4], argv[4], (char *)0);
+
             perror("Error with exec pr2");
             exit(5);
         }
@@ -61,13 +61,13 @@ void func1(int argc, char **argv) {
             break;
         }
     }
-    
+
     close(fd[1]);
     close(fd[0]);
-    
-    while (wait(NULL) != -1);
-    
-    
+
+    while (wait(NULL) != -1)
+        ;
+
     pid_t pid3 = fork();
     switch (pid3) {
         case -1: {
@@ -84,9 +84,9 @@ void func1(int argc, char **argv) {
             close(fd[1]);
             close(fd[0]);
             close(file_out);
-            
-            execlp(argv[5], argv[5], (char*)0);
-            
+
+            execlp(argv[5], argv[5], (char *)0);
+
             perror("Error with exec pr3");
             exit(8);
         }
@@ -94,7 +94,7 @@ void func1(int argc, char **argv) {
             break;
         }
     }
-    
+
     wait(NULL);
 }
 
@@ -104,10 +104,10 @@ void func2(int argc, char **argv) {
         fprintf(stderr, "You should have 6 arguments\n");
         exit(1);
     }
-    
+
     int fd[2];
     pipe(fd);
-    
+
     pid_t pid = fork();
     switch (pid) {
         case -1: {
@@ -125,9 +125,9 @@ void func2(int argc, char **argv) {
             dup2(fd[1], 1);
             close(fd[1]);
             close(fd[0]);
-            
-            execlp(argv[1], argv[1], (char*)0);
-            
+
+            execlp(argv[1], argv[1], (char *)0);
+
             perror("Error with exec pr1");
             exit(4);
             break;
@@ -136,7 +136,7 @@ void func2(int argc, char **argv) {
             break;
         }
     }
-    
+
     pid_t pid2 = fork();
     switch (pid2) {
         case -1: {
@@ -154,9 +154,9 @@ void func2(int argc, char **argv) {
             dup2(file_out, 1);
             close(fd[1]);
             close(fd[0]);
-            
-            execlp(argv[3], argv[3], (char*)0);
-            
+
+            execlp(argv[3], argv[3], (char *)0);
+
             perror("Error with exec pr2");
             exit(6);
             break;
@@ -165,13 +165,14 @@ void func2(int argc, char **argv) {
             break;
         }
     }
-    
+
     close(fd[1]);
     close(fd[0]);
-    
-    while (wait(NULL) != -1);
-    
-    execlp(argv[5], argv[5], (char*)0); /* exec pr3 */
+
+    while (wait(NULL) != -1)
+        ;
+
+    execlp(argv[5], argv[5], (char *)0); /* exec pr3 */
 }
 
 /* pr1 | pr2 | ... | pr_n */
@@ -179,7 +180,7 @@ void func3(int argc, char **argv) {
     int i = 0;
     pid_t pid;
     int fd[2];
-    
+
     while (argv[++i] != NULL) {
         pipe(fd);
         switch (pid = fork()) {
@@ -194,9 +195,9 @@ void func3(int argc, char **argv) {
                 }
                 close(fd[1]);
                 close(fd[0]);
-                
-                execlp(argv[i], argv[i], (char*)0);
-                
+
+                execlp(argv[i], argv[i], (char *)0);
+
                 exit(2);
                 break;
             }
@@ -205,12 +206,13 @@ void func3(int argc, char **argv) {
             }
         }
         dup2(fd[0], 0);
-        
+
         close(fd[1]);
         close(fd[0]);
     }
-    
-    while (wait(NULL) != -1);
+
+    while (wait(NULL) != -1)
+        ;
 }
 
 /* pr1 arg1 > f.res; pr2 | pr3 | pr4 >> f.res */
@@ -219,9 +221,9 @@ void func4(int argc, char **argv) {
         fprintf(stderr, "You should have 8 arguments\n");
         exit(1);
     }
-    
+
     pid_t pid = fork();
-    switch(pid) {
+    switch (pid) {
         case -1: {
             perror("System error with pid");
             exit(2);
@@ -234,9 +236,9 @@ void func4(int argc, char **argv) {
                 exit(3);
             }
             dup2(file_out, 1);
-            
-            execlp(argv[1], argv[1], argv[2], (char*)0);
-            
+
+            execlp(argv[1], argv[1], argv[2], (char *)0);
+
             perror("Error with exec pr1");
             exit(4);
             break;
@@ -245,13 +247,14 @@ void func4(int argc, char **argv) {
             break;
         }
     }
-    while (wait(NULL) != -1);
-    
+    while (wait(NULL) != -1)
+        ;
+
     int fd[2];
     pipe(fd);
-    
+
     pid_t pid2;
-    
+
     for (int i = 4; i < 6; i++) {
         pipe(fd);
         switch (pid2 = fork()) {
@@ -264,9 +267,9 @@ void func4(int argc, char **argv) {
                 dup2(fd[1], 1);
                 close(fd[1]);
                 close(fd[0]);
-                
-                execlp(argv[i], argv[i], (char*)0);
-                
+
+                execlp(argv[i], argv[i], (char *)0);
+
                 perror("Error with exec pr_i");
                 exit(2);
                 break;
@@ -276,13 +279,13 @@ void func4(int argc, char **argv) {
             }
         }
         dup2(fd[0], 0);
-        
+
         close(fd[1]);
         close(fd[0]);
     }
-    
+
     pid_t pid3 = fork();
-    switch(pid3) {
+    switch (pid3) {
         case -1: {
             perror("System error with pid3");
             exit(5);
@@ -294,13 +297,13 @@ void func4(int argc, char **argv) {
                 perror(argv[7]);
                 exit(6);
             }
-            
+
             dup2(file_out, 1);
             close(fd[1]);
             close(fd[0]);
-            
-            execlp(argv[6], argv[6], (char*)0);
-            
+
+            execlp(argv[6], argv[6], (char *)0);
+
             perror("Error with exec pr4");
             exit(6);
             break;
@@ -309,15 +312,16 @@ void func4(int argc, char **argv) {
             break;
         }
     }
-    
+
     close(fd[1]);
     close(fd[0]);
-    
-    while (wait(NULL) != -1);
+
+    while (wait(NULL) != -1)
+        ;
 }
 
 int main(int argc, char **argv) {
     func4(argc, argv);
-    
+
     return 0;
 }

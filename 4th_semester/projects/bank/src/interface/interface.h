@@ -7,4 +7,4 @@
 void authorization(Bank b);
 void start_menu();
 
-#endif // INTERFACE_H
+#endif  // INTERFACE_H

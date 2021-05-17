@@ -1,7 +1,7 @@
 #include <iostream>
 
 struct S {
-    virtual void f();// const = 0; - abstruct class
+    virtual void f();  // const = 0; - abstruct class
     virtual ~S() {}
 };
 
@@ -11,6 +11,5 @@ struct A {
 };
 
 int main() {
-    
     return 0;
 }

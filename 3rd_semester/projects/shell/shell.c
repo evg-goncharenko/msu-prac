@@ -19,14 +19,14 @@
 #define SUCCESS_CODE 1
 
 typedef struct Node {
-    int spec_symb;  /* 1 - ">", ";", '|", ">>", etc */
+    int spec_symb; /* 1 - ">", ";", '|", ">>", etc */
     char *elem;
     struct Node *next;
 } Node;
 
 typedef struct Tree {
-    int read;       /* -1 default */
-    int write;      /* -1 default */
+    int read;  /* -1 default */
+    int write; /* -1 default */
     Node *key;
     struct Tree *right;
     struct Tree *left;
@@ -54,7 +54,7 @@ void add_to_sequence_of_quotes(char **sequence, int *index, int *flag, int tmp_c
     if (tmp_c == end_symbol) {
         *flag = 0;
     } else {
-        *sequence = (char*)realloc(*sequence, (*index + 2) * sizeof(char));
+        *sequence = (char *)realloc(*sequence, (*index + 2) * sizeof(char));
         (*sequence)[*index] = tmp_c;
         (*index)++;
     }
@@ -65,9 +65,9 @@ char *read_word() {
     flag_is_spec_symb = 0;
     char tmp_c = 0;
     int i = 0;
-    char *word = (char*)malloc(sizeof(char));
+    char *word = (char *)malloc(sizeof(char));
     word[i] = 0; /* if EOF is immediately encountered */
-    
+
     while ((tmp_c = getchar()) != EOF) {
         if (flag_single_quotes) {
             add_to_sequence_of_quotes(&word, &i, &flag_single_quotes, tmp_c, '\'');
@@ -77,8 +77,8 @@ char *read_word() {
             add_to_sequence_of_quotes(&word, &i, &flag_apostrophe, tmp_c, '`');
         } else if (flag_spec_char) {
             flag_spec_char = 0;
-            if (tmp_c == word[i-1]) {
-                word = (char*)realloc(word, (i + 2) * sizeof(char));
+            if (tmp_c == word[i - 1]) {
+                word = (char *)realloc(word, (i + 2) * sizeof(char));
                 word[i] = tmp_c;
                 i++;
                 word[i] = 0;
@@ -114,7 +114,7 @@ char *read_word() {
             flag_is_command = 1;
             flag_apostrophe = 1;
         } else if (strchr(special_characters, tmp_c)) {
-        /* If characters are encountered: '&', '|', '<', '>' */
+            /* If characters are encountered: '&', '|', '<', '>' */
             if (flag_is_command) {
                 ungetc(tmp_c, stdin); /* making a return to the stream */
                 word[i] = 0;
@@ -123,31 +123,31 @@ char *read_word() {
                 /* If the team doesn't exist yet */
                 flag_spec_char = 1;
                 flag_is_spec_symb = 1;
-                word = (char*)realloc(word, (i + 2) * sizeof(char));
+                word = (char *)realloc(word, (i + 2) * sizeof(char));
                 word[i] = tmp_c;
                 i++;
             }
         } else if (strchr(separate_special_characters, tmp_c)) {
-            if (flag_is_command) { /* '; ' at the end of the command */
+            if (flag_is_command) {    /* '; ' at the end of the command */
                 ungetc(tmp_c, stdin); /* making a return to the stream */
                 word[i] = 0;
                 return word;
             } else { /* after ungetc (), the new command isn't created */
-                word = (char*)realloc(word, (i + 2) * sizeof(char));
+                word = (char *)realloc(word, (i + 2) * sizeof(char));
                 word[i] = tmp_c;
                 i++;
                 flag_is_spec_symb = 1; /* for example, word[0] = ';' */
                 word[i] = 0;
                 return word;
             }
-        } else { /* just add to the word */
+        } else {                 /* just add to the word */
             flag_is_command = 1; /* command started */
-            word = (char*)realloc(word, (i + 2) * sizeof(char));
+            word = (char *)realloc(word, (i + 2) * sizeof(char));
             word[i] = tmp_c;
             i++;
         }
     }
-    
+
     flag_eof = 1;
     if (word != NULL) {
         free(word);
@@ -162,7 +162,7 @@ void delete_array(char **arr) {
     if (arr == NULL) {
         return;
     }
-    
+
     int i = 0;
     while (arr[i] != NULL) {
         free(arr[i]);
@@ -176,11 +176,11 @@ void delete_array(char **arr) {
 }
 
 void print_list(Node *l) {
-     while (l) {
-         printf("%s ", l->elem);
-         l = l->next;
-     }
- }
+    while (l) {
+        printf("%s ", l->elem);
+        l = l->next;
+    }
+}
 
 void delete_list(Node *l) {
     if (l != NULL) {
@@ -211,7 +211,6 @@ void delete_tree(Tree *t) {
     }
 }
 
-
 void delete_all_struct() {
     delete_tree(main_tree);
     main_tree = NULL;
@@ -235,7 +234,7 @@ void kill_all_processes() {
     Node *tmp = processed_proc;
     int status;
     int pid;
-    
+
     while (tmp) {
         pid = tmp->spec_symb;
         printf("Killing process: %s [pid:%d]\n", tmp->elem, tmp->spec_symb);
@@ -249,8 +248,8 @@ void kill_all_processes() {
 
 Node *add_to_list(Node *l, char *str) {
     if (!l) {
-        Node *tmp = (Node*)malloc(sizeof(Node));
-        tmp->elem = (char*)malloc((strlen(str) + 1) * sizeof(char));
+        Node *tmp = (Node *)malloc(sizeof(Node));
+        tmp->elem = (char *)malloc((strlen(str) + 1) * sizeof(char));
         tmp->spec_symb = flag_is_spec_symb;
         strcpy(tmp->elem, str);
         tmp->next = NULL;
@@ -263,10 +262,10 @@ Node *add_to_list(Node *l, char *str) {
 char **list_to_array(Node *l) {
     char **res = NULL;
     int i = 0;
-    
+
     while (l) {
-        res = (char**)realloc(res, sizeof(char*) * (i + 2));
-        res[i] = (char*)malloc(sizeof(char) * (strlen(l->elem) + 1));
+        res = (char **)realloc(res, sizeof(char *) * (i + 2));
+        res[i] = (char *)malloc(sizeof(char) * (strlen(l->elem) + 1));
         strcpy(res[i], l->elem);
         i++;
         l = l->next;
@@ -278,19 +277,19 @@ char **list_to_array(Node *l) {
 Node *pop_end(Node *l) {
     Node *ret = l;
     Node *tmp;
-    
+
     if (!l) {
         return NULL;
     }
     if (!(l->next)) {
         return NULL;
     }
-    
+
     do {
         tmp = l;
         l = l->next;
     } while (l->next);
-    
+
     free(l->elem);
     free(l);
     tmp->next = NULL;
@@ -302,17 +301,17 @@ Node *pop_start(Node *l) {
     l = l->next;
     free(tmp->elem);
     free(tmp);
-    
+
     return l;
 }
 
 Node *proc_list(Node *l, int *rd, int *wr) {
     int sk = 0;
-    Node* res = NULL;
-    
+    Node *res = NULL;
+
     while (l) {
         int fl = 1;
-        
+
         if (!strcmp(l->elem, "(")) {
             fl = 0;
             ++sk;
@@ -320,7 +319,7 @@ Node *proc_list(Node *l, int *rd, int *wr) {
             fl = 0;
             --sk;
         }
-        
+
         if ((l->spec_symb == 1) && !sk && fl) {
             if (!strcmp(l->elem, ">>")) {
                 if (*wr != -1) { /* if it hasn't been closed yet */
@@ -355,17 +354,17 @@ Tree *make_tree(Node *l, int rd, int wr, int fl) {
     int sk = 0;
     int new_rd;
     int new_wr;
-    Tree * res = NULL;
-    Node * fend = NULL;
-    Node * fstart = l;
-    Node * sstart = NULL;
-    Node * parse;
-    Node * tmp = l;
-    
+    Tree *res = NULL;
+    Node *fend = NULL;
+    Node *fstart = l;
+    Node *sstart = NULL;
+    Node *parse;
+    Node *tmp = l;
+
     if (!l) {
         return NULL;
     }
-    
+
     while (tmp->next) {
         if (!strcmp(tmp->elem, "(")) {
             sk++;
@@ -391,20 +390,20 @@ Tree *make_tree(Node *l, int rd, int wr, int fl) {
         }
         tmp = tmp->next;
     }
-    
+
     if (fend) {
-        res = (Tree*)malloc(sizeof(Tree));
+        res = (Tree *)malloc(sizeof(Tree));
         res->key = fend->next;
         fend->next = NULL;
         sstart = res->key->next;
         res->key->next = NULL;
-        
+
         res->read = rd;
         res->write = wr;
-        
+
         res->left = make_tree(fstart, rd, wr, 0);
         res->right = make_tree(sstart, rd, wr, 0);
-        
+
         if (rd != -1) {
             close(rd);
         }
@@ -413,7 +412,7 @@ Tree *make_tree(Node *l, int rd, int wr, int fl) {
         }
         return res;
     }
-    
+
     if (!fl) { /* file */
         if (rd != -1) {
             new_rd = dup(rd);
@@ -431,19 +430,19 @@ Tree *make_tree(Node *l, int rd, int wr, int fl) {
         new_rd = rd;
         new_wr = wr;
     }
-    
+
     if (l) {
         delete_list(l);
         l = NULL;
     }
-    
+
     if (!strcmp(parse->elem, "(")) {
         parse = pop_end(parse);
         parse = pop_start(parse);
         return make_tree(parse, new_rd, new_wr, 1);
     }
-    
-    res = (Tree*)malloc(sizeof(Tree));
+
+    res = (Tree *)malloc(sizeof(Tree));
     res->key = parse;
     res->read = new_rd;
     res->write = new_wr;
@@ -468,20 +467,20 @@ int is_cd(char **arr) {
 int work(Node *l, int rd, int wr) {
     char **argv;
     argv = list_to_array(l);
-    
+
     if (is_cd(argv)) {
         return SUCCESS_CODE;
     }
-    
+
     int pid = fork();
-    
+
     if (pid < 0) {
         perror("Error with fork()");
         delete_list(l);
         delete_array(argv);
         l = NULL;
         argv = NULL;
-        
+
         if (rd != -1) {
             close(rd);
         }
@@ -493,7 +492,7 @@ int work(Node *l, int rd, int wr) {
         if (!flag_exec_in_background) {
             signal(SIGINT, SIG_DFL);
         }
-        
+
         if (rd != -1) {
             dup2(rd, 0);
             close(rd);
@@ -504,18 +503,18 @@ int work(Node *l, int rd, int wr) {
         }
         execvp(*argv, argv);
         perror("Incorrect command");
-        
+
         delete_array(argv);
         delete_all_struct();
         exit(0);
     } else {
         int status = 0;
         int result_status = 0;
-        
+
         if (!flag_exec_in_background) {
             waitpid(pid, &status, 0);
             result_status = (WIFEXITED(status) && !WEXITSTATUS(status));
-            
+
             if (rd != -1) {
                 close(rd);
             }
@@ -524,10 +523,10 @@ int work(Node *l, int rd, int wr) {
             }
         } else {
             flag_is_spec_symb = pid;
-            
+
             /* Add the command in the background to the list: */
             processed_proc = add_to_list(processed_proc, argv[0]);
-            
+
             if (rd != -1) {
                 close(rd);
             }
@@ -546,7 +545,7 @@ int work_tree(Tree *t, int p) {
         return 1;
     }
     int right_tr = 0, left_tr = 0;
-    
+
     if (!strcmp(t->key->elem, "||")) {
         left_tr = work_tree(t->left, p);
         if (left_tr == -1) {
@@ -564,7 +563,7 @@ int work_tree(Tree *t, int p) {
         } else {
             return -1;
         }
-        
+
         if (right_tr == -1) {
             return -1;
         } else {
@@ -578,7 +577,7 @@ int work_tree(Tree *t, int p) {
         } else {
             return -1;
         }
-        
+
         if (right_tr == -1) {
             return -1;
         } else {
@@ -595,7 +594,7 @@ int work_tree(Tree *t, int p) {
             close(t->right->read);
             t->right->read = -1;
         }
-        
+
         if (!p) {
             t->left->write = fd[1];
             t->right->read = fd[0];
@@ -629,7 +628,7 @@ int work_tree(Tree *t, int p) {
             printf("End of the program\n");
             exit(0);
         }
-        
+
         if (work(t->key, t->read, t->write) == ERROR_CODE) {
             return -1;
         }
@@ -646,12 +645,12 @@ void quotes_error(Node *l) {
 void check_bad_ampersand(Node *l) {
     Node *tmp;
     tmp = l;
-    
+
     while (tmp && strcmp((tmp->elem), "&")) { /* until we meet them "&" */
         l = tmp;
         tmp = tmp->next;
     }
-    
+
     if (tmp) {
         if (tmp->next) { /* because a single "&" can only be at the end */
             perror("& ERROR!");
@@ -660,15 +659,15 @@ void check_bad_ampersand(Node *l) {
     }
 }
 
-Node* find_pid_proc(Node *l, int pid, Node **buf) {
+Node *find_pid_proc(Node *l, int pid, Node **buf) {
     if (l == NULL) {
         return NULL;
     }
-    
+
     if (l->spec_symb == pid) { /* this process will be deleted */
         *buf = l;
         Node *ret = l;
-        
+
         /* Freeing processed_proc from the current process to be deleted: */
         ret = l->next;
         return ret;
@@ -676,7 +675,7 @@ Node* find_pid_proc(Node *l, int pid, Node **buf) {
         Node *ret = l;
         Node *pr = l;
         l = l->next;
-        
+
         while (l) {
             if (l->spec_symb == pid) { /* this process will be deleted */
                 /* Freeing processed_proc from the current process to be deleted: */
@@ -692,14 +691,14 @@ Node* find_pid_proc(Node *l, int pid, Node **buf) {
 
 void sig_handler(int sig) {
     int status;
-    Node* buf = NULL;
+    Node *buf = NULL;
     /*
         WNOHANG - means immediate return of control
         if no child process has completed execution.
     */
     int pid = waitpid(-1, &status, WNOHANG);
     processed_proc = find_pid_proc(processed_proc, pid, &buf);
-    
+
     if (buf) {
         flag_is_spec_symb = buf->spec_symb;
         deleted_proc = add_to_list(deleted_proc, buf->elem);
@@ -713,20 +712,20 @@ int main(int argc, char **argv) {
     /* When the command that was running in the background has finished, processing is required: */
     signal(SIGCHLD, sig_handler);
     signal(SIGINT, SIG_IGN);
-    
+
     char *word = NULL;
     int is_correct_quotes = 1;
     int count = 0;
-    
+
     while (!flag_eof) {
         main_list = NULL;
         main_tree = NULL;
         flag_exec_in_background = 0;
         flag_new_line = 0;
         flag_is_spec_symb = 0;
-        
+
         printf("%s> %s ", COLOR_RED, RESET); /* color shell */
-        
+
         while (!flag_eof && !flag_new_line) {
             is_correct_quotes = 1;
             word = read_word();
@@ -737,19 +736,19 @@ int main(int argc, char **argv) {
             word = NULL;
             count++;
         }
-        
+
         if (flag_single_quotes || flag_double_quotes || flag_apostrophe) {
             is_correct_quotes = 0;
             quotes_error(main_list);
-            
+
             flag_single_quotes = 0;
             flag_double_quotes = 0;
             flag_apostrophe = 0;
-            
+
             delete_list(main_list);
             continue;
         }
-        
+
         if (!flag_eof && is_correct_quotes && main_list && (flag_exec_in_background != -1)) {
             check_bad_ampersand(main_list);
             main_tree = make_tree(main_list, -1, -1, 1);

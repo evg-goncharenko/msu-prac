@@ -1,7 +1,7 @@
 #include <iostream>
 
 class Flag {
-    bool condition_; // on - true
+    bool condition_;  // on - true
 public:
     void SetOn() {
         condition_ = true;

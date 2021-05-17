@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     int bom = BIG_ENDIANS;
     unsigned short utf16_symb;
     unsigned char utf8_symb;
-    
+
     /* Initially, we initialize input / output as standard: */
     file_in = stdin;
     file_out = stdout;
@@ -41,23 +41,23 @@ int main(int argc, char **argv) {
             }
         }
     }
-    
+
     unsigned char tmp_byte1 = 0;
     unsigned char tmp_byte2 = 0;
     unsigned char tmp_byte3 = 0;
-    
+
     fread(&tmp_byte1, 1, 1, file_in);
     fread(&tmp_byte2, 1, 1, file_in);
     fread(&tmp_byte3, 1, 1, file_in);
-    
+
     /* Shift to the beginning of the file, if it isn't a BOM: */
     if (!((tmp_byte1 == 0xEF) && (tmp_byte2 == 0xBB) && (tmp_byte3 == 0xBF))) {
         fseek(file_in, 0, SEEK_SET);
     }
-    
+
     fwrite(&bom, 2, 1, file_out);
     fread(&utf8_symb, 1, 1, file_in);
-    
+
     /*
      **********************************************************
      *  Number of octets |             Template               |
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
     */
     while (!feof(file_in)) {
         utf16_symb = 0;
-        
+
         if ((utf8_symb >> 7) == 0) { /* 1 symbol is 1 byte */
             utf16_symb += utf8_symb;
             correct_output = 1;
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
             utf8_symb = utf8_symb & 0x1F;
             utf16_symb += utf8_symb;
             utf16_symb = utf16_symb << 6;
-            
+
             fread(&utf8_symb, sizeof(char), 1, file_in);
 
             if ((utf8_symb >> 6) == 2) {
@@ -131,6 +131,6 @@ int main(int argc, char **argv) {
 
     fclose(file_in);
     fclose(file_out);
-    
+
     return 0;
 }

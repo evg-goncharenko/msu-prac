@@ -2,7 +2,7 @@
 
 class Assign {
 public:
-    Assign* operator -> () {
+    Assign *operator->() {
         return this;
     }
     template <class T>
@@ -14,7 +14,7 @@ public:
 int main() {
     Assign a;
     bool x = true, y = false;
-    a -> f(x, y);
-    std::cout << "x: "<< x << ", y: " << y << std::endl;
+    a->f(x, y);
+    std::cout << "x: " << x << ", y: " << y << std::endl;
     return 0;
 }

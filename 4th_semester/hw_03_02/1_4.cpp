@@ -3,9 +3,10 @@ using namespace std;
 
 class A {
     int c;
+
 public:
     A(int a) { c = a; }
-    int operator *= (int b) {
+    int operator*=(int b) {
         c = c * b;
         return c;
     }

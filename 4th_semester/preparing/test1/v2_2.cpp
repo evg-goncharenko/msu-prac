@@ -2,7 +2,7 @@
 
 class Functor {
 public:
-    int operator () (const int x, const int y) {
+    int operator()(const int x, const int y) {
         return x + y;
     }
 };

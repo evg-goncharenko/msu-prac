@@ -12,9 +12,9 @@
 int main(int argc, char **argv) {
     int status;
     pid_t pid;
-    
+
     if ((pid = fork()) == 0) {
-        execlp(argv[1], argv[1], (char*)0);
+        execlp(argv[1], argv[1], (char *)0);
         exit(1);
     }
     wait(&status);
@@ -29,11 +29,11 @@ int main(int argc, char **argv) {
     */
     if ((WIFEXITED(status) == 0) || (WEXITSTATUS(status) != 0)) {
         if ((pid = fork()) == 0) {
-            execlp(argv[2], argv[2], (char*)0);
+            execlp(argv[2], argv[2], (char *)0);
             exit(1);
         }
     }
     wait(NULL);
-    
+
     return 0;
 }

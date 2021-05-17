@@ -1,12 +1,13 @@
 #include <iostream>
 class SumHold {
     static int all_sum_;
+
 public:
     int sum_;
     SumHold() : sum_(0) {}
     ~SumHold() {}
 
-    SumHold& operator << (int a) {
+    SumHold& operator<<(int a) {
         all_sum_ += a;
         sum_ += a;
         return *this;

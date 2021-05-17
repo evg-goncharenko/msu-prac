@@ -2,18 +2,21 @@
 
 void Parser::analyze() {
     int num = 0;
-    std::cerr << CYAN_COLOR << "\nLEXEMS:\n\n" << RESET_COLOR;
+    std::cerr << CYAN_COLOR << "\nLEXEMS:\n\n"
+              << RESET_COLOR;
     gl();
     S();
     if (c_type != LEX_FIN) {
         throw curr_lex;
     }
-    std::cerr << CYAN_COLOR << "\nPOLIZ:\n\n" << RESET_COLOR;
+    std::cerr << CYAN_COLOR << "\nPOLIZ:\n\n"
+              << RESET_COLOR;
     for (Lexeme l : poliz) {
         std::cerr << num << ' ' << l;
         num++;
     }
-    std::cerr << CYAN_COLOR << "\nPOLIZ is OK!\n\n" << RESET_COLOR;
+    std::cerr << CYAN_COLOR << "\nPOLIZ is OK!\n\n"
+              << RESET_COLOR;
 }
 
 void Parser::S() {
@@ -500,9 +503,9 @@ void Parser::eq_type(types_of_lexeme& new_val) {
 }
 
 void Parser::gl() {
-        curr_lex = scan.get_lex();
-        c_type = curr_lex.get_type();
-        c_val = curr_lex.get_value();
-        c_str = curr_lex.get_string();
-        std::cerr << curr_lex;
-    }
+    curr_lex = scan.get_lex();
+    c_type = curr_lex.get_type();
+    c_val = curr_lex.get_value();
+    c_str = curr_lex.get_string();
+    std::cerr << curr_lex;
+}

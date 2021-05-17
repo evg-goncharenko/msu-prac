@@ -2,10 +2,11 @@
 using namespace std;
 
 struct mystr {
-    mystr() { }
+    mystr() {}
     int a, b;
+
 private:
-    mystr(const mystr & s) {
+    mystr(const mystr& s) {
         a = s.a;
         b = s.b;
     }
@@ -20,6 +21,6 @@ int f(mystr s) {
 int main() {
     mystr str;
     f(str);
-    
+
     return 0;
 }

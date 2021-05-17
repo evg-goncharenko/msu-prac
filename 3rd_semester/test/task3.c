@@ -24,10 +24,10 @@ char *read_str(FILE *fr) {
     s[0] = 0;
     char c = 0;
     int i = 0;
-    
+
     while (fread(&c, 1, 1, fr)) {
         if (c == '\n') break;
-        
+
         if ((i + 1) == sz) {
             sz *= 2;
             s = realloc(s, sz);
@@ -36,7 +36,7 @@ char *read_str(FILE *fr) {
         i++;
     }
     s[i] = 0;
-    
+
     if (strlen(s) == 0) {
         free(s);
         s = NULL;
@@ -63,14 +63,14 @@ int file_len(char *file_name) {
 void ch_handler(int sig) {
     char *fl_name = NULL;
     read(fd[0], &f_l_size, sizeof(int));
-    
+
     if (f_l_size == 0) {
         close(fd[0]);
         close(fd[1]);
         exit(0);
     }
 
-    fl_name = (char*)malloc(f_l_size+1);
+    fl_name = (char *)malloc(f_l_size + 1);
     read(fd[0], fl_name, f_l_size);
     fl_name[f_l_size] = 0;
     printf("file name: %s\n", fl_name);
@@ -96,9 +96,10 @@ void f_handler(int sig) {
 int main(int arg, char **argv) {
     pipe(fd);
     signal(SIGUSR1, ch_handler);
-    
+
     if ((pid = fork()) == 0) {
-        for (;;);
+        for (;;)
+            ;
         exit(0);
     } else {
         signal(SIGUSR2, f_handler);
@@ -109,14 +110,14 @@ int main(int arg, char **argv) {
         }
         char *cur_file;
         cur_file = read_str(fr);
-        
+
         while (cur_file != NULL) {
             numb_files++;
             f_l_size = strlen(cur_file);
             write(fd[1], &f_l_size, sizeof(int));
             write(fd[1], cur_file, f_l_size);
             kill(pid, SIGUSR1);
-            
+
             for (;;) {
                 if (!flag) {
                     pause();
@@ -133,12 +134,13 @@ int main(int arg, char **argv) {
         kill(getpid(), SIGUSR2);
         free(cur_file);
         cur_file = NULL;
-        
-        while (wait(NULL) != -1);
+
+        while (wait(NULL) != -1)
+            ;
         close(fd[0]);
         close(fd[1]);
         printf("Number of processed files: %d\n", numb_files);
     }
-    
+
     return 0;
 }

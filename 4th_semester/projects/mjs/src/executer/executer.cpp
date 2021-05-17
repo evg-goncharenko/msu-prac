@@ -825,5 +825,6 @@ void Executer::execute(std::vector<Lexeme> &poliz) {
         }  // end of switch
         ++index;
     };  // end of while
-    std::cerr << CYAN_COLOR << "\n\nExecuter is OK!\n" << RESET_COLOR;
+    std::cerr << CYAN_COLOR << "\n\nExecuter is OK!\n"
+              << RESET_COLOR;
 }

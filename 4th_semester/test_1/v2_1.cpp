@@ -6,6 +6,7 @@ class BadRectangle {};
 
 class BadAdd {
     int x1, y1, x2, y2;
+
 public:
     BadAdd(int X1, int Y1, int X2, int Y2) : x1(X1), y1(Y1), x2(X2), y2(Y2) {}
     int GetX1() const { return x1; }
@@ -16,6 +17,7 @@ public:
 
 class IntPair {
     int x_, y_;
+
 public:
     virtual int Measure() const = 0;
     IntPair(int x, int y) : x_(x), y_(y) {}
@@ -25,17 +27,16 @@ public:
 
 class IntRectangle : public IntPair {
 public:
-    IntRectangle (int x = 0, int y = 0) : IntPair(x, y) {
+    IntRectangle(int x = 0, int y = 0) : IntPair(x, y) {
         if (x < 0 || y < 0) {
             throw BadRectangle();
         }
     }
 
     virtual int Measure() const { return GetX() * GetY(); }
-
 };
 
-IntRectangle operator + (const IntRectangle& r1, const IntRectangle& r2) {
+IntRectangle operator+(const IntRectangle& r1, const IntRectangle& r2) {
     if (r1.GetX() == r2.GetX()) {
         return IntRectangle(r1.GetX(), r1.GetY() + r2.GetY());
     } else if (r1.GetY() == r2.GetY()) {
@@ -45,20 +46,18 @@ IntRectangle operator + (const IntRectangle& r1, const IntRectangle& r2) {
     }
 }
 
-int main() { 
+int main() {
     try {
         IntRectangle a(5, 4), b(7, 4), c(2, 1), d(2, 3);
         IntRectangle p, q;
         p = a + b;
         q = c + d;
-        cout << (p+q).Measure() << endl;
-        cout << (p+d).Measure() << endl; 
+        cout << (p + q).Measure() << endl;
+        cout << (p + d).Measure() << endl;
+    } catch (const BadAdd& bad) {
+        cout << "Bad add: (" << bad.GetX1() << " x " << bad.GetY1() << ") + (" << bad.GetX2() << " x " << bad.GetY2() << ")\n";
+    } catch (BadRectangle b) {
+        cout << "Bad rectangle\n";
     }
-    catch (const BadAdd &bad) {
-        cout << "Bad add: (" << bad.GetX1() << " x " << bad.GetY1() << ") + (" << bad.GetX2() << " x " << bad.GetY2() << ")\n";  
-    }
-    catch (BadRectangle b) { 
-        cout << "Bad rectangle\n"; 
-    }       
-    return 0; 
+    return 0;
 }

@@ -7,7 +7,7 @@ int main() {
     int max_len = 0, numb = 0, size = 0, ch = 0, i;
     char *tmp = NULL; /* current line */
     char *res = NULL; /* the longest line */
-    
+
     while (ch != EOF) {
         while (((ch = getchar()) != '\n') && (ch != EOF)) {
             if (numb == size) {
@@ -30,7 +30,7 @@ int main() {
         }
         numb = size = 0;
     }
-    
+
     if (res != NULL) {
         printf("\nThe longest line: ");
         for (i = 0; i < max_len; i++) {

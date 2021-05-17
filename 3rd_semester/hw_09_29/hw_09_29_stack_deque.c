@@ -12,7 +12,7 @@
 
 #define DEQUE_OVERFLOW 3
 #define STACK_MAX_SIZE 20
-#define STACK_OVERFLOW  1
+#define STACK_OVERFLOW 1
 #define STACK_UNDERFLOW 2
 
 typedef struct StackStruct StackType;
@@ -66,18 +66,18 @@ StackValType stack_peek(StackType *st) {
 void stack_print(StackType *st) {
     int i;
     unsigned long len = st->size - 1;
-    
+
     if (!(st->size)) {
         printf("stack is empty\n");
         return;
     }
-    
+
     printf("stack consists of %zu elements: ", st->size);
-    
+
     for (i = 0; i < len; i++) {
         printf("%d | ", st->data[i]);
     }
-    
+
     if (st->size != 0) {
         printf("%d", st->data[i]);
     }
@@ -87,14 +87,14 @@ void stack_print(StackType *st) {
 /* Adding an element at the beginning of the deque: */
 void deque_push_front(DequeType *d, deque_val_type v) {
     struct NodeStruct *n = malloc(sizeof(struct NodeStruct));
-    
+
     if (n == NULL) {
         exit(DEQUE_OVERFLOW);
     }
     n->val = v;
     n->next = d->head;
     n->prev = NULL;
-    
+
     if (d->tail == NULL) {
         d->head = d->tail = n;
     } else {
@@ -106,14 +106,14 @@ void deque_push_front(DequeType *d, deque_val_type v) {
 /* Adding an element to the end of the deque: */
 void deque_push_back(DequeType *d, deque_val_type v) {
     struct NodeStruct *n = malloc(sizeof(struct NodeStruct));
-    
+
     if (n == NULL) {
         exit(DEQUE_OVERFLOW);
     }
     n->val = v;
     n->prev = d->tail;
     n->next = NULL;
-    
+
     if (d->head == NULL) {
         d->head = d->tail = n;
     } else {
@@ -126,7 +126,7 @@ void deque_push_back(DequeType *d, deque_val_type v) {
 deque_val_type deque_pop_front(DequeType *d) {
     deque_val_type v = d->head->val;
     struct NodeStruct *n = d->head;
-    
+
     if (d->head == d->tail) {
         d->head = d->tail = NULL;
     } else {
@@ -140,7 +140,7 @@ deque_val_type deque_pop_front(DequeType *d) {
 deque_val_type deque_pop_back(DequeType *d) {
     deque_val_type v = d->tail->val;
     struct NodeStruct *n = d->tail;
-    
+
     if (d->head == d->tail) {
         d->head = d->tail = NULL;
     } else {
@@ -157,7 +157,7 @@ void deque_print(DequeType *d) {
     }
     struct NodeStruct *n = d->head;
     printf("deque consists of: ");
-    
+
     while (n != d->tail) {
         printf("%d | ", n->val);
         n = n->next;
@@ -169,13 +169,13 @@ int main() {
     /* Example of working with a stack: */
     StackType stack;
     stack.size = 0;
-     
+
     stack_push(&stack, 3);
     stack_print(&stack);
     stack_push(&stack, 5);
     stack_print(&stack);
     stack_push(&stack, 7);
-    
+
     stack_print(&stack);
     printf("stack_pop element: %d\n", stack_pop(&stack));
     stack_print(&stack);
@@ -183,17 +183,17 @@ int main() {
     stack_print(&stack);
     printf("stack_pop element: %d\n", stack_pop(&stack));
     stack_print(&stack);
-    
+
     /* Example of working with a deque: */
     DequeType deque;
     printf("\n");
-    
+
     deque_push_front(&deque, 2);
     deque_print(&deque);
     deque_push_back(&deque, 4);
     deque_print(&deque);
     deque_push_front(&deque, 6);
-    
+
     deque_print(&deque);
     printf("deque_pop_back element: %d\n", deque_pop_back(&deque));
     deque_print(&deque);
@@ -201,6 +201,6 @@ int main() {
     deque_print(&deque);
     printf("deque_pop_back element: %d\n", deque_pop_back(&deque));
     deque_print(&deque);
-    
+
     return 0;
 }

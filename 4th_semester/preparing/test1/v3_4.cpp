@@ -6,7 +6,7 @@ public:
     SumHold() : sum_(0) {}
     ~SumHold() {}
 
-    SumHold& operator << (int a) {
+    SumHold& operator<<(int a) {
         sum_ += a;
         return *this;
     }

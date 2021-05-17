@@ -26,6 +26,7 @@ void sig_handler(int s) {
 
 int main() {
     signal(SIGINT, sig_handler);
-    for(;;);
+    for (;;)
+        ;
     return 0;
 }

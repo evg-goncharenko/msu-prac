@@ -7,9 +7,9 @@
 #include "../identifier/identifier.h"
 #include "../lexeme/lexeme.h"
 
-#define CLEAR_SCREEN    "\033[2J\033[1;1H"
-#define RESET_COLOR     "\033[0m"
-#define CYAN_COLOR      "\x1b[36m"
+#define CLEAR_SCREEN "\033[2J\033[1;1H"
+#define RESET_COLOR "\033[0m"
+#define CYAN_COLOR "\x1b[36m"
 
 extern std::ifstream fp;
 

@@ -20,30 +20,31 @@ std::string HttpHeader::string_concat() const {
     return name_ + value_;
 }
 
-HttpHeader HttpHeader::parse_header(const std::string& line) {    
-   int i = 0;
+HttpHeader HttpHeader::parse_header(const std::string& line) {
+    int i = 0;
     std::string new_name, new_value;
-    if (!line.empty()){
+    if (!line.empty()) {
         while (line[i] != ' ') {
             new_name += line[i];
             i++;
         }
         new_name += '\0';
-        
+
         while (i < line.size()) {
             new_value += line[i];
             i++;
         }
         new_value += '\0';
     } else {
-        new_name = " "; new_value = " ";
+        new_name = " ";
+        new_value = " ";
     }
     HttpHeader temp(new_name, new_value);
     return temp;
 }
 
 //class HttpRequest:
-    
+
 HttpRequest::HttpRequest() {
     lines_ = {"GET /cgi/testcgi?name=eugene&surname=goncharenko&mail=evg_goncharenko HTTP/1.1\r\0"};
 }
@@ -56,7 +57,7 @@ std::string HttpRequest::string_concat() const {
     return res;
 }
 
-// class HttpResponse: 
+// class HttpResponse:
 
 HttpResponse::HttpResponse(std::vector<std::string> lines) {
     response_ = HttpHeader::parse_header(lines[0]);

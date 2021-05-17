@@ -13,7 +13,7 @@ struct B : A {
 };
 
 B *f(void *p) {
-    B *pb = dynamic_cast<B*>((A*)p);
+    B *pb = dynamic_cast<B *>((A *)p);
     if (pb) {
         return pb;
     } else {
@@ -24,10 +24,10 @@ B *f(void *p) {
 
 int main() {
     B b, *pb = f(&b);
-    cout << pb -> x << endl;
-    
+    cout << pb->x << endl;
+
     A a;
     pb = f(&a);
-    cout << pb -> x << endl;
+    cout << pb->x << endl;
     return 0;
 }

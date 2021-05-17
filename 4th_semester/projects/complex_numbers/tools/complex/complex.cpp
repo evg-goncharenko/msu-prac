@@ -1,9 +1,8 @@
-#include <iostream>
-#include <cmath>
 #include "complex.h"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
-
 
 Complex::Complex() {
     re = 0;
@@ -20,42 +19,42 @@ Complex::Complex(double r, double i) {
     im = i;
 }
 
-Complex::Complex(const Complex &c) { // copy constructor
+Complex::Complex(const Complex &c) {  // copy constructor
     re = c.re;
     im = c.im;
 }
 
 // assignment operator
-Complex& Complex::operator = (Complex &c) {
+Complex &Complex::operator=(Complex &c) {
     re = c.re;
     im = c.im;
     return (*this);
 }
 
 // += operator
-Complex& Complex::operator+=(const Complex &c) {
+Complex &Complex::operator+=(const Complex &c) {
     re += c.re;
     im += c.im;
     return *this;
 }
 
 // addition operator
-Complex Complex::operator + (const Complex &c) {
+Complex Complex::operator+(const Complex &c) {
     return Complex(re + c.re, im + c.im);
 }
 
 // subtraction operator
-Complex Complex::operator - (const Complex &c) {
+Complex Complex::operator-(const Complex &c) {
     return Complex(re - c.re, im - c.im);
 }
 
 // multiplication operator
-Complex Complex::operator * (const Complex &c) {
+Complex Complex::operator*(const Complex &c) {
     return Complex(re * c.re - im * c.im, re * c.im + im * c.re);
 }
 
 // division operator
-Complex Complex::operator / (const Complex &c) {
+Complex Complex::operator/(const Complex &c) {
     Complex temp;
     double r = c.re * c.re + c.im * c.im;
     temp.re = (re * c.re + im * c.im) / r;
@@ -64,7 +63,7 @@ Complex Complex::operator / (const Complex &c) {
 }
 
 // equality operator
-bool Complex::operator == (const Complex &c) const {
+bool Complex::operator==(const Complex &c) const {
     if (im != c.im || re != c.re) {
         return false;
     }
@@ -72,7 +71,7 @@ bool Complex::operator == (const Complex &c) const {
 }
 
 // inequality operator
-bool Complex::operator != (const Complex &c) const {
+bool Complex::operator!=(const Complex &c) const {
     if (*this == c) {
         return false;
     }
@@ -93,13 +92,13 @@ double Complex::abs() {
 }
 
 // operator overload <<
-ostream& operator << (ostream &out, const Complex &c) {
+ostream &operator<<(ostream &out, const Complex &c) {
     out << "(" << c.re << ", " << c.im << ")";
     return out;
 }
 
 // operator overload >>
-istream& operator >> (istream &in, Complex &c) {
+istream &operator>>(istream &in, Complex &c) {
     in >> c.re >> c.im;
     return in;
 }

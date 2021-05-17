@@ -37,7 +37,8 @@ void kill_handler(int sig) {
     for (int i = 0; i < 3; i++) {
         kill(pid_array[i], SIGKILL);
     }
-    while (wait(NULL) != -1);
+    while (wait(NULL) != -1)
+        ;
     exit(0);
 }
 
@@ -45,12 +46,12 @@ int main(int argc, char **argv) {
     start = 1;
     numb_ch = -1;
     is_blocked = 1;
-    
+
     pid = getpid();
     signal(SIGINT, f_handler);
     signal(SIGUSR1, user_handler);
     signal(SIGALRM, kill_handler);
-    
+
     for (int i = 0; i < 3; i++) {
         if ((child_val = fork()) == 0) {
             cur_proc = getpid();
@@ -64,10 +65,10 @@ int main(int argc, char **argv) {
         pid_array[i] = child_val;
     }
     alarm(10);
-    
+
     for (;;) {
         pause();
     }
 
-    return(0);
+    return (0);
 }

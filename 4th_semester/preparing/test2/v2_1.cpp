@@ -18,8 +18,7 @@ public:
     char gc() {
         if (p >= 0) {
             return ((char)buf[p++]);
-        }
-        else {
+        } else {
             return (getchar());
         }
     }

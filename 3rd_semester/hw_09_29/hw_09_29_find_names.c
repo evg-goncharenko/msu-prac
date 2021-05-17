@@ -51,17 +51,27 @@ int is_system(char *word, char **system_words, int numb_system_words) {
 /* Creating an array of system words: */
 void create_words(char ***system_words, int *numb_system_words) {
     *numb_system_words = 10;
-    *system_words = (char**)malloc(*numb_system_words * sizeof(char*));
-    (*system_words)[0] = (char*) calloc(4, sizeof(char)); strcpy((*system_words)[0], "int");
-    (*system_words)[1] = (char*) calloc(5, sizeof(char)); strcpy((*system_words)[1], "long");
-    (*system_words)[2] = (char*) calloc(5, sizeof(char)); strcpy((*system_words)[2], "char");
-    (*system_words)[3] = (char*) calloc(6, sizeof(char)); strcpy((*system_words)[3], "float");
-    (*system_words)[4] = (char*) calloc(7, sizeof(char)); strcpy((*system_words)[4], "double");
-    (*system_words)[5] = (char*) calloc(5, sizeof(char)); strcpy((*system_words)[5], "void");
-    (*system_words)[6] = (char*) calloc(7, sizeof(char)); strcpy((*system_words)[6], "struct");
-    (*system_words)[7] = (char*) calloc(8, sizeof(char)); strcpy((*system_words)[7], "include");
-    (*system_words)[8] = (char*) calloc(7, sizeof(char)); strcpy((*system_words)[8], "string");
-    (*system_words)[9] = (char*) calloc(7, sizeof(char)); strcpy((*system_words)[9], "return");
+    *system_words = (char **)malloc(*numb_system_words * sizeof(char *));
+    (*system_words)[0] = (char *)calloc(4, sizeof(char));
+    strcpy((*system_words)[0], "int");
+    (*system_words)[1] = (char *)calloc(5, sizeof(char));
+    strcpy((*system_words)[1], "long");
+    (*system_words)[2] = (char *)calloc(5, sizeof(char));
+    strcpy((*system_words)[2], "char");
+    (*system_words)[3] = (char *)calloc(6, sizeof(char));
+    strcpy((*system_words)[3], "float");
+    (*system_words)[4] = (char *)calloc(7, sizeof(char));
+    strcpy((*system_words)[4], "double");
+    (*system_words)[5] = (char *)calloc(5, sizeof(char));
+    strcpy((*system_words)[5], "void");
+    (*system_words)[6] = (char *)calloc(7, sizeof(char));
+    strcpy((*system_words)[6], "struct");
+    (*system_words)[7] = (char *)calloc(8, sizeof(char));
+    strcpy((*system_words)[7], "include");
+    (*system_words)[8] = (char *)calloc(7, sizeof(char));
+    strcpy((*system_words)[8], "string");
+    (*system_words)[9] = (char *)calloc(7, sizeof(char));
+    strcpy((*system_words)[9], "return");
 }
 
 /* Inserting a variable name in the list: */
@@ -70,14 +80,14 @@ Node *push_elem(Node *name_list, char *word) {
 
     /* If the list was empty: */
     if (!name_list) {
-        Node *new_word = (Node*)malloc(sizeof(Node));
-        new_word->elem = (char*)malloc((strlen(word) + 1) * sizeof(char));
+        Node *new_word = (Node *)malloc(sizeof(Node));
+        new_word->elem = (char *)malloc((strlen(word) + 1) * sizeof(char));
         strcpy(new_word->elem, word);
         new_word->next = NULL;
         new_word->prev = NULL;
         return new_word;
     }
-    
+
     struct Node *tmp = name_list;
     do {
         /* If inserted name is larger than the current one, then go next: */
@@ -90,13 +100,13 @@ Node *push_elem(Node *name_list, char *word) {
         } else if (!strcmp(word, tmp->elem)) { /* this name already exists: */
             return name_list;
         } else {
-            Node *new_word = (Node*)malloc(sizeof(Node));
+            Node *new_word = (Node *)malloc(sizeof(Node));
             new_word->elem = malloc((strlen(word) + 1) * sizeof(char));
             strcpy(new_word->elem, word);
             new_word->next = tmp;
-            
+
             /* If there is a previous list item: */
-            if(tmp->prev) {
+            if (tmp->prev) {
                 new_word->prev = tmp->prev;
                 new_word->next = tmp;
                 new_word->prev->next = new_word;
@@ -112,10 +122,10 @@ Node *push_elem(Node *name_list, char *word) {
             break;
         }
     } while (tmp);
-    
+
     /* Insert a name at the end: */
-    if(!flag_ins) {
-        Node *new_word = (Node*)malloc(sizeof(Node));
+    if (!flag_ins) {
+        Node *new_word = (Node *)malloc(sizeof(Node));
         new_word->elem = malloc(sizeof(word));
         strcpy(new_word->elem, word);
         new_word->next = NULL;
@@ -157,7 +167,6 @@ void print_list(Node *l, int n) {
     } else {
         printf("\n");
     }
-
 }
 
 /* Deleting a list: */
@@ -197,21 +206,21 @@ int main(int argc, char **argv) {
         fprintf(stderr, "File '%s' not found \n", argv[1]);
         return 1;
     }
-    
+
     if (!argv[2]) {
         fprintf(stderr, "Number N is not set \n");
         return 2;
     }
-    
+
     int n; /* checking the first n characters by condition */
     sscanf(argv[2], "%d", &n);
     tmp_c = fgetc(file_in);
-    
+
     while (tmp_c != EOF) {
         /* Processing comments: */
         if (tmp_c == '/') {
             tmp_c = fgetc(file_in);
-            
+
             /* If a comment of the form is encountered: '//': */
             if (tmp_c == '/') {
                 while (tmp_c != '\n' && tmp_c != EOF) {
@@ -229,7 +238,7 @@ int main(int argc, char **argv) {
             }
             continue;
         }
-        
+
         /* Handling of double quotes: */
         if (tmp_c == '"') {
             tmp_c = fgetc(file_in);
@@ -237,12 +246,12 @@ int main(int argc, char **argv) {
                 tmp_c = fgetc(file_in);
             }
         }
-        
+
         /* Creating a temporary word: */
         if (!isspace(tmp_c)) {
             if (isalpha(tmp_c)) {
                 while (isalpha(tmp_c) || tmp_c == '_' || isdigit(tmp_c)) {
-                    if ((word_index+1) == word_size) {
+                    if ((word_index + 1) == word_size) {
                         word_size *= 2;
                         word = realloc(word, word_size);
                     }
@@ -254,8 +263,7 @@ int main(int argc, char **argv) {
             }
             if (word) {
                 /* If "#include", "#define" or "typedef" is encountered" */
-                if(!strcmp(word, INCLUDE) || !strcmp(word, DEFINE)
-                   || !strcmp(word, TYPEDEF)) {
+                if (!strcmp(word, INCLUDE) || !strcmp(word, DEFINE) || !strcmp(word, TYPEDEF)) {
                     while ((tmp_c != '\n') && (tmp_c != EOF)) {
                         tmp_c = fgetc(file_in);
                     }
@@ -268,12 +276,12 @@ int main(int argc, char **argv) {
                         word_size = 1;
                         continue;
                     }
-                    
+
                     /* Skip spaces: */
                     while (tmp_c == ' ') {
                         tmp_c = fgetc(file_in);
                     }
-                    
+
                     /* If '('is encountered, then we have come across the function name: */
                     if ((tmp_c != '(') && (strlen(word) >= n)) {
                         list = push_elem(list, word);
@@ -291,7 +299,7 @@ int main(int argc, char **argv) {
     }
     print_list(list, n);
     delete_list(list);
-    
+
     /* System word memory cleaning: */
     for (int i = 0; i < numb_system_words; i++) {
         free(system_words[i]);

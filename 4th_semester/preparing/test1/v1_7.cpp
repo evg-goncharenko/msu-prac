@@ -10,31 +10,32 @@ class IntQueue {
         Elem *next;
     };
     Elem *head_;
+
 public:
-    IntQueue() { 
-        head_ = nullptr; 
+    IntQueue() {
+        head_ = nullptr;
     }
 
     ~IntQueue() {
         while (head_ != nullptr) {
-            Elem *tmp = head_ -> next;
+            Elem *tmp = head_->next;
             delete head_;
             head_ = tmp;
         }
     }
 
-    void operator <<= (int new_numb) {
+    void operator<<=(int new_numb) {
         add_elem(new_numb);
     }
 
-    void operator >>= (int &delete_numb) {
+    void operator>>=(int &delete_numb) {
         delete_elem(delete_numb);
     }
 
     void add_elem(int new_val) {
         Elem *new_elem = new Elem;
-        new_elem -> val = new_val;
-        new_elem -> next = head_;
+        new_elem->val = new_val;
+        new_elem->next = head_;
         head_ = new_elem;
         numb_elem_++;
     }
@@ -45,16 +46,16 @@ public:
         }
 
         Elem *tmp = head_;
-        for (int i = 0; (i < numb_elem_ - 1) && (tmp -> next != nullptr) && (tmp -> next -> next != nullptr); ++i) {
-            tmp = tmp -> next;
+        for (int i = 0; (i < numb_elem_ - 1) && (tmp->next != nullptr) && (tmp->next->next != nullptr); ++i) {
+            tmp = tmp->next;
         }
 
-        if (tmp -> next != nullptr) {
-            delete_numb = tmp -> next -> val;
-            delete tmp -> next;
-            tmp -> next = nullptr;
+        if (tmp->next != nullptr) {
+            delete_numb = tmp->next->val;
+            delete tmp->next;
+            tmp->next = nullptr;
         } else {
-            delete_numb = tmp -> val;
+            delete_numb = tmp->val;
             delete tmp;
             tmp = nullptr;
             head_ = nullptr;
@@ -68,7 +69,7 @@ public:
             std::cout << "queue: ";
             while (tmp != nullptr) {
                 std::cout << tmp->val << ", ";
-                tmp = tmp -> next;
+                tmp = tmp->next;
             }
             std::cout << std::endl;
         } else {

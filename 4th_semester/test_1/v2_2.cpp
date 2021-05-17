@@ -23,17 +23,21 @@ public:
 
 class Assign {
     int* px;
+
 public:
-    Assign& operator [] (int& n) { px = &n; return *this; }
+    Assign& operator[](int& n) {
+        px = &n;
+        return *this;
+    }
     int Get() { return *px; }
-    void operator () (int y) { *px = y; }
-}; 
+    void operator()(int y) { *px = y; }
+};
 
 int main() {
     Assign a;
     int x = -1, y = 5;
     a[x](y);
-    cout << a.Get() << endl; // print 5
-    cout << x << endl;       // print 5
+    cout << a.Get() << endl;  // print 5
+    cout << x << endl;        // print 5
     return 0;
 }

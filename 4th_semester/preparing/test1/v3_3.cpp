@@ -1,9 +1,10 @@
 #include <iostream>
 
 class M {
-    int *obj_;
+    int* obj_;
     int num_;
     static int count;
+
 public:
     M(int n) {
         obj_ = new int;
@@ -18,15 +19,15 @@ public:
         num_ = count;
     }
 
-    ~M() { 
+    ~M() {
         delete obj_;
     }
 
-    int& operator * () const {
-        return *obj_; 
+    int& operator*() const {
+        return *obj_;
     }
 
-    int& operator () (M & m) {
+    int& operator()(M& m) {
         M A(0);
         if (num_ == m.num_) {
             return *obj_;
@@ -47,6 +48,6 @@ int main() {
 
     m(m) = 1;
     int tmp = m(m) + m(x) + x(x);
-    std::cout << "m: " << m(m)  << ", m(x): " << m(x) << ", tmp: " << tmp << std::endl;
+    std::cout << "m: " << m(m) << ", m(x): " << m(x) << ", tmp: " << tmp << std::endl;
     return 0;
 }
