@@ -1,10 +1,5 @@
-<html><body>
-Welcome to CGI test program
-Here is what I've got
-SERVER_ADDR: 127.0.0.1
-SERVER_PORT: 8080
-SERVER_PROTOCOL: HTTP/1.0
-CONTENT_TYPE: text/plain
-QUERY_STRING: name=eugene&surname=goncharenko&mail=evg_goncharenko
-SCRIPT_NAME: src//cgi/testcgi
-</body></html>
+<html>
+<body>
+some_test
+</body>
+</html>
