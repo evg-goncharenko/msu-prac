@@ -1,37 +1,37 @@
-## Модельный веб-сервер
+## Model Web Server
 
-Сборка сервера:
+How to build a server:
 ```
 make PROG=SERVER
 ```
 
-Сборка клиента:
+How to build a client:
 ```
 make PROG=CLIENT
 ```
 
-Запуск сервера:
+How to launch a server:
 ```
 ./prog_server
 ```
 
-Запуск клиента:
+How to launch a client:
 ```
 ./prog_client 
 ```
 
-### Постановка задачи:
-- Реализация модельного веб-сервера, поддерживающая описанное ниже подмножество протокола HTTP.
-- Реализация поддержки общего шлюзового интерфейса (CGI) в разработанном веб-сервере.
-- Реализация интерпретатора модельного языка описания сценариев для написания CGI-сценариев. Язык реализации — Си++.
+### Problem statement:
+- A model web server implementation that supports the HTTP protocol subset described below.
+- Implementation of Common Gateway Interface (CGI) support in the developed web server.
+- Implementation of the interpreter of the model script description language for writing CGI scripts. Implementation language - C++.
 
-<b>Реализация первого этапа задания:</b>
+<b>Implementation of the first stage of the task:</b>
 
-Целью первого этапа задания является реализация статического веб-сервера, поддерживающего подмножество HTTP-протокола. <br>
-Первая программа — «псевдо-сервер», цель которого — запись реальных запросов, посылаемых веб-клиентами (например, различными веб-браузерами). Сервер принимает запрос, записывает его в лог-файл и немедленно закрывает соединение. Сохраненные запросы можно использовать для отладки сервера. <br>
+The goal of the first stage of the task is to implement a static web server that supports a subset of the HTTP protocol. <br>
+First program is a "pseudo-server", the purpose of which is to record real requests sent by web clients (for example, various web browsers). The server accepts the request, writes it to a log file, and immediately closes the connection. Saved queries can be used to debug the server. <br>
 
-<b>Реализация второго этапа задания:</b>
+<b>Implementation of the second stage of the task:</b>
 
-Целью второго этапа задания является добавление поддержки CGI в ранее разработанный модельный веб-сервер. <br>
-Самая простая схема реализации CGI подразумевает, что сервер запускает отдельный процесс-потомок для обработки CGI-программы. Вывод программы перенаправляется во временный файл для последующего включения этого файла в ответ на запрос. Временный файл используется, т.к. программа может завершиться некорректно (и тогда её результаты должны быть проигнорированы без передачи клиенту), а также, чтобы узнать длину ответа и сформировать заголовок `Content-length`. После корректного завершения CGI-программы сервер генерирует ответ на основе выдачи программы.
-При реализации CGI особенно проявляются недостатки первой схемы реализации сервера (когда тот не приступает к обработке следующего запроса, пока не выполнит до конца текущий). Действительно, в этом случае сервер простаивает в ожидании завершения CGI-программы, которая может работать произвольно долго.
+The goal of the second stage of the task is to add CGI support to the previously developed model web server. <br>
+The simplest CGI implementation scheme implies that server runs a separate child process to process the CGI program. Output of the program is redirected to a temporary file for later inclusion of this file in response to the request. The temporary file is used because the program may terminate incorrectly (and then its results should be ignored without being passed to the client), also to find out the length of the response and form the `Content-length` header. After CGI program completes correctly, the server generates a response based on the output of the program.
+When implementing CGI, the disadvantages of the first server implementation scheme are particularly evident (when the server does not start processing the next request until it completes the current one). Indeed, in this case, the server is idle waiting for the completion of a CGI program, which can run arbitrarily long.

@@ -1,31 +1,31 @@
-## Модельный Shell-интерпретатор
+## Model of Shell Interpreter
 
-Интерактивный командный интерпретатор под управлением ОС Unix осуществляет в цикле считывание командной строки со стандартного ввода, анализ и исполнение соответствующих действий. <br>
+An interactive command interpreter running on Unix OS reads the command line from standard input in a loop, analyzes and executes the corresponding actions. <br>
 <br>
-Первая версия командного интерпретатора в цикле выполняет одиночную команду ОС. Программа читает со стандартного ввода строку и разбивает ее на отдельные слова, разделенные пробелами или табуляциями. Любое количество идущих подряд пробельных символов обрабатывается так же, как один пробел. <br>
-Текст, заключенный в двойные кавычки, рассматривается как одно слово или часть слова, т.е. внутри двойных кавычек пробельные символы рассматриваются как обычные символы. Например:
+The first version of the command interpreter executes a single OS command in a loop. The program reads a string from standard input and splits it into separate words separated by spaces or tabs. Any number of consecutive whitespace characters are treated the same as a single space. <br>
+Text enclosed in double quotes is treated as a single word or part of a word, i.e. inside double quotes, whitespace characters are treated as normal characters. For example:
 
 ```
 vi "text with space"
 gcc -o "ccc ddd" t1.c
 ```
 
-Допускаются строки произвольной длины, т.е. программа введет себя корректно вне зависимости от того, какой длины строка подана на ввод. <br>
-После разбиения строки на слова первое полученное слово воспринимается как команда (то есть имя файла с исполняемой программой), остальные — как параметры команды – то есть аргументы командной строки. Интерпретатор запускает указанную команду с указанными аргументами, считая, что файл с исполняемым кодом должен находиться в диске в директориях, перечисленных в переменной PATH, или указан по полному имени — абсолютному или относительному пути. <br>
+Strings of any length are allowed, meaning, that the program will enter itself correctly regardless of how long the string is submitted for input. <br>
+After splitting the string into words, the first received word is perceived as a command (that is, the name of the file with the executable program), the rest - as command parameters – that is, command line arguments. The interpreter runs the specified command with the specified arguments, assuming that the file with the executable code must be located on disk in the directories listed in the PATH variable, or specified by the full name-an absolute or relative path. <br>
 <br>
 
-Две команды - `cd` для смены текущего каталога, и `exit` – для выхода из программы, реализованы как встроенные команды, то есть программа выполняет их сама, а не вызывает (несуществующие) внешние команды. <br>
-Программа завершает работу в ситуации "конец файла" на стандартном вводе или при вводе пользователем команды `exit`. Обработка конца файла реализована корректно. <br>
+Two commands `cd` for changing the current directory, and `exit` - for exiting the program, are implemented as built-in commands, that is, the program executes them itself, and does not call (non-existent) external commands. <br>
+The program exits in the "end of file" situation on standard input or when the user enters the `exit` command. End-of-file processing is implemented correctly. <br>
 <br>
 
-Реализовано модифицирование чтения команды и аргументов таким образом, что символы `<`, `>` или `>>` воспринимались как разделительные. Реализовано перенаправление ввода и вывода, определяемое символами `<`, `>` или `>>`. А чтение команды и аргументов таким образом, что символ `|` воспринимается как разделительный. Реализован запуск команд конвейером без ограничений на длину. <br>
+Implemented modification of reading the command and arguments so that the characters `<`, `>` or `>>` were perceived as delimiters. Implemented input and output redirection, defined by the characters `<`, `>` or `>>`. And reading the command and arguments in such a way that the `|` character is perceived as a separator. Implemented the execution of commands by the pipeline without restrictions on the length.<br>
 <br>
 
-Реализовано модифицирование чтения команды и аргументов таким образом, что она воспринимает символ `&` (если он встречен вне кавычек) как разделительный символ (т.е. символ, который является отдельным словом сам по себе). Реализовано выполнение команд в фоновом режиме. Если символ `&` встречен не в конце, то выдается сообщение об ошибке. По завершении команды, выполнявшейся в фоновом режиме, выдается сообщение о ее завершении и код завершения. <br>
+Implemented modification of reading the command and arguments in such a way that it perceives the `&` character (if it is encountered outside the quotation marks) as a separator character (i.e., a character that is a separate word in itself). Implemented the execution of commands in the background. If the `&` character is not found at the end, an error message is displayed. When a command that was executed in the background is completed, a message about its completion and a completion code will be displayed. <br>
 <br>
 
-Также реализовано:
-- Связка `;` (сначала выполняется одна команда, потом вторая)
-- Связка `||` (сначала выполняется первая команда, и если она завершилась неудачей, то выполнятся вторая команда)
-- Связка `&&` (сначала выполняется первая команда, и если она завершилась успешно, то выполняется вторая команда)
-- Круглые скобки (содержимое скобок, имеющее произвольную сложность, выполняется как отдельно взятая команда). Эту возможность можно выбирать только вместе с одной из трех предыдущих, в противном случае невозможно проверить ее наличие
+Also implemented:
+- A bunch of `;` (first one command is executed, then the second one)
+- The `||` bundle (the first command is executed first, and if it fails, the second command is executed)
+- The `&&` bundle (the first command is executed first, and if it succeeds, the second command is executed)
+- Parentheses (the contents of the parentheses, which have an arbitrary complexity, are executed as a single command). This option can only be selected together with one of the previous three, otherwise it is impossible to check its availability.
