@@ -1,22 +1,24 @@
 ## Model Web Server
 
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
+
 How to build a server:
-```
+```bash
 make PROG=SERVER
 ```
 
 How to build a client:
-```
+```bash
 make PROG=CLIENT
 ```
 
 How to launch a server:
-```
+```bash
 ./prog_server
 ```
 
 How to launch a client:
-```
+```bash
 ./prog_client 
 ```
 

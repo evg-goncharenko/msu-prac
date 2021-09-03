@@ -1,11 +1,13 @@
 ## Model of Shell Interpreter
 
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
+
 An interactive command interpreter running on Unix OS reads the command line from standard input in a loop, analyzes and executes the corresponding actions. <br>
 <br>
 The first version of the command interpreter executes a single OS command in a loop. The program reads a string from standard input and splits it into separate words separated by spaces or tabs. Any number of consecutive whitespace characters are treated the same as a single space. <br>
 Text enclosed in double quotes is treated as a single word or part of a word, i.e. inside double quotes, whitespace characters are treated as normal characters. For example:
 
-```
+```bash
 vi "text with space"
 gcc -o "ccc ddd" t1.c
 ```

@@ -1,4 +1,7 @@
 # Programming on UNIX OS in C
+
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
+
 ### Practicum
 - Creating a dictionary by frequency for some text ([frequency_dictionary](.//projects/frequency_dictionary));
 - Encoding converter from UTF16 to UTF8 ([converter_of_character_encodings](.//projects/converter_of_character_encodings));

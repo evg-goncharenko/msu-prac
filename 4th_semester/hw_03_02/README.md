@@ -1,5 +1,7 @@
 ## Homework by 03.02
 
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
+
 <b> [vector](./vector.cpp): </b><br>
     
 The program simulates the implementation of vectors:

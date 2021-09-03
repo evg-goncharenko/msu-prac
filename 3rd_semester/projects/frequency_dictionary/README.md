@@ -1,7 +1,9 @@
 ## Creating a frequency dictionary for some text
 
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
+
 The program creates a frequency dictionary for a given text. It is started using the command line of the form:
-```
+```bash
 ./prog -i f.txt -o dict.txt
 ```
 The `-i` option specifies the input text file, and the `-o` option specifies the output file to which the frequency dictionary is print. In the absence of the `-i` option, the input comes from the standard input channel, in the absence of the `-o` option, the output goes to the standard output channel. <br>
@@ -10,7 +12,7 @@ The input text is divided into words, with whitespace characters and line ends a
 <b> Word1 | number of occurrences | frequency of occurrences of word </b> <br>
 <b> Word2 | number of occurrences | frequency of occurrences of word </b> <br><br>
 For example:
-```
+```bash
 .....
 а 19 0.000432
 в 12 0.000319

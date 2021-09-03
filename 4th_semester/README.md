@@ -1,5 +1,7 @@
 # System programming in C++
 
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
+
 ### Practicum
 - Creating a class of complex numbers ([complex_numbers](.//projects/complex_numbers));
 - Implementation of the bank's online services ([bank](.//projects/bank));

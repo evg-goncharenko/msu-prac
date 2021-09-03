@@ -1,130 +1,164 @@
-## Подготовка к первой контрольной:
-<b> [v1_1](./v1_1.cpp): </b><br>
+## Preparing for the first test:
 
-    Опишите функцию set_min, которая принимает два параметра - переменные типа int, определяет,
-    в какой из двух переменных значение меньше, и заносит это значение в обе переменные.
-    Вызов функции будет выполняться с указанием в качестве параметров имён переменных без каких-либо
-    дополнительных операций (взятия адреса и т.п.)
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
+
+<b> [v1_1](./v1_1.cpp): </b><br>
+```
+Describe the set_min() function, which takes two parameters-variables of type int, determines
+which of the two variables has the value less, and puts this value in both variables.
+The function call will be executed with the variable names specified as parameters without any
+additional operations (taking the address, etc.).
+```
 
 <br> <b> [v1_2](./v1_2.cpp): </b><br>
-
-    Опишите класс Flag, объект которого может находиться в одном из двух состояний - 
-    «взведён» (оп) и «сброшен» (off). Предусмотрите методы SetOn и SetOff, устанавливающие флаг
-    в соответствующее положение, а также метод IsOn, возвращающий логическое значение (истина, если объект
-    находится в состоянии «взведён», ложь в противном случае), который должен
-     допускать работу для константных объектов.
+```
+Describe the Flag class, the object of which can be in one of two states - "cocked" (on) and
+"reset" (off). Provide the SetOn and SetOff methods that set the flag to the appropriate
+position, as well as the IsOn method that returns a boolean value (true if the object is
+in the "cocked" state, false otherwise), which should allow operation for constant objects.
+```
 
 <br> <b> [v1_3](./v1_3.cpp): </b><br>
-    
-    Модифицируйте класс Flag из предыдущей задачи так, чтобы его объекты (без явного применения к ним каких-либо
-    дополнительных операций) можно было использовать в качестве логического значения (условного
-    выражения), например, в операторах if, while и т.п. Это должно работать в том числе и для константных объектов. 
+```
+Modify the Flag class from the previous task so that its objects (without explicitly applying
+any additional operations to them) can be used as a boolean value (conditional expression),
+for example, in the if, while, etc. statements. This should also work for constant objects.
+```
 
 <br> <b> [v1_4](./v1_4.cpp): </b><br>
-    
-    Опишите класс Watched, допускающий создание объекта без указания параметров. Реализуйте в этом классе
-    метод Amount так, чтобы вызвать его можно было без объекта, указав имя класса. Метод Amount должен возвращать
-    целое число, соответствующее количеству существующих в настояший момент объектов класса Counted. 
-    Не забудьте про случай создания объекта как копии другого объекта!
+```
+Describe the Watched class, which allows you to create an object without specifying parameters.
+Implement the Amount method in this class so that you can call it without an object by specifying
+the class name. The Amount method must return an integer corresponding to the number of currently
+existing objects of the Counted class. Don't forget about the case of creating an object as
+a copy of another object!
+```
 
 <br> <b> [v1_5](./v1_5.cpp): </b><br>
-    
-    Опишите классы A и В так, чтобы (при условии, что a и b - объекты соответственно А и класса В):
-    • Выражения вида a[b] и b[a] были равны числу 75 (здесь и далее подразумеваются числа типа int);
-    • Выражение а() было равно числу 50, выражение a(b) было равно числу 100, выражение a(b, b)
-    было равно числу 150, выражение b(a) было равно числу 200;
-    • Выражение а(а,а,а) успешно проходило компиляцию в качестве целочисленного, во при попытке
-    его вычислить выбрасывало исключение типа А;
-    • Выражение --а было равно числу 500, выражение а-- - числу 501.
+```
+Describe classes A and B so that (assuming that a and b are objects of Class A and Class B):
+• Expressions of the form a[b] and b[a] were equal to the number 75
+(hereafter, int numbers are meant);
+• Expression a() was equal to the number 50, expression a (b) was equal to the number 100,
+expression a (b, b) was equal to the number 150, expression b (a) was equal to the number 200;
+• The expression a (a,a,a) was successfully compiled as an integer, but when trying to calculate
+threw an exception of type A;
+• Expression --a was equal to the number 500, expression a-- was equal to the number 501.
+```
 
 <br> <b> [v1_6](./v1_6.cpp): </b><br>
+```
+Describe the class D and (if necessary) additional classes or structures so that
+(provided that d is an object of class D) the expression "d->1" is an integer variable that
+can be assigned values, which stores the assigned value and from which this value can be
+extracted as from a normal variable; if the program describes more than one object of class D,
+each such object must correspond to its own integer variable, accessible via the "->f" operation.
+that is, such variables should not conflict. An object of class D must be created without
+specifying parameters. Any dynamic memory must be released correctly.
+```
     
-    Опишите класс D и (при необходимости) дополнительные классы или структуры так, чтобы (при условии,
-    что d есть объект класса D) выражение d->1 представляло собой целочисленную переменную, которой можно
-    присваивать значения, которая сохраняет присвоенное значение и из которой это значение можно извлечь как
-    из обычной переменной; в случае, если в программе описано больше одного объекта класса D,
-    каждому такому объекту должна соответствовать своя собственная целочисленная переменная, доступная через
-    операцию ->f. то есть такие переменные не должны конфликтовать. Объект класса D должен допускать
-    создание без указания параметров. Любая динамическая память должна корректно освобождаться.
-
 <br> <b> [v1_7](./v1_7.cpp): </b><br>
-    
-    Опишите класс IntQueue, представляющий понятие «очереди целых чисел", реализованный через односвязный
-    список с указателями на начало и конец (возможности стандартной библиотеки С++ не использовать!).
-    Предусмотрите операции <<= (левый операнд - объект вашего класса, правый - целочисленное выражение,
-    операция добавляет элемент в конец очереди) и >>= (правый операнд - переменная типа int, 
-    операция извлекает элемент из начала очереди; если нечего извлекать, бросьте исключение
-    класса QueueEmpty, который опишите сами). Предусмотрите метод Amount, возвращающий текущее количество 
-    элементов в очереди. 
-    Вся выделенная динамическая память должна быть корректно освобождена - память от извлекаемых элементов
-    освобождается при их извлечении, память от всего остального освобождается при уничтожении объекта очереди.
+```  
+Describe the IntQueue class, which represents the concept of a "queue of integers", implemented
+through a singly linked list with pointers to the beginning and end (do not use the features of
+the C++ standard library!). Provide the operations "<<=" (the left operand is an object of
+your class, the right is an integer expression, the operation adds an element to the end
+of the queue) and ">>=" (the right operand is an int variable, the operation extracts an element
+from the beginning of the queue; if there is nothing to extract, throw an exception of
+the QueueEmpty class, which you describe yourself). Provide an Amount method that returns
+the current number of items in the queue. All allocated dynamic memory must be properly freed -
+the memory from the extracted elements is freed when they are extracted, the memory from
+everything else is freed when the queue object is destroyed.
+```
 
 <br> <b> [v1_8](./v1_8.cpp): </b><br>
-    
-    Модифицируйте класс IntQueue из предыдущей задачи, снабдив его виртуальной функцией Check, принимающей параметр
-    типа int и возвращающей логическое значение; функция должна допускать работу для константных объектов. В классе
-    IntQueue функция Check должна всегда возвращать «истину», но предполагается, что классы-наследники могут
-    заменить эту функцию своей версией таковой. При добавлении нового числа в очередь это число должно проверяться
-    вызовом функции Check, и если функция вернула истину, число должно помещаться в очередь, в противном случае - 
-    игнорироваться. Унаследуйте от класса IntQueue класс EvenFilter, принимающий для помещения в очередь только
-    чётные числа. Этот класс должен отличаться от базового только функцией Check. Учтите, что в ходе тестирования
-    от класса будут наследоваться также другие потомки.
+```
+Modify the IntQueue class from the previous task by providing it with a virtual Check() function
+that accepts an int parameter and returns a Boolean value; the function must allow operation for
+constant objects. In the IntQueue class, the Check function should always return "true", but
+it is assumed that the inheriting classes can replace this function with their own version of it.
+When adding a new number to the queue, this number should be checked by calling the Check()
+function, and if the function returned true, the number should be placed in the queue, otherwise
+it should be ignored. Inherit from the IntQueue class the EvenFilter class, which accepts only
+even numbers for queuing. This class should differ from the base class only by the Check()
+function. Note that during testing, other descendants will also inherit from the class.
+```
 
 <br> <b> [v2_1](./v2_1.cpp): </b><br>
-    
-    Опишите класс А, а в нём открытую функцию f с пустым списком параметров, возвращающую целое число и допускающую
-    вызов без объекта, те с указанием имени класса. Функция при первом её вызове должна возвращать ноль, а при каждом
-    следующем - число на единицу большее предыдущего.
+```
+Describe class A, and in it an open function f with an empty list of parameters that returns
+an integer and allows calling without an object, those with the class name specified.
+The function must return zero the first time it is called, and each time it is called,
+it must return a number one greater than the previous one.
+```
 
 <br> <b> [v2_2](./v2_2.cpp): </b><br>
+```
+Describe the Functor class in such a way that (provided that f is an object of this class)
+the expression "f(x,y)" was equal to the sum of the numbers x and y. The expression should also
+work for constant objects.
+```
     
-    Опишите класс Functor таким образом, чтобы (при условии, что f - объект этого класса) выражение f(x,y)
-    было равно сумме чисел x и y. Выражение должно работать в том числе и для константных объектов.
-
 <br> <b> [v2_3](./v2_3.cpp): </b><br>
+```
+Describe the PseudoArray class, which is a "pseudo-array" of integers. An indexing operation
+must be applied to objects of the class, the argument of which, having the type int, must be
+ignored, that is, it must give the impression that there are as many elements in the array as
+there are different int values, and all elements are equal to the same number. The initial value
+of all "elements" is zero. The value is changed by assignment, as for regular arrays. Extracting
+the value of elements should also work for constant objects.
+```
     
-    Опишите класс PseudoArray, представляющий собой "псевдомассив" целых чисел. К объектам класса должна быть применима
-    операция индексирования, аргумент которой, имеющий тип int, должен игнорироваться, то есть должно создаваться
-    впечатление, что в массиве столько элементов, сколько существует различных значений int, причём все элементы
-    равны одному и тому же числу. Начальное значение всех «элементов» - ноль. Изменение значения производится присваиванием,
-    как для обычных массивов. Извлечение значения элементов должно работать в том числе для константных объектов.
-
 <br> <b> [v2_4](./v2_4.cpp): </b><br>
+```
+Describe the Smart class and, if necessary, additional classes in such a way that (if s is
+an object of the Smart class, possibly of constant type, the expression "t = s[x]", where t
+is an integer variable and x is an integer expression, puts in t a value greater than x by one,
+and an expression of the form "t = s[x][y]" puts in the product of the numbers x and y.
+```
     
-    Опишите класс Smart и, при необходимости, дополнительные классы таким образом, чтобы (если s - объект класса Smart, 
-    возможно константного типа, выражение t = s[х], где t - целочисленная переменая, а x - целочисленное выражение, заносило
-    в t значение, превосходящее х на единицу, а выражение вида t = s[x][y] заносило в произведение чисел х и у.
 <br> <b> [v3_1](./v3_1.cpp): </b><br>
-    
-    Создайте класс Assign (и, при необходимости, дополнительные классы) так, чтобы выражение вида а->f(x,у)
-    (где а - объект класса присваивало целочисленной переменной х значение у, при этом присвоенное значение запоминалось
-    в объекте и могло быть получено методом Get ().
+```
+Create the Assign class (and, if necessary, additional classes) so that an expression of
+the form "a->f(x,y)" (where a is an object of the class assigns the integer variable x
+the value y, while the assigned value is stored in the object and can be obtained by
+the Get() method.
+```
 
 <br> <b> [v3_2](./v3_2.cpp): </b><br>
-    
-    Модифицируйте класс Assign из предыдущей задачи так, чтобы присвоить таким способом новое значение можно было
-    переменной любого типа, если только для неё в принципе существует операция присваивания (в том числе для переменных,
-    тип которых запрещает копирование, но позволяет присваивание). В этой версии не нужно реализовывать
-    запоминание значения и метод Get().
+```
+Modify the Assign class from the previous task so that you can assign a new value to a variable
+of any type in this way, as long as there is an assignment operation for it in principle
+(including for variables whose type prohibits copying, but allows assignment). In this version,
+you do not need to implement value storage and the Get() method.
+```
 
 <br> <b> [v3_3](./v3_3.cpp): </b><br>
-    
-    Опишите класс М и (при необходимости) дополнительные классы или структуры так, чтобы (при условии, что m есть объект класса M)
-    выражение m(m) представляло собой целочисленную переменную, которой можно присваивать значения, которая сохраняет
-    присвоенное значение и из которой значение можно извлечь как из обычной переменной; в случае, если в программе описано
-    больше одного объекта класса М, каждому такому объекту должна соответствовать своя собственная целочисленная переменная,
-    доступная через операцию вида x(x). При этом выражение вида m(x), где x - объект того же класса, отличный от m, должно
-    всегда возвращать ноль, а присваивание любого целочисленного значения такому выражению не должно ничего менять. Объект класса
-    должен допускать создание без указания параметров. Помните, что компиляция с флагом -Wall не должна вызывать предупреждений!
+```  
+Describe the class M and (if necessary) additional classes or structures so that (provided that
+m is an object of class M) the expression "m(m)" is an integer variable that can be assigned
+values, which stores the assigned value and from which the value can be extracted as from
+a normal variable; if the program describes more than one object of class M, each such object
+must correspond to its own integer variable, accessible via an operation of the form "x(x)". 
+In this case, an expression of the form "m(x)", where x is an object of the same class other
+than m, should always return zero, and assigning any integer value to such an expression should
+not change anything. An object of the class must be created without specifying parameters.
+Remember that compiling with the "-Wall" flag should not cause warnings!
+```
 
 <br> <b> [v3_4](./v3_4.cpp): </b><br>
+```
+Describe the SumHold class for storing the sum of integers. Adding a number to the sum must be
+performed by the "<<" operation, and this operation must be described in such a way that it is
+possible to write "chains" like "sh << 20 << 30 << 40 << 50", where sh is an object of the SumHold
+class; such a "chain" must sequentially add numbers to the sum from left to right. Provide a
+Get() method that returns the current sum value for this object. You can assume that the number
+of int type will be sufficient.
+```
     
-    Опишите класс SumHold для хранения суммы целых чисел. Добавление числа к сумме должно производиться операцией <<, причём эта
-    операция должна быть описана так, чтобы можно было записывать «цепочки» вроде sh << 20 << 30 << 40 << 50, где sh - объект
-    класса SumHold; такая «цепочка» должна последовательно добавлять к сумме числа слева направо. Предусмотрите метод Get(),
-    возвращающий текущее значение суммы для данного объекта. Можете считать, что разрядности типа int будет достаточно.
-
 <br> <b> [v3_5](./v3_5.cpp): </b><br>
-    
-    Добавьте в класс SumHold из предыдущей задачи метод GetAll(), возвращающий сумму всех чисел, добавленных с момента старта
-    программы во все объекты класса SumHold. При необходимости введите дополнительные поля и/или методы.
+```
+Add the GetAll() method to the SumHold class from the previous task, which returns the sum of
+all the numbers added to all the objects of the SumHold class since the start of the program.
+If necessary, enter additional fields and / or methods.
+```

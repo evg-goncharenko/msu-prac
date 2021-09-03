@@ -1,18 +1,18 @@
-# Model JavaScript
+# Модельный JavaScript
 
 *Read this in other languages: [English](README.md), [Русский](README.ru.md).*
 
-How to build:
+Сборка проекта:
 ```bash
 make 
 ```
-How to launch:
+Запуск с тестовой программой:
 ```bash
 ./prog test_prog.js
 ```
-Or:
+Либо:
 ```bash
 ./prog < test_prog.js
 ```
-State Diagram:
+Диаграмма состояний:
 <img src="flowchart.png" width="100%">
