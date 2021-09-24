@@ -10,6 +10,32 @@
 ```python
 print(process([[1, 2], [3], [4], [3, 1]])) # [16, 9, 4, 1]
 ```
+<br><br>
+
+Решение на 84 символа:
+```python
+def process(l):
+    r = []
+    for i in l:
+        for j in i:
+            if j*j not in r:
+                r.append(j*j)
+    return sorted(r,reverse=1)
+```
+<br><br>
+
+Решение на 60 символов:
+```python
+def process(l):
+    s = {a * a for b in l for a in b}
+    return sorted(s,reverse=1)
+```
+<br><br>
+
+Решение на 49 символов:
+```python
+process = lambda l: sorted({a * a for b in l for a in b})[::-1]
+```
 <br>
 
 Запуск тестов:

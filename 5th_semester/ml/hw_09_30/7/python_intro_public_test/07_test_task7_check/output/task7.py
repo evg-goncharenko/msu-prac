@@ -1,7 +1,1 @@
-def process(l):
-    r = []
-    for i in l:
-        for j in i:
-            if j*j not in r:
-                r.append(j*j)
-    return sorted(r,reverse=1)
+process = lambda l: sorted({a * a for b in l for a in b})[::-1]
