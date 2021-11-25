@@ -1,0 +1,71 @@
+	entry go
+	extrn add, sub, mul, div, dr
+	extrn numb, symb
+	
+go =+
+	<testAdd><testSub><testMul><testDiv><testDr>+
+	<testNumb><testSymb>
+	
+	
+checkNegative
+	'-' e(N)1 =
+
+checkPositive
+	'+' e(N)1 =
+	e(N)1 =
+
+strictMatch
+	(e1)e1 =
+
+testAdd =+
+	<checkPositive <add(/7/)/13/> >+
+	<checkNegative <add(/7/)'-'/13/> >+
+	<checkPositive <add('-'/7/)/13/> >+
+	<checkNegative <add('-'/7/)'-'/13/> >+
+	<checkPositive <add(/17/)/13/> >+
+	<checkPositive <add(/17/)'-'/13/> >+
+	<checkNegative <add('-'/17/)/13/> >+
+	<checkNegative <add('-'/17/)'-'/13/> >
+
+testSub =+
+	<checkNegative <sub(/7/)/13/> >+
+	<checkPositive <sub(/7/)'-'/13/> >+
+	<checkNegative <sub('-'/7/)/13/> >+
+	<checkPositive <sub('-'/7/)'-'/13/> >+
+	<checkPositive <sub(/17/)/13/> >+
+	<checkPositive <sub(/17/)'-'/13/> >+
+	<checkNegative <sub('-'/17/)/13/> >+
+	<checkNegative <sub('-'/17/)'-'/13/> >
+
+testMul =+
+	<checkPositive <mul(/69/)/13/> >+
+	<checkNegative <mul(/69/)'-'/13/> >+
+	<checkNegative <mul('-'/69/)/13/> >+
+	<checkPositive <mul('-'/69/)'-'/13/> >
+
+testDiv =+
+	<checkPositive <div(/69/)/13/> >+
+	<checkNegative <div(/69/)'-'/13/> >+
+	<checkNegative <div('-'/69/)/13/> >+
+	<checkPositive <div('-'/69/)'-'/13/> >
+
+testDr =+
+	<strictMatch (    /5/ (    /4/ ) ) <dr (   /69/  )    /13/ > >+
+	<strictMatch ( '-'/5/ (    /4/ ) ) <dr (    /69/ ) '-'/13/ > >+
+	<strictMatch ( '-'/5/ ( '-'/4/ ) ) <dr ( '-'/69/ )    /13/ > >+
+	<strictMatch (    /5/ ( '-'/4/ ) ) <dr ( '-'/69/ ) '-'/13/ > >
+
+testNumb =+
+	<strictMatch (    /768/ ) <numb  '768'> >+
+	<strictMatch ( '-'/768/ ) <numb '-768'> >
+
+testSymb =+
+	<strictMatch ( '0' ) <symb    /0/> >+
+	<strictMatch ( '0' ) <symb '-'/0/> >+
+	<strictMatch ( '0' ) <symb '+'/0/> >+
+	<strictMatch (  '327' ) <symb    /327/> >+
+	<strictMatch ( '-327' ) <symb '-'/327/> >+
+	<strictMatch (  '327' ) <symb '+'/327/> >+
+	<strictMatch (  '1325400188' ) <symb    /79//124/> >+
+	<strictMatch ( '-1325400188' ) <symb '-'/79//124/> >+
+	<strictMatch (  '1325400188' ) <symb '+'/79//124/> >

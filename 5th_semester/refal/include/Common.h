@@ -1,0 +1,22 @@
+#pragma once
+
+#include <assert.h>
+#include <stdint.h>
+#include <string.h>
+#include <map>
+#include <set>
+#include <array>
+#include <stack>
+#include <queue>
+#include <bitset>
+#include <memory>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include <utility>
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+#include <forward_list>
