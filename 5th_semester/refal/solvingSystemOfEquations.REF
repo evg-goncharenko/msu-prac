@@ -4,7 +4,7 @@ DIALOG start
  
 go = <main<prout 'Enter the number of equations: '><card>> 
 
-main e1 = <call_expression <removing_all_spaces e1>>
+main e1 = <find_terms <converting_parentheses <converting_digits_to_numbers <removing_all_spaces e1>>>>
 
 removing_all_spaces e1 S(' ')A e2 = e1 <removing_all_spaces e2>
       e1 = e1
@@ -19,7 +19,13 @@ converting_parentheses e1')'e2=<converting_parentheses<sk1 e1>e2>
 sk1 R e1'('e2 = e1(<converting_parentheses e2>)
       e1 = <printError 'parentheses sequence is incorrect'>
 
-call_expression e1 = <expression_transformations <converting_parentheses <converting_digits_to_numbers e1>>>
+find_terms e1 (e3) S('*')B S(L)A S('*/')C (e4) e2 = <find_terms e1>  <expression_transformations (e3) SC (e4)> SB SA <find_terms e2>
+      e1 (e3) S('*')B S(L)A S('*/')C S(N)F e2 = <find_terms e1>  <expression_transformations (e3) SC SF> SB SA <find_terms e2>
+      e1 S(N)F S('*')B S(L)A S('*/')C (e3) e2 = <find_terms e1>  <expression_transformations SF SC (e3)> SB SA <find_terms e2>
+      e1 S(N)E S('*')B S(L)A S('*/')C S(N)F e2 = <find_terms e1> <expression_transformations SE SC SF> SB SA <find_terms e2>
+      e1 (e3) S('*')B S(L)A e2 = <find_terms e1>  <expression_transformations e3> SB SA <find_terms e2>
+      e1 S(L)A S('*/')B (e3) e2 = <find_terms e1> <expression_transformations e3> SB SA <find_terms e2>
+      e1 = e1
 
 expression_transformations e1 = (<expression e1>)
 
@@ -80,13 +86,6 @@ multiplier (e1) = <expression e1>
       e1 = <printError 'multiplier expression is incorrect'>
 
 printError e1 = <prout 'Err: ' e1>
-
-
-
-
-
-
-
 
  end
  
