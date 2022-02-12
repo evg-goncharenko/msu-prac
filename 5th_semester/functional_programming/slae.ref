@@ -1,0 +1,334 @@
+SLAE START
+ EXTRN CARD, PROUT, NUMB, SYMB, CHARTOF, FTOCHAR, ADD, SUB, MUL, DIV, DR, M1, NREL
+ ENTRY GO
+
+GO = <PROUT '\nResult:\n'<START_CYCLE <START_WORK <CHECK_NUM <CARD 'Number of equations = '>>>>>
+
+*---------------------------------------------------------------------------------
+* CHECK_NUM checks what is entered as the number of equations.
+
+CHECK_NUM '-'e1 = 'ERROR: a negative number of equations was entered\n'
+          '0' = 'Empty system\n'
+          s(D)Ae(D)1 = <NUMB sAe1>
+          e1 = 'ERROR: not a number entered\n'
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* START_WORK, START_SYS and SYS convert system:
+* EQ1
+* EQ2
+* EQ3,
+* in record INT_REPR(EQ1);INT_REPR(EQ2);INT_REPR(EQ3).
+
+START_WORK e1'\n' = e1'\n'
+           e1 = <PROUT 'System:'><START_SYS e1>
+
+START_SYS e1'ERROR'e2'\n'e3 = 'ERROR'e2'\n'
+          sAe1 = <SYS <NREL (sA)/0/>e1>
+
+SYS '>'(sA)sBe1 = <START_SYS <M1 sA>e1<INT_REPR <CARD>>';'>
+    '='(sA)sBe1';' = e1
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* INT_REPR convert an equation to the form:
+* a*x + b*y + c*z + ... = d,
+* into an internal representation of the form:
+* (/a/)/x/(/b/)/y/(/c/)/z/...(/d/).
+
+* The functions are called sequentially:
+* DEL_SPACE removes all spaces;
+* VARTOF convert variables (s(L)e(LD)) in the placemark symbol;
+* SKOB replaces symbolic brackets with structural ones;
+* PUT_BR encloses the coefficients and the free term of the equation in structural brackets, and signs '*' and '=' are removed;
+* CAL_COEF calculates the coefficients and the free term, and calculations are performed according to the BNF, as at seminar;
+* CHECK_ERROR drags the error record into the overlying functions.
+
+INT_REPR e1 = <CHECK_ERROR <CAL_COEF <PUT_BR <BALANCE <SKOB <VARTOF <DEL_SPACE e1>>>>>>>
+
+DEL_SPACE e1' 'e2 = e1<DEL_SPACE e2>
+          e1 = e1
+
+VARTOF e1s(L)Ae(LD)2s((LD))Be3 = e1<CHARTOF sAe2><VARTOF sBe3>
+       e1s(L)Ae(LD)2 = e1<CHARTOF sAe2>
+       e1 = e1
+
+SKOB e1')'e2 = <SKOB <SK e1')'>e2>
+     e1'('e2 = 'ERROR: balance of brackets is broken\n'
+     e1 = e1
+
+SK R e1'('e2')' = e1(e2)
+     e1 = 'ERROR: balance of brackets is broken\n'   
+
+BALANCE e1 = <BALANCE_CONST <BALANCE_VAR e1>>
+
+BALANCE_VAR e1'='e2s(F)Ae3 = e1<VAR_TO_LEFT '='e2sAe3>
+            e1 = e1
+
+VAR_TO_LEFT '='e((F))1'+'e2s(F)Ae3 = '-'e2sA<VAR_TO_LEFT '='e1e3>
+            '='e((F))1'-'e2s(F)Ae3 = '+'e2sA<VAR_TO_LEFT '='e1e3>
+            '='e1s(F)Ae2 = '-'e1sA<VAR_TO_LEFT '='e2>
+            e1 = e1
+
+BALANCE_CONST e1'=' = <BALANCE_CONST e1'=0'>
+              '-'(e1)'+'e2'='e3 = <BALANCE_CONST e2'='e3'+'(e1)>
+              '-'(e1)'-'e2'='e3 = <BALANCE_CONST '-'e2'='e3'+'(e1)>
+              (e1)'-'e2'='e3 = <BALANCE_CONST '-'e2'='e3'-'(e1)>
+              (e1)'+'e2'='e3 = <BALANCE_CONST e2'='e3'-'(e1)>
+              e1'+'e((F))2s('+-')Be3'='e4 = <BALANCE_CONST e1sBe3'='e4'-'e2>
+              e1'-'e((F))2s('+-')Be3'='e4 = <BALANCE_CONST e1sBe3'='e4'+'e2>
+              '-'e((F))1'*'s(F)A'='e2 = '-'e1'*'sA'='e2
+              s((F))Ae((F))1'+'e2'='e3 = <BALANCE_CONST e2'='e3'-'sAe1>
+              s((F))Ae((F))1'-'e2'='e3 = <BALANCE_CONST '-'e2'='e3'-'sAe1>
+              e1'+'e((F))2'='e3 = e1'='e3'-'e2
+              e1'-'e((F))2'='e3 = e1'='e3'+'e2
+              e((F))1'='e2 = '='e2'+'e1
+              e1 = e1  
+
+PUT_BR s(F)Ae1 = ('1')sA<PUT_BR e1>
+       '+'s(F)Ae1 = ('1')sA<PUT_BR e1>
+       '-'s(F)Ae1 = ('-1')sA<PUT_BR e1>
+       e1'*'s(F)Ae2 = (e1)sA<PUT_BR e2>
+       '='e1 = (e1)
+       e1'ERROR'e2'\n'e3 = 'ERROR'e2'\n'
+
+CAL_COEF e1('ERROR'e2)e3 = 'ERROR'e2
+         e1'ERROR'e2'\n'e3 = 'ERROR'e2'\n'
+         (e1)sAe2 = (<VYR e1>)sA<CAL_COEF e2>
+         (e1) = (<VYR e1>)
+
+CHECK_ERROR e1('ERROR'e2)e3 = 'ERROR'e2
+            'ERROR'e2 = 'ERROR'e2
+            e1 = e1
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* VYR, Z1, SLAG, Z2, MNOJ expression is calculated according to the following BNF:
+* <expression> ::= <summand> | <expression><sign1><summand>
+* <sign1> ::= + | -
+* <summand> ::= <multiplier> | <summand><sign2><multiplier>
+* <sign2> ::= * | /
+* <multiplier> ::= (<expression>) | <integer>
+* <integer> ::= 0, 1, -1, 2, -2, ..., 
+* moreover, all numbers are converted to rational fractions, for example: 1 -> 1/1, 2->2/1 etc.
+
+VYR R e1s('+-')Ae2 = <Z1 sA(<VYR e1>)<SLAG e2>>
+      e1 = <SLAG e1>
+
+Z1 '+'(e1)e2 = <ADD_FRAC (e1)e2>
+   '-'(e1)e2 = <SUB_FRAC (e1)e2>
+
+SLAG R e1s('*/')Ae2 = <Z2 sA(<SLAG e1>)<MNOJ e2>>
+       e1 = <MNOJ e1>
+
+Z2 '*'(e1)e2 = <MUL_FRAC (e1)e2>
+   '/'(e1)/0/e2 = 'ERROR: деление на ноль\n'
+   '/'(e1)e2 = <DIV_FRAC (e1)e2>
+
+MNOJ (e1) = <VYR e1>
+     e1 = <NUMB e1>'/'/1/
+*---------------------------------------------------------------------------------
+
+
+*---------------------------------------------------------------------------------
+* The following functions provide work with fractional numbers of the form a/b.
+* REDUCE, SUBRED responsible for the reduction of fractions;
+* NOD calculates the Greatest Common Divisor by the recursive Euclidean algorithm;
+* MOD calculates the remainder of the division after executing the function DR;
+* FRACTOCHAR convert a fraction of the form: /a/'/'/b/, in a sequence of characters 'a/b'
+* ADD_FRAC - addition of fractions
+* SUB_FRAC - subtraction of fractions
+* MUL_FRAC - multiplication of fractions
+* DIV_FRAC - division of fractions
+
+REDUCE '-'e1'/-'e2 = <SUBRED (<NOD (e1)e2>)e1'/'e2>
+       '-'e1'/'e2 = '-'<SUBRED (<NOD (e1)e2>)e1'/'e2>
+       e1'/-'e2 = '-'<SUBRED (<NOD (e1)e2>)e1'/'e2>
+       e1'/'e2 = <SUBRED (<NOD (e1)e2>)e1'/'e2>
+
+SUBRED (e1)e2'/'e3 = <DIV (e2)e1>'/'<DIV (e3)e1>
+
+NOD (e1)/0/ = e1
+    (e1)e2 = <NOD (e2)<MOD <DR (e1)e2>>>
+
+MOD e1(e2) = e2
+
+FRACTOCHAR /0/e1 = '0'
+           e1'/'/1/ = <SYMB e1>
+           e1'/'e2 = <SYMB e1>'/'<SYMB e2>
+
+ADD_FRAC (e1'/'e2)e3'/'e4 = <REDUCE <ADD (<MUL (e1)e4>)<MUL (e2)e3>>'/'<MUL (e2)e4>>
+
+SUB_FRAC (e1'/'e2)e3'/'e4 = <REDUCE <SUB (<MUL (e1)e4>)<MUL (e2)e3>>'/'<MUL (e2)e4>>
+
+MUL_FRAC (e1'/'e2)e3'/'e4 = <REDUCE <MUL (e1)e3>'/'<MUL (e2)e4>>
+
+DIV_FRAC (e1'/'e2)e3'/'e4 = <REDUCE <MUL (e1)e4>'/'<MUL (e2)e3>>
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* START_CYCLE, CYCLE, ITERATION start a cycle in which:
+* 1) All equations are converted into canonical form, that is, similar terms are given;
+* 2) In the first equation, the first variable is expressed in terms of others;
+* 3) The resulting expression is substituted into the remaining equations,
+* in the end we will get simplified equations, but in reverse order: EQ3;EQ2;EQ1.
+
+START_CYCLE e1'\n' = e1'\n'
+            e1 = <CYCLE <VAR_SET e1>e1'|'>
+
+CYCLE (e1)e2'|'e3 = <CHECK_FIRST (e1)<CANON_FORM e2>'|'e3>
+
+ITERATION (e1)e2'|'e3 = <CHECK_ITER (e1)<SUBSTITUTION <EXP_VAR e2>'|'e3>>
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* CHECK_ITER checks if the first cycle has not completed in order to start the second one.
+
+CHECK_ITER (e1)e2'|' = <DESISION (e1)<CYCLE2 e2'|'>>
+           e1 = <CYCLE e1>
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* VAR_SET, PUT_VAR create a set of all variables found in the system.
+
+VAR_SET e1 = <PUT_VAR ()e1>
+
+PUT_VAR (e1)e2s(F)Ae3 = <PUT_VAR <PUT sA(e1)>e3>
+        (e1)e2 = (e1)
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* Operations for working with sets:
+* PUT puts an element in set;
+* GET takes an element from set.
+
+PUT sA(e1sAe2) = (e1sAe2)
+    sA(e1) = (e1sA) 
+
+GET sA(e1sAe2) = (e1e2)
+    e1 = e1
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* CHECK_FIRST checks whether the first equation is not an identity.
+* If it is a true identity, then this equation is removed from the system,
+* otherwise, the message "The system of equations has no solution" is displayed.
+
+CHECK_FIRST (e1)(/0/e2)';'e3'|' = <CHECK_FIRST  (e1)e3'|'>
+            (e1)(/0/e2)';'e3 = <CHECK_ITER (e1)e3>
+            (e1)(/0/e2)'|'e3';' = <CHECK_ITER (e1)e3'|'>
+            (e1)(/0/e2)'|'e3 = <CHECK_ITER (e1)e3'|'>
+            (e1)(e2)s(';|')Ae3 = 'The system of equations has no solution'
+            e1 = <ITERATION e1>
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* The second cycle is responsible for the sequential substitution of the obtained expressions into subsequent equations,
+* so EQ3 -> EQ2, EQ1; EQ2 -> EQ1, and in the end we have the following order: EQ1;EQ2;EQ3, where
+* all equations are simplified as much as possible.
+
+CYCLE2 e1';'e2'|'e3 = <CYCLE2 <CANON_FORM <SUB_TO_EACH e1';'e2>>'|'e1';'e3>
+       e1'|'e2';' = e1';'e2
+       e1'|' = e1
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* Converting the result into characters:
+* DESISION sequentially iterates through all the equations. After the last equation sends a lot of data. perem. for processing;
+* MAKE converts variables from symbol labels to symbols and sends the remaining expression for processing;
+* ALLTOCHAR, SIGN convertes a linear combination of coef. and perem. in symbols, and for adding a sign before the next term is responsible SIGN;
+* MAKE_FREE calls after converting everything available into symbols to process a set of free variables.
+
+DESISION e1(e2)e3';'e4 = <DESISION e1<MAKE e3(e2)>e4>
+         e1(e2)e3 = <MAKE_FREE e1<MAKE e3(e2)>>
+
+MAKE sA(e1)(e2) = <FTOCHAR sA>' = '<FRACTOCHAR e1>'\n'<GET sA(e2)>
+     sA(/0/e2)e3(e4) = <FTOCHAR sA>' = '<ALLTOCHAR e3>'\n'<GET sA(e4)>
+     sA(e1)('-'e2)e3(e4) = <FTOCHAR sA>' = '<FRACTOCHAR e1><ALLTOCHAR ('-'e2)e3>'\n'<GET sA(e4)>
+     sA(e1)(e2)e3(e4) = <FTOCHAR sA>' = '<FRACTOCHAR e1>'+'<ALLTOCHAR (e2)e3>'\n'<GET sA(e4)>
+     (e1) = (e1)
+
+ALLTOCHAR ('-'/1/'/'/1/)sAe1 = '-'<FTOCHAR sA><SIGN e1>
+          (/1/'/'/1/)sAe1 = <FTOCHAR sA><SIGN e1>
+          (e1)sAe2 = <FRACTOCHAR e1>'*'<FTOCHAR sA><SIGN e2>
+
+SIGN ('-'e1)e2 = <ALLTOCHAR ('-'e1)e2>
+     (e1)e2 = '+'<ALLTOCHAR (e1)e2>
+     e1 = e1
+
+MAKE_FREE e1(sAe2) = <MAKE_FREE e1(e2)><FTOCHAR sA>' - free variable\n'
+          e1() = e1
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* Reduction to the canonical form of all the equations of the system:
+* CANON_FORM translates each equation into a canonical form;
+* CANON_ALL responsible for choosing the next equation;
+* CANON_ONE gives similar terms in the next equation;
+* DEL_ZERO removes entries of the form from all equations: 0*x.
+
+CANON_FORM e1 = <DEL_ZERO <CANON_ALL e1>>
+
+CANON_ALL e1';'e2 = <CANON_ONE e1>';'<CANON_ALL e2>
+          e1 = <CANON_ONE e1>
+
+CANON_ONE e1(e2)sAe3(e4)sAe5 = e1<CANON_ONE (<ADD_FRAC (e2)e4>)sAe3e5>
+          e1(e2)(e3) = e1(<ADD_FRAC (e2)e3>)
+          e1 = e1
+
+DEL_ZERO e1(/0/e2)s(F)Ae3 = <DEL_ZERO e1e3>
+         e1 = e1
+*---------------------------------------------------------------------------------
+
+*---------------------------------------------------------------------------------
+* Expression of the first variable in the first equation of system, through remaining variables
+* (x = -2*y + z + 5 stored as: /x/(/5/'/'/1/)(-/2/'/'/1/)/y/(/1/'/'/1/)/z/, that is, a free member at the beginning):
+* EXP_VAR gets the first equation;
+* EXP expresses the first variable from the equation in terms of the remaining;
+* VAR_MINUS changes the signs of the coefficients to the opposite ones if necessary to transfer to the right side of the equality;
+* VAR_TO_RIGHT transfers the remaining (except the first) variables to the right side, and the signs of the coefficients are changed in advance;
+* DIV_COEF, DIV_VAR divide the remaining (except the first) coefficient. and the free term by the coefficient. before the first variable.
+
+EXP_VAR e1';'e2 = <DIV_COEF <EXP e1>>';'e2
+        e1 = <DIV_COEF <EXP e1>>
+
+EXP ('-'e1)sAe2('-'e3) = (e1)sA<VAR_TO_RIGHT e2(e3)>
+    ('-'e1)sAe2(e3) = (e1)sA<VAR_TO_RIGHT e2('-'e3)>
+    (e1)sAe2 = (e1)SA<VAR_TO_RIGHT <VAR_MINUS e2>>
+
+VAR_MINUS ('-'e1)sAe2 = (e1)sA<VAR_MINUS e2>
+          (e1)sAe2 = ('-'e1)sA<VAR_MINUS e2>
+          e1 = e1
+
+VAR_TO_RIGHT e1(e2) = (e2)e1
+
+DIV_COEF (e1)sA(e2)e3 = sA(<DIV_FRAC (e2)e1>)<DIV_VAR (e1)e3>
+
+DIV_VAR (e1)(e2)sBe3 = (<DIV_FRAC (e2)e1>)sB<DIV_VAR (e1)e3>
+        (e1) =
+*---------------------------------------------------------------------------------
+
+
+*---------------------------------------------------------------------------------
+* Substitution of the expressed variable from the first equation into the remaining equations:
+* SUBSTITUTION selects the first equation. In case they are the latter, then rearranges the '|' sign to the end;
+* SUB_TO_EACH substitutes the expressed first equation into the remaining ones;
+* SUBS searches for the desired variable (from 1 equation) in the remaining ones and substitutes it in them;
+* MUL_COEF multiplies the coefficients and the free term by the coefficient in front of the encountered variable.
+
+SUBSTITUTION e1';'e2'|'e3 = <SUB_TO_EACH e1';'e2>'|'e1';'e3
+             e1'|' = e1'|'
+             e1'|'e2';' = e1';'e2'|'
+             e1'|'e2 = e1';'e2'|'
+
+SUB_TO_EACH e1';'e2';'e3 = <SUBS e1';'e2>';'<SUB_TO_EACH e1';'e3>
+            e1 = <SUBS e1>
+
+SUBS sA('-'e1)e2';'e3(e4)sAe5(e6) = e3<MUL_COEF (e4)e2>e5(e6)(<MUL_FRAC (e4)e1>)
+     sA(e1)e2';'e3(e4)sAe5(e6) = e3<MUL_COEF (e4)e2>e5(e6)(<MUL_FRAC (e4)'-'e1>)
+     sA(e1)e2';'sB(e3)e4(e5)sAe6 = sB(<ADD_FRAC (e3)<MUL_FRAC (e5)e1>>)e4<MUL_COEF (e5)e2>e6
+     e1';'e2 = e2
+
+MUL_COEF (e1)(e2)sAe3 = (<MUL_FRAC (e1)e2>)sA<MUL_COEF (e1)e3>
+         (e1)(e2)e3 = (<MUL_FRAC (e1)e2>)<MUL_COEF (e1)e3>
+         (e1) = 

@@ -1,0 +1,21 @@
+* Дан текст в виде последовательности слов через пробел.
+* Исключить из текста все слова, которые содержат хотя бы одну цифру.
+     start
+     entry go
+     extrn PROUT,CARD
+go = <res<prout 'give a text: '><card>> 
+
+f0 e1' 'e2 = (e1)<f0 e2> 
+     e1 = (e1)
+
+f1 e4(e1 S(D)A e2)e3 = e4<f1 e3>
+     e1 = e1
+
+f2 (e1)e8(e2s5e6)e9 = e1' '<f2 e8(e2s5e6)e9>
+     e1(e2) = e1e2
+     e1 = e1
+
+res e1 = <f2 <f1 <f0 e1>>>
+     e1 = e1
+
+     end

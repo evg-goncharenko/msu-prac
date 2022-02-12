@@ -1,42 +1,53 @@
-## Программа "сочинитель" текста
+## The program "The Writer" of the text
 
-<b> [Main](./Main.py): </b> - графический интерфейс для демонстрации работы и использование основных алгоритмов и функций. <br>
-<b> [TheWriter](./TheWriter.py): </b> - файл с реализацией основных алгоритмов <br>
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
 
-### О программе:
-Программа - "сочинитель" текста заданного вида. Изменяется заданный текст по определенным правилам:
-1) Из текста выбираются фразы, соответствующие заданному виду, стилю (длина, части речи, длина слов и т.п.).
-2) В каждой фразе несколько слов заменяются на более подходящие (формально, по стилю, например, на более длинные).
-3) Слова берутся из неиспользованных фраз текста, ставятся в нужной форме.
-4) Четко выполняется соответствие по морфологическим характеристикам (понятно, что семантически может быть бессмыслица, но грамматически текст верный).<br>
-Пример: "Петя рисует дом" - "Интеграл усиливает простуду".<br>
-Графический интерфейс сделан с адаптацией под разный размер окна и разрешение экрана.
+<b> [Main](./Main.py): </b> - graphical interface for demonstrating the operation and use of basic algorithms
+and functions. <br>
+<b> [TheWriter](./TheWriter.py): </b> - a file with implementation of the basic algorithms <br>
+
+### About program:
+The program is "The Writer" of a text of a given type. The specified text changes according to certain rules:
+1) Phrases corresponding to a given type and style (length, parts of speech, length of words, etc.)
+are selected from the text.
+2) In each phrase, several words are replaced with more suitable ones (formally, in style, for example,
+with longer ones).
+3) The words are taken from unused phrases of the text, put in the right form.
+4) The morphological characteristics are clearly matched (it is clear that semantically there may be nonsense,
+but grammatically the text is correct).<br>
+Example: "Петя рисует дом" - "Интеграл усиливает простуду".<br>
+The graphical interface is made to adapt to different window sizes and screen resolutions.
 <br><br>
 
 <img src="main_page.png" width="100%">
 <img src="result.png" width="100%">
 
-### Установка:
-Используемые библиотеки:<br>
+### Installation:
+Libraries used:<br>
 - pymorphy2
 - math
 - os
 - tkinter
-Не встроенной библиотекой является только pymorphy2. Если она не установлена, то можно ее установить следующей командой: `pip install pymorphy2`
-Если pip не установлен, то можно поставить в ручную: https://pypi.org/project/pip 
+Only pymorphy2 is not a built-in library. If it is not installed, then you can install it with
+the following command: `pip install pymorphy2`
+If pip is not installed, then you can put it manually: https://pypi.org/project/pip 
 <br><br>
 
-### Запуск:
-Запуск осуществляется через: `python Main.py` <br>
-Во время работы программы требуется два текстовых файла - шаблон текста для изменения и текст для словаря слов.<br>
-Для удобства тестовые варианты текстов расположены в папке `/tests` <br>
-Пример шаблона текста для изменения: `tests/text_template_to_change.txt`
-Примеры текстов для словаря слов:<br>
-`tests/text_for_dictionary_words.txt` - отрывок из книги Теодора Драйзера "Финансист".<br>
-`tests/text_for_dictionary_words_2.txt` - стихотворение Михаила Лермонтова "Родина".<br>
-Результат печатается на экране, а также формируется в виде текстового файла `result.txt`, расположенного в корне, рядом с Main.py и др.<br><br>
+### Launch:
+The launch is carried out via: `python Main.py` <br>
+While the program is running, two text files are required - a text template for modification and a text
+for a dictionary of words.<br>
+For convenience, the test versions of the texts are located in the folder `/tests` <br>
+Example of a text template to change: `tests/text_template_to_change.txt`
+Examples of texts for a dictionary of words:<br>
+`tests/text_for_dictionary_words.txt` - excerpt from Theodore Dreiser's book "The Financier".<br>
+`tests/text_for_dictionary_words_2.txt` - Mikhail Lermontov's poem "Motherland".<br>
+The result is printed on the screen and also formed as a text file `result.txt`, located at the root,
+next to Main.py and others.<br><br>
 
-### Настройки:
-В данном проекте в разделе `Настройки` можно выбирать параметры работы "сочинителя" текста.<br>
-Например, можно выбирать какие части речи рассматривать для изменения. Вид замены: гибкая, строгая и нужно ли запоминать соответствия.<br> 
-А также можно настраивать выбор по длине слов (проверять равенство, не проверять и заменять большим).
+### Settings:
+In this project, in the `Settings` section, you can select the parameters of the "writer" of the text.<br>
+For example, you can choose which parts of speech to consider for modification. Type of replacement:
+flexible, strict and whether it is necessary to remember the matches.<br> 
+And you can also customize the selection by the length of words (check for equality, do not check and
+replace with a large one).

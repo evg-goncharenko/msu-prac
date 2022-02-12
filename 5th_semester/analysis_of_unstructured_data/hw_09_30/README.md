@@ -1,27 +1,35 @@
-## Анализ текста
+## Text Analysis
+
+*Read this in other languages: [English](README.md), [Русский](README.ru.md).*
 
 <b> [task1](./task1.py): </b><br>
 
-Подсчет частоты входящих слов в тексте.<br>
-Программа убирает в предложении знаки препинания, составляет список без стоп-слов, ставит слова в начальную форму и формирует отсортированный словарь.<br>
+Counting the frequency of incoming words in the text.<br>
+The program removes punctuation marks in the sentence, makes a list without stop words, puts words in
+the initial form and forms a sorted dictionary.<br>
 
 <b> [task2](./task2.py): </b><br>
 
-Подсчет частоты всех входящих в текст русских букв (без учета регистра), латинских букв: частота = сколько раз встретилась в тексте буква / количество букв в тексте.<br>
+Counting the frequency of all Russian letters included in the text (case-insensitive), Latin letters:<br>
+frequency = how many times a letter has appeared in the text / number of letters in the text.<br>
 
 <b> [task3](./task3.py): </b><br>
 
-Подсчет частоты биграмм и триграмм.  Биграмма - пара стоящих рядом букв, триграмма - три рядом стоящие буквы. Заданное количество самых частых биграмм(триграмм) печатается с их частотой. Для английского и русского текста. Регистр не учитывается. В тексте могут быть символы, не являющиеся буквами (цифры, знаки препинания) - они не учитываются.<br>
-Пример "Мой кот." - биграммы (с учетом пробела)  ' м', 'мо', 'ой', 'й ', ' к', 'ко', 'от', 'т '.<br>
+Counting the frequency of bigrams and trigrams. A bigram is a pair of letters standing side by side, a trigram
+is three letters standing side by side. The specified number of the most frequent bigrams (trigrams) is printed
+with their frequency. For English and Russian text. Case is not taken into account. The text may contain
+characters that are not letters (numbers, punctuation marks) - they are not taken into account.<br>
+Example of "My cat." - bigrams (taking into account the space) ' m', 'my', 'y ', ' c', 'ca', 'at', 't '.<br>
 
 <b> [task4](./task4.py): </b><br>
 
-Подсчет частоты всех входящих в текст русских букв.<br>
+Counting the frequency of all Russian letters included in the text.<br>
 
 <b> [task5](./task5.py): </b><br>
 
-Подсчет общего количества слов, среднего количества слов и среднего количества букв.<br>
+Counting the total number of words, the average number of words and the average number of letters.<br>
 
 <b> [task6](./task6.py): </b><br>
 
-Вычисление Индекса Флеша. Подсчет количества предложений, общего количества слов и количества слогов.
+Calculating The Flash Index. Counting the number of sentences, the total number of words and the number
+of syllables.
