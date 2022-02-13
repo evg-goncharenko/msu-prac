@@ -1,0 +1,7 @@
+filterFuncName = extendedFilterRU
+trainFileName = train/war-and-peace.txt
+previousCnt = 2
+sentanceCnt = 5
+maxSentanceLen = 15
+minSentanceLen = 5
+resultFileName = result.txt
