@@ -11,9 +11,10 @@
 - Генератор текста на основе цепи Маркова ([hw_09_30](./analysis_of_unstructured_data/hw_09_30)).
 
 ### Функциональное программирование
-- Решение системы линейных уравнений в русском варианте ([slae_ru](./functional_programming/slae_ru.ref));
-- Решение системы линейных уравнений в английском варианте ([slae](./functional_programming/slae.ref));
-- Исключить из текста все слова, которые содержат хотя бы одну цифру ([delete_words](./functional_programming/delete_words.ref)).
+- Решение системы линейных уравнений в русском варианте ([slae_ru](./functional_programming/refal_lessons/slae_ru.ref));
+- Решение системы линейных уравнений в английском варианте ([slae](./functional_programming/refal_lessons/slae.ref));
+- Исключить из текста все слова, которые содержат хотя бы одну цифру ([delete_words](./functional_programming/refal_lessons/delete_words.ref));
+- Контрольная по языку Хаскель ([haskell](./functional_programming/haskell)).
 
 ### Курс по методам машинного обучения
 - Основы Python ([hw_09_30](./machine_learning/hw_09_30));

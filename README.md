@@ -7,3 +7,4 @@
 - 3rd semester
 - 4th semester
 - 5th semester
+- 6th_semester

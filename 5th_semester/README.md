@@ -11,9 +11,10 @@
 - Text generator based on the Markov chain ([hw_09_30](./analysis_of_unstructured_data/hw_09_30)).
 
 ### Functional programming
-- Solving a system of linear equations in the Russian version ([slae_ru](./functional_programming/slae_ru.ref));
-- Solving a system of linear equations in the English version ([slae](./functional_programming/slae.ref));
-- Exclude from the text all words that contain at least one digit ([delete_words](./functional_programming/delete_words.ref)).
+- Solving a system of linear equations in the Russian version ([slae_ru](./functional_programming/refal_lessons/slae_ru.ref));
+- Solving a system of linear equations in the English version ([slae](./functional_programming/refal_lessons/slae.ref));
+- Exclude from the text all words that contain at least one digit ([delete_words](./functional_programming/refal_lessons/delete_words.ref));
+- Haskell Test ([haskell](./functional_programming/haskell)).
 
 ### Machine learning
 - Python Basics ([hw_09_30](./machine_learning/hw_09_30));
