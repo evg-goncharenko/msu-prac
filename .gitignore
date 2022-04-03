@@ -37,5 +37,16 @@
 *.out
 *.app
 
+# Haskell
+*.hi
+
+# LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.gz
+
+# VSCode and MacOS 
 .vscode/
 .DS_Store
