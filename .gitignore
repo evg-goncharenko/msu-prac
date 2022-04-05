@@ -40,6 +40,11 @@
 # Haskell
 *.hi
 
+# Python
+__pycache__
+catboost_info
+.pytest_cache
+
 # LaTeX
 *.aux
 *.fdb_latexmk
