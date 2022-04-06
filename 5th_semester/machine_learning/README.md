@@ -7,3 +7,8 @@
 - KNN ([hw_11_04](./hw_11_04));
 - Linear regression and classification models ([hw_11_18](./hw_11_18));
 - Support Vector Machine (SVM) ([hw_12_07](./hw_12_07)).
+
+Running tests:
+```bash
+python run.py public_tests
+```
