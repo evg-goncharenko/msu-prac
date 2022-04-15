@@ -5,3 +5,4 @@
 [submodule "coursework/rmu/Libs/iconvpp"]
 	path = coursework/rmu/Libs/iconvpp
 	url = https://github.com/unnonouno/iconvpp
+	ignore = untracked
