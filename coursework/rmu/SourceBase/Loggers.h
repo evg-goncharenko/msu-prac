@@ -5,14 +5,14 @@
 //#include <fstream>
 #include <cstdio>
 
-class FileLogger : public ILogger
-{
-	//std::fstream _stream;
-	std::FILE * _stream;
+class FileLogger : public ILogger {
+    //std::fstream _stream;
+    std::FILE* _stream;
+
 public:
-	FileLogger(const TCHAR * fileName);
-	virtual void LogEvent(const TCHAR * msg);
-	virtual ~FileLogger();
+    FileLogger(const TCHAR* fileName);
+    virtual void LogEvent(const TCHAR* msg);
+    virtual ~FileLogger();
 };
 
 #endif

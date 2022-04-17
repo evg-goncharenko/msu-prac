@@ -6,7 +6,7 @@ struct S {
     S(int a) {
         try {
             if (a > 0) {
-                throw * this;
+                throw *this;
             } else {
                 if (a < 0) {
                     throw 0;

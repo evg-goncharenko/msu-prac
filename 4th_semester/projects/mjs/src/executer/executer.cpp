@@ -821,7 +821,9 @@ void Executer::execute(std::vector<Lexeme> &poliz) {
                 std::cout << getenv(one.get_string().c_str()) << std::endl;
                 break;
             }
-            default: { throw "POLIZ: unexpected elem"; }
+            default: {
+                throw "POLIZ: unexpected elem";
+            }
         }  // end of switch
         ++index;
     };  // end of while

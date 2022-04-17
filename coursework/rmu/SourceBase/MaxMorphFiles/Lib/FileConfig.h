@@ -16,9 +16,9 @@
 #ifndef FILECONFIG_H
 #define FILECONFIG_H
 
-#include "String.h"
 #include "FileStream.h"
 #include "SCArray.h"
+#include "String.h"
 
 /*____________________________________________________________________
 
@@ -28,20 +28,20 @@
   ____________________________________________________________________
 */
 
-class FileConfig
-{
+class FileConfig {
 public:
-// Life-cycle
-                  FileConfig () {}
-                  FileConfig ( const String & CfgFileName ) { Open ( CfgFileName ); }
-                 ~FileConfig () {}
-            
-// Interface
-    bool          Open  ( const String & CfgFileName );
-    bool          Read  ( const String & AttrName, String& Value );
+    // Life-cycle
+    FileConfig() {}
+    FileConfig(const String& CfgFileName) { Open(CfgFileName); }
+    ~FileConfig() {}
+
+    // Interface
+    bool Open(const String& CfgFileName);
+    bool Read(const String& AttrName, String& Value);
+
 protected:
-// Attributes
-    FileStream    CfgFile;
+    // Attributes
+    FileStream CfgFile;
     CSCDictionary<String> Attrs;
 };
 

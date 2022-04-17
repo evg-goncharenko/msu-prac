@@ -27,19 +27,18 @@
   ____________________________________________________________________
 */
 
-class IRMUnit
-{
+class IRMUnit {
 public:
-    static  IRMUnit * Create        ();
-    virtual int       GetBusyStatus () const = 0;
-    virtual int       LexemsCount   () const = 0;
-    virtual int       FormsCount    () const = 0;
-    virtual void      LoadFromFile  ( const String & BaseName, IRMStockManager::FileFormat Format = IRMStockManager::SM_FORMAT_BINARY ) = 0;
-    virtual int       PClassesCount () const = 0;
-    virtual String    ProcessQuery  ( const String & Query ) = 0;
-    virtual void      SaveToFile    ( const String & BaseName, IRMStockManager::FileFormat Format = IRMStockManager::SM_FORMAT_BINARY ) = 0;
-    virtual int       StressSchemasCount () const = 0;
-    virtual          ~IRMUnit       () {};
+    static IRMUnit* Create();
+    virtual int GetBusyStatus() const = 0;
+    virtual int LexemsCount() const = 0;
+    virtual int FormsCount() const = 0;
+    virtual void LoadFromFile(const String& BaseName, IRMStockManager::FileFormat Format = IRMStockManager::SM_FORMAT_BINARY) = 0;
+    virtual int PClassesCount() const = 0;
+    virtual String ProcessQuery(const String& Query) = 0;
+    virtual void SaveToFile(const String& BaseName, IRMStockManager::FileFormat Format = IRMStockManager::SM_FORMAT_BINARY) = 0;
+    virtual int StressSchemasCount() const = 0;
+    virtual ~IRMUnit(){};
 };
 
-#endif // !defined(AFX_IRMUNIT_H__78BD1CC0_6182_11D5_BE32_00409516091F__INCLUDED_)
+#endif  // !defined(AFX_IRMUNIT_H__78BD1CC0_6182_11D5_BE32_00409516091F__INCLUDED_)

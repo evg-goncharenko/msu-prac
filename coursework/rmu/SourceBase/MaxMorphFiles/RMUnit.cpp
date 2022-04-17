@@ -51,15 +51,14 @@
   ____________________________________________________________________
 */
 
-#include "Lib/stdafx.h"
+#include "RMUnit.h"
 #include "Lib/Xception.h"
 #include "Lib/Xml.h"
-#include "RMUnit.h"
+#include "Lib/stdafx.h"
 
-struct Prediction
-{
-    String                  PredictedLexem;
-    CSCSet<String,Strings>  Hypothesises;
+struct Prediction {
+    String PredictedLexem;
+    CSCSet<String, Strings> Hypothesises;
 };
 
 /*
@@ -104,52 +103,47 @@ const char RRMUnit::Suffixes[256][8] =
   ____________________________________________________________________
 */
 
-class CRMUnit : public IRMUnit
-{
+class CRMUnit : public IRMUnit {
 public:
     // Life-cycle
-                              CRMUnit () :
-                                  BusyStatus ( 0 ),
-                                  Stock ( IRMStockManager::Create () )
-                              {};
-                             ~CRMUnit ();
+    CRMUnit() : BusyStatus(0),
+                Stock(IRMStockManager::Create()){};
+    ~CRMUnit();
     // Interface
-            int               GetBusyStatus () const { return Stock->GetBusyStatus (); };
-            int               FormsCount    () const { return Stock->FormsCount (); };
-            int               LexemsCount   () const { return Stock->LexemsCount (); };
-            void              LoadFromFile  ( const String& BaseName, IRMStockManager::FileFormat Format = IRMStockManager::SM_FORMAT_BINARY )
-                              { Stock->LoadFromFile ( BaseName, Format ); }
-            int               PClassesCount () const { return Stock->PClassesCount (); };
-            String            ProcessQuery  ( const String& Query );
-            void              SaveToFile    ( const String& BaseName, IRMStockManager::FileFormat Format = IRMStockManager::SM_FORMAT_BINARY )
-                              { Stock->SaveToFile ( BaseName, Format ); }
-            int               StressSchemasCount () const { return Stock->StressSchemasCount(); }
+    int GetBusyStatus() const { return Stock->GetBusyStatus(); };
+    int FormsCount() const { return Stock->FormsCount(); };
+    int LexemsCount() const { return Stock->LexemsCount(); };
+    void LoadFromFile(const String& BaseName, IRMStockManager::FileFormat Format = IRMStockManager::SM_FORMAT_BINARY) { Stock->LoadFromFile(BaseName, Format); }
+    int PClassesCount() const { return Stock->PClassesCount(); };
+    String ProcessQuery(const String& Query);
+    void SaveToFile(const String& BaseName, IRMStockManager::FileFormat Format = IRMStockManager::SM_FORMAT_BINARY) { Stock->SaveToFile(BaseName, Format); }
+    int StressSchemasCount() const { return Stock->StressSchemasCount(); }
 
 private:
-            void              AdaptCaps     ( String Form, Strings& Forms ) const;
-            void              AdaptSpell    ( const String& Form, Strings& Forms ) const;
-			// GIG - 04.03.2013 - extra parameter for comparative degree
-            void              EncodeLexem   ( CRMLexem* Lexem, String& Result, const String& From, const String& Stem, const String& Flex, int StartPos = 0 ) const;
-            // GIG - 13.01.2013
-			//bool              HasPrefix     ( const String& Form, int & PrefixIndex ) const;
-            String            ProcessAnalyzeQuery     ( XMLElement * XML ) const;
-            String            ProcessAnalyzeNewQuery  ( XMLElement * XML ) const;
-            String            ProcessFindCognates     ( XMLElement * XML ) const;
-            String            ProcessSynthesizeQuery  ( XMLElement * XML ) const;
-            String            ProcessShowPClass       ( XMLElement * XML ) const;
-            String            ProcessShowPClasses     ( XMLElement * XML ) const;
-    // Attributes
-    static  const char      * Version;
-    static  const char      * Build;
-            int               BusyStatus;
-            IRMStockManager * Stock;
+    void AdaptCaps(String Form, Strings& Forms) const;
+    void AdaptSpell(const String& Form, Strings& Forms) const;
+    // GIG - 04.03.2013 - extra parameter for comparative degree
+    void EncodeLexem(CRMLexem* Lexem, String& Result, const String& From, const String& Stem, const String& Flex, int StartPos = 0) const;
     // GIG - 13.01.2013
-	//static  const char        Prefixes[64][8];
+    //bool              HasPrefix     ( const String& Form, int & PrefixIndex ) const;
+    String ProcessAnalyzeQuery(XMLElement* XML) const;
+    String ProcessAnalyzeNewQuery(XMLElement* XML) const;
+    String ProcessFindCognates(XMLElement* XML) const;
+    String ProcessSynthesizeQuery(XMLElement* XML) const;
+    String ProcessShowPClass(XMLElement* XML) const;
+    String ProcessShowPClasses(XMLElement* XML) const;
+    // Attributes
+    static const char* Version;
+    static const char* Build;
+    int BusyStatus;
+    IRMStockManager* Stock;
+    // GIG - 13.01.2013
+    //static  const char        Prefixes[64][8];
     //static  const int         PrefixesQnt;
 };
 
-const char * CRMUnit::Version = "RMU v3.4";
-const char * CRMUnit::Build   = "55/"  __DATE__;
+const char* CRMUnit::Version = "RMU v3.4";
+const char* CRMUnit::Build = "55/" __DATE__;
 
 /* GIG - 11.01.2013
 const int    CRMUnit::PrefixesQnt = 31;
@@ -171,9 +165,8 @@ const char   CRMUnit::Prefixes[64][8] =
   ____________________________________________________________________
 */
 
-IRMUnit *
-IRMUnit::Create ()
-{
+IRMUnit*
+IRMUnit::Create() {
     return new CRMUnit;
 }
 
@@ -185,18 +178,15 @@ IRMUnit::Create ()
   ____________________________________________________________________
 */
 
-void
-CRMUnit::AdaptCaps ( String Form, Strings& Forms ) const
-{
-    if ( 192 <= unsigned ( Form[0] ) && unsigned ( Form[0] ) <= 223 )
-    {
-      // Store first variant - first capital, rest - lowers
-      MakeLower ( Form, 1 );
-      Forms.Add ( Form );
+void CRMUnit::AdaptCaps(String Form, Strings& Forms) const {
+    if (192 <= unsigned(Form[0]) && unsigned(Form[0]) <= 223) {
+        // Store first variant - first capital, rest - lowers
+        MakeLower(Form, 1);
+        Forms.Add(Form);
     }
     // Store second variant - all lowers
-    MakeLower ( Form );
-    Forms.Add ( Form );
+    MakeLower(Form);
+    Forms.Add(Form);
 }
 
 /*____________________________________________________________________
@@ -207,28 +197,24 @@ CRMUnit::AdaptCaps ( String Form, Strings& Forms ) const
   ____________________________________________________________________
 */
 
-void
-CRMUnit::AdaptSpell ( const String& Form, Strings& Forms ) const
-{
-    String  SubForm;
-    int     ReplPos;
-    
+void CRMUnit::AdaptSpell(const String& Form, Strings& Forms) const {
+    String SubForm;
+    int ReplPos;
+
     // Check first capital letter
-    AdaptCaps ( Form, Forms );
+    AdaptCaps(Form, Forms);
     // Heurisitic adaptation analysis
-    ReplPos = Form.Find ( "å" );
-    if ( Form.Find ( "¸" ) == -1 && 0 <= ReplPos )
-        do
-        {
+    ReplPos = Form.Find("å");
+    if (Form.Find("¸") == -1 && 0 <= ReplPos)
+        do {
             // Make several form patterns with "e" letter replaced by "¸"
             SubForm = Form;
             SubForm[ReplPos] = '¸';
             // Check first capital letter
-            AdaptCaps ( SubForm, Forms );
+            AdaptCaps(SubForm, Forms);
             // Prepare next pattern
-            ReplPos = Form.Find ( "å", ReplPos + 1 );
-        }
-        while ( ReplPos != -1 );
+            ReplPos = Form.Find("å", ReplPos + 1);
+        } while (ReplPos != -1);
 }
 
 /*____________________________________________________________________
@@ -305,40 +291,34 @@ CRMUnit::Decompose ( const String& Form ) const
   ____________________________________________________________________
 */
 
-void 
-CRMUnit::EncodeLexem ( CRMLexem* Lexem, String& Result, const String& Form, const String& Stem, const String& Flex, int StartPos ) const
-{
+void CRMUnit::EncodeLexem(CRMLexem* Lexem, String& Result, const String& Form, const String& Stem, const String& Flex, int StartPos) const {
     int k;
-    CRMParadigm::FlexPositions * FlexPositions = NULL;
+    CRMParadigm::FlexPositions* FlexPositions = NULL;
 
-    try
-    {
-        if ( Lexem->Paradigm && 0 < Lexem->Paradigm->Items.Count () )
-        {
-            Result += "<analyzed form=\"" + Form + "\" lexem=\"" + Stem + Lexem->Paradigm->GetFirstFlex () + "\" />";
-            FlexPositions = Lexem->Paradigm->Contains ( Flex, StartPos );
-        }
-        else
-        {
+    try {
+        if (Lexem->Paradigm && 0 < Lexem->Paradigm->Items.Count()) {
+            Result += "<analyzed form=\"" + Form + "\" lexem=\"" + Stem + Lexem->Paradigm->GetFirstFlex() + "\" />";
+            FlexPositions = Lexem->Paradigm->Contains(Flex, StartPos);
+        } else {
             CRMParadigm::FlexVar FV;
-            FV.Pos = 0; FV.Var = 0;
+            FV.Pos = 0;
+            FV.Var = 0;
             Result += "<analyzed form=\"" + Form + "\" lexem=\"" + Stem + "\" />";
             FlexPositions = new CRMParadigm::FlexPositions;
-            FlexPositions->Items.Add ( FV );
+            FlexPositions->Items.Add(FV);
         }
-        if ( FlexPositions )
-        {
-            for ( k = 0; k < FlexPositions->Items.Count (); ++k )
-                Result += CompleteMultiStringResult ( Lexem->IdentifyFlex ( FlexPositions->Items[k], Form ) );
+        if (FlexPositions) {
+            for (k = 0; k < FlexPositions->Items.Count(); ++k)
+                Result += CompleteMultiStringResult(Lexem->IdentifyFlex(FlexPositions->Items[k], Form));
             ++Lexem->UsageCounter;
-            if ( 1999999999 < Lexem->UsageCounter ) Stock->UpdateCounters ();
+            if (1999999999 < Lexem->UsageCounter) Stock->UpdateCounters();
         }
     }
     finally (
         if ( FlexPositions ) delete FlexPositions;
     )
 }
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  __
                                                                _|__|_
     ProcessAnalyzeQuery                                       |  (o) |
@@ -346,88 +326,77 @@ CRMUnit::EncodeLexem ( CRMLexem* Lexem, String& Result, const String& Form, cons
   ____________________________________________________________________
 */
 
-String
-CRMUnit::ProcessAnalyzeQuery ( XMLElement * XML ) const
-{
-    String      Result;
-    String      Form;
-    String      ThisStem;
-    String      ThisFlex;
-    Strings     Forms;
-    CRMLexems * Lexems;
-    int         Pos, Length;
-    bool        IsPossiblyComparativeMode;
-    bool        Found;
-    int         k;
+    String
+    CRMUnit::ProcessAnalyzeQuery(XMLElement* XML) const {
+        String Result;
+        String Form;
+        String ThisStem;
+        String ThisFlex;
+        Strings Forms;
+        CRMLexems* Lexems;
+        int Pos, Length;
+        bool IsPossiblyComparativeMode;
+        bool Found;
+        int k;
 
-	struct CompDegreeHackHelper
-	{
-		CompDegreeHackHelper()
-		{
-			CRMSclasses::CRMAdjective::AdjectiveHomonim::WeakDegreeHack(true);
-		}
-		~CompDegreeHackHelper()
-		{
-			CRMSclasses::CRMAdjective::AdjectiveHomonim::WeakDegreeHack(false);
-		}
-	};
-
-    if ( ! XML->Attr( "form" ).IsEmpty () )
-    {
-        int i;
-        if ( XML->Attr( "match" ) == "spell" )
-            Forms.Add ( XML->Attr("form") );
-        else
-            AdaptSpell ( XML->Attr( "form" ), Forms );
-        for ( k = 0; k < Forms.Count (); k++ )
-        {
-            Form = Forms[k];
-            Pos = Length = Form.Length ();
-            IsPossiblyComparativeMode = false;
-            Found = false;
-            if ( 4 < Length )
-				IsPossiblyComparativeMode = ( Form.SubStr ( 0, 2 ) == "ïî" );
-            while ( 0 <= Pos )
-            {
-                ThisStem = Form.SubStr ( 0, Pos );
-                ThisFlex = Form.SubStr ( Pos, Length - Pos );
-                Lexems   = Stock->FindLexems ( ThisStem, ThisFlex );
-                if ( Lexems->Count () ) Found = true;
-                for ( i = 0; i < Lexems->Count (); ++i )
-                    EncodeLexem ( (*Lexems)[i], Result, Form, ThisStem, ThisFlex );
-                delete Lexems;
-				// GIG - 04.03.2013 - search for comparative adjectives completely redesigned
-				if ( IsPossiblyComparativeMode && 2 <= ThisStem.Length () )
-				{
-					CompDegreeHackHelper hack;
-					ThisStem = ThisStem.SubStr ( 2, ThisStem.Length () - 2 );
-                    Lexems = Stock->FindComparativeLexems ( ThisStem, ThisFlex );
-	                if ( Lexems->Count () ) Found = true;
-					for ( i = 0; i < Lexems->Count (); ++i )
-						EncodeLexem ( (*Lexems)[i], Result, Form, ThisStem, ThisFlex );
-					delete Lexems;
-				}
-                --Pos;
+        struct CompDegreeHackHelper {
+            CompDegreeHackHelper() {
+                CRMSclasses::CRMAdjective::AdjectiveHomonim::WeakDegreeHack(true);
             }
-            if ( !Found && 0 < Form.Find ( "-" ) )
-            {
-                // Analyze compound adjectives
+            ~CompDegreeHackHelper() {
+                CRMSclasses::CRMAdjective::AdjectiveHomonim::WeakDegreeHack(false);
+            }
+        };
 
+        if (!XML->Attr("form").IsEmpty()) {
+            int i;
+            if (XML->Attr("match") == "spell")
+                Forms.Add(XML->Attr("form"));
+            else
+                AdaptSpell(XML->Attr("form"), Forms);
+            for (k = 0; k < Forms.Count(); k++) {
+                Form = Forms[k];
+                Pos = Length = Form.Length();
+                IsPossiblyComparativeMode = false;
+                Found = false;
+                if (4 < Length)
+                    IsPossiblyComparativeMode = (Form.SubStr(0, 2) == "ïî");
+                while (0 <= Pos) {
+                    ThisStem = Form.SubStr(0, Pos);
+                    ThisFlex = Form.SubStr(Pos, Length - Pos);
+                    Lexems = Stock->FindLexems(ThisStem, ThisFlex);
+                    if (Lexems->Count()) Found = true;
+                    for (i = 0; i < Lexems->Count(); ++i)
+                        EncodeLexem((*Lexems)[i], Result, Form, ThisStem, ThisFlex);
+                    delete Lexems;
+                    // GIG - 04.03.2013 - search for comparative adjectives completely redesigned
+                    if (IsPossiblyComparativeMode && 2 <= ThisStem.Length()) {
+                        CompDegreeHackHelper hack;
+                        ThisStem = ThisStem.SubStr(2, ThisStem.Length() - 2);
+                        Lexems = Stock->FindComparativeLexems(ThisStem, ThisFlex);
+                        if (Lexems->Count()) Found = true;
+                        for (i = 0; i < Lexems->Count(); ++i)
+                            EncodeLexem((*Lexems)[i], Result, Form, ThisStem, ThisFlex);
+                        delete Lexems;
+                    }
+                    --Pos;
+                }
+                if (!Found && 0 < Form.Find("-")) {
+                    // Analyze compound adjectives
+                }
             }
         }
+        return Result;
     }
-    return Result;
-}
 
-
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  __
                                                                _|__|_
     HasPrefix                                                 | (o)  |
                                                               |______|
   ____________________________________________________________________
 */
-/* GIG - 13.01.2013
+    /* GIG - 13.01.2013
 bool
 CRMUnit::HasPrefix ( const String& Form, int & PrefixIndex ) const
 {
@@ -444,7 +413,7 @@ CRMUnit::HasPrefix ( const String& Form, int & PrefixIndex ) const
 }
 */
 
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  __
                                                                _|__|_
     ProcessAnalyzeNewQuery                                    |  (o) |
@@ -452,91 +421,80 @@ CRMUnit::HasPrefix ( const String& Form, int & PrefixIndex ) const
   ____________________________________________________________________
 */
 
-String
-CRMUnit::ProcessAnalyzeNewQuery ( XMLElement * XML ) const
-{
-    String        Result;
-    Strings       preResult;
-    CSCPtrArray<Prediction> Answers;
-    Prediction  * pAnswer;
-    String        Form;
-    String        ThisStem;
-    String        StemTail, StemTailShort;
-    String        ThisFlex;
-    String        line;
-    Strings       Forms;
-    CRMPClasses * PClasses;
-    int           Pos, Length;
-    int           i, j, k, h, AttrPos, p;
+    String
+    CRMUnit::ProcessAnalyzeNewQuery(XMLElement* XML) const {
+        String Result;
+        Strings preResult;
+        CSCPtrArray<Prediction> Answers;
+        Prediction* pAnswer;
+        String Form;
+        String ThisStem;
+        String StemTail, StemTailShort;
+        String ThisFlex;
+        String line;
+        Strings Forms;
+        CRMPClasses* PClasses;
+        int Pos, Length;
+        int i, j, k, h, AttrPos, p;
 
-    if ( XML->Attrs()->Exists( "form", AttrPos ) && !(*XML->Attrs ())[AttrPos].Value.IsEmpty () )
-    {
-        if ( XML->Attrs()->Exists ( "match", AttrPos ) && (*XML->Attrs ())[AttrPos].Value == "spell" )
-            Forms.Add ( XML->Attr(AttrPos) );
-        else
-            AdaptSpell ( XML->Attr(AttrPos), Forms );
-        for ( k = 0; k < Forms.Count (); k++ )
-        {
-            Form = Forms[k];
-            if ( 3 < ( Length = Form.Length () ) )
-            {
-                Pos = 3;
-                while ( Pos <= Length )
-                {
-                    StemTail = Form.SubStr ( Pos - 3, 3 );
-                    StemTailShort = Form.SubStr ( Pos - 2, 2 );
-                    if ( Pos == Length )
-                    {
-                        ThisStem = Form;
-                        ThisFlex.Clear ();
-                    }
-                    else
-                    {
-                        ThisStem = Form.SubStr ( 0, Pos );
-                        ThisFlex = Form.SubStr ( Pos, Length - Pos );
-                    }
-                    PClasses = Stock->FindPClasses ( ThisFlex );
-                    if ( PClasses->Count () )
-                    {
-                        for ( i = 0; i < PClasses->Count (); ++i )
-                        {
-                            if ( ( *PClasses )[i]->SuffixesExt.Find ( StemTail, p ) || ( *PClasses )[i]->Suffixes.Find ( StemTailShort, p ) )
-                            {
-                                line = "<predicted form=\"" + Form + "\" lexem=\"" + ThisStem + (*PClasses)[i]->GetFirstFlex () + "\" />";
-                                h = 0;
-                                while ( h < Answers.Count () )
-                                    if ( Answers[h]->PredictedLexem == line ) break;
-                                    else ++h;
-                                if ( h == Answers.Count () || !Answers.Count () )
-                                {
-                                    // New answer
-                                    pAnswer = new Prediction;
-                                    pAnswer->PredictedLexem = line;
-                                    Answers.Add ( pAnswer );
+        if (XML->Attrs()->Exists("form", AttrPos) && !(*XML->Attrs())[AttrPos].Value.IsEmpty()) {
+            if (XML->Attrs()->Exists("match", AttrPos) && (*XML->Attrs())[AttrPos].Value == "spell")
+                Forms.Add(XML->Attr(AttrPos));
+            else
+                AdaptSpell(XML->Attr(AttrPos), Forms);
+            for (k = 0; k < Forms.Count(); k++) {
+                Form = Forms[k];
+                if (3 < (Length = Form.Length())) {
+                    Pos = 3;
+                    while (Pos <= Length) {
+                        StemTail = Form.SubStr(Pos - 3, 3);
+                        StemTailShort = Form.SubStr(Pos - 2, 2);
+                        if (Pos == Length) {
+                            ThisStem = Form;
+                            ThisFlex.Clear();
+                        } else {
+                            ThisStem = Form.SubStr(0, Pos);
+                            ThisFlex = Form.SubStr(Pos, Length - Pos);
+                        }
+                        PClasses = Stock->FindPClasses(ThisFlex);
+                        if (PClasses->Count()) {
+                            for (i = 0; i < PClasses->Count(); ++i) {
+                                if ((*PClasses)[i]->SuffixesExt.Find(StemTail, p) || (*PClasses)[i]->Suffixes.Find(StemTailShort, p)) {
+                                    line = "<predicted form=\"" + Form + "\" lexem=\"" + ThisStem + (*PClasses)[i]->GetFirstFlex() + "\" />";
+                                    h = 0;
+                                    while (h < Answers.Count())
+                                        if (Answers[h]->PredictedLexem == line)
+                                            break;
+                                        else
+                                            ++h;
+                                    if (h == Answers.Count() || !Answers.Count()) {
+                                        // New answer
+                                        pAnswer = new Prediction;
+                                        pAnswer->PredictedLexem = line;
+                                        Answers.Add(pAnswer);
+                                    }
+                                    preResult = (*PClasses)[i]->IdentifyFlex(ThisFlex);
+                                    for (j = 0; j < preResult.Count(); ++j)
+                                        // preResult should be cleaned before append
+                                        Answers[h]->Hypothesises.Add(preResult[j]);
                                 }
-                                preResult = (*PClasses)[i]->IdentifyFlex ( ThisFlex );
-                                for ( j = 0; j < preResult.Count (); ++j )
-                                    // preResult should be cleaned before append
-                                    Answers[h]->Hypothesises.Add ( preResult[j] );
                             }
                         }
+                        delete PClasses;
+                        ++Pos;
                     }
-                    delete PClasses;
-                    ++Pos;
                 }
             }
         }
+        for (i = 0; i < Answers.Count(); ++i) {
+            Result += Answers[i]->PredictedLexem;
+            for (j = 0; j < Answers[i]->Hypothesises.Count(); ++j)
+                Result += Answers[i]->Hypothesises[j] + " />";
+        }
+        return Result;
     }
-    for ( i = 0; i < Answers.Count (); ++i )
-    {
-        Result += Answers[i]->PredictedLexem;
-        for ( j = 0; j < Answers[i]->Hypothesises.Count (); ++j )
-            Result += Answers[i]->Hypothesises[j] + " />";
-    }
-    return Result;
-}
 
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  __
                                                                _|__|_
     ProcessFindCognates                                       | (o)  |
@@ -544,11 +502,10 @@ CRMUnit::ProcessAnalyzeNewQuery ( XMLElement * XML ) const
   ____________________________________________________________________
 */
 
-String
-CRMUnit::ProcessFindCognates ( XMLElement * XML ) const
-{
-    String          Result;
-/*
+    String
+    CRMUnit::ProcessFindCognates(XMLElement* XML) const {
+        String Result;
+        /*
     String          Stem;
     String          Form;
     Strings         Forms;
@@ -620,10 +577,10 @@ CRMUnit::ProcessFindCognates ( XMLElement * XML ) const
         }
     }
 */
-    return Result;
-}
+        return Result;
+    }
 
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  __
                                                                _|__|_
     ProcessSynthesizeQuery                                    | (o)  |
@@ -631,78 +588,68 @@ CRMUnit::ProcessFindCognates ( XMLElement * XML ) const
   ____________________________________________________________________
 */
 
-String
-CRMUnit::ProcessSynthesizeQuery ( XMLElement * XML ) const
-{
-    String      Result;
-    String      Form;
-    String      ThisStem;
-    String      ThisFlex;
-    Strings     Forms;
-    Strings   * Flexes;
-    CRMLexems * Lexems;
-    int         Pos, Length;
-    int         i, j, k;
+    String
+    CRMUnit::ProcessSynthesizeQuery(XMLElement* XML) const {
+        String Result;
+        String Form;
+        String ThisStem;
+        String ThisFlex;
+        Strings Forms;
+        Strings* Flexes;
+        CRMLexems* Lexems;
+        int Pos, Length;
+        int i, j, k;
 
-    if ( ! XML->Attr("form").IsEmpty () )
-    {
-        if ( XML->Attr("match") == "spell" )
-            Forms.Add ( XML->Attr( "form" ) );
-        else
-            AdaptSpell ( XML->Attr( "form" ), Forms );
-        for ( j = 0; j < Forms.Count (); ++j )
-        {
-            Form = Forms[j];
-            Pos = Length = Form.Length ();
-            while ( 0 <= Pos )
-            {
-                ThisStem = Form.SubStr ( 0, Pos );
-                ThisFlex = Form.SubStr ( Pos, Length - Pos );
-                Lexems   = Stock->FindLexems ( ThisStem, ThisFlex );
-                if ( Lexems->Count () )
-                {
-                    CRMParadigm::FlexPositions* FlexPositions;
-                    for ( i = 0; i < Lexems->Count (); ++i )
-                    {
-                        if ( (*Lexems)[i]->Paradigm && 0 < (*Lexems)[i]->Paradigm->Items.Count () )
-                        {
-                            Result += "<synthesized lexem=\"" + ThisStem + (*Lexems)[i]->Paradigm->GetFirstFlex () + "\" />";
-                            Flexes = (*Lexems)[i]->Paradigm->GetAllFlexes ();
-                            FlexPositions = (*Lexems)[i]->Paradigm->GetAllFlexPositions ();
-                        }
-                        else
-                        {
-                            Flexes = new Strings;
-                            Flexes->Add ( "" );
-                            CRMParadigm::FlexVar FV;
-                            FV.Pos = 0; FV.Var = 0;
-                            Result += "<synthesized lexem=\"" + ThisStem + "\" />";
-                            FlexPositions = new CRMParadigm::FlexPositions;
-                            FlexPositions->Items.Add ( FV );
-                        }
-                        if ( FlexPositions )
-                        {
-                            for ( k = 0; k < Flexes->Count (); ++k )
-                            {
-                                Result += "<form value=\"" + ThisStem + (*Flexes)[k] + "\" />";
-                                Result += CompleteMultiStringResult ( (*Lexems)[i]->IdentifyFlex ( FlexPositions->Items[k], Form ) );
+        if (!XML->Attr("form").IsEmpty()) {
+            if (XML->Attr("match") == "spell")
+                Forms.Add(XML->Attr("form"));
+            else
+                AdaptSpell(XML->Attr("form"), Forms);
+            for (j = 0; j < Forms.Count(); ++j) {
+                Form = Forms[j];
+                Pos = Length = Form.Length();
+                while (0 <= Pos) {
+                    ThisStem = Form.SubStr(0, Pos);
+                    ThisFlex = Form.SubStr(Pos, Length - Pos);
+                    Lexems = Stock->FindLexems(ThisStem, ThisFlex);
+                    if (Lexems->Count()) {
+                        CRMParadigm::FlexPositions* FlexPositions;
+                        for (i = 0; i < Lexems->Count(); ++i) {
+                            if ((*Lexems)[i]->Paradigm && 0 < (*Lexems)[i]->Paradigm->Items.Count()) {
+                                Result += "<synthesized lexem=\"" + ThisStem + (*Lexems)[i]->Paradigm->GetFirstFlex() + "\" />";
+                                Flexes = (*Lexems)[i]->Paradigm->GetAllFlexes();
+                                FlexPositions = (*Lexems)[i]->Paradigm->GetAllFlexPositions();
+                            } else {
+                                Flexes = new Strings;
+                                Flexes->Add("");
+                                CRMParadigm::FlexVar FV;
+                                FV.Pos = 0;
+                                FV.Var = 0;
+                                Result += "<synthesized lexem=\"" + ThisStem + "\" />";
+                                FlexPositions = new CRMParadigm::FlexPositions;
+                                FlexPositions->Items.Add(FV);
                             }
-                            ++(*Lexems)[i]->UsageCounter;
-                            if ( (*Lexems)[i]->UsageCounter > 1999999999 ) Stock->UpdateCounters ();
+                            if (FlexPositions) {
+                                for (k = 0; k < Flexes->Count(); ++k) {
+                                    Result += "<form value=\"" + ThisStem + (*Flexes)[k] + "\" />";
+                                    Result += CompleteMultiStringResult((*Lexems)[i]->IdentifyFlex(FlexPositions->Items[k], Form));
+                                }
+                                ++(*Lexems)[i]->UsageCounter;
+                                if ((*Lexems)[i]->UsageCounter > 1999999999) Stock->UpdateCounters();
+                            }
+                            delete Flexes;
+                            delete FlexPositions;
                         }
-                        delete Flexes;
-                        delete FlexPositions;
                     }
+                    delete Lexems;
+                    --Pos;
                 }
-                delete Lexems;
-                --Pos;
             }
         }
+        return Result;
     }
-    return Result;
-}
 
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  ___
                                                                 /   \
     ProcessQuery                                                )   (
@@ -710,33 +657,29 @@ CRMUnit::ProcessSynthesizeQuery ( XMLElement * XML ) const
   ____________________________________________________________________
 */
 
-String 
-CRMUnit::ProcessQuery ( const String & Query )
-{
-    String        ThisStem;
-    String        ThisFlex;
-    String        Form, SubForm, Result;
-    XMLElement *  XML = NULL;
+    String
+    CRMUnit::ProcessQuery(const String& Query) {
+        String ThisStem;
+        String ThisFlex;
+        String Form, SubForm, Result;
+        XMLElement* XML = NULL;
 
-    
-    XML = XMLElement::ReadFrom ( Query );
-    try
-    {
-        if ( XML && XML->IsElem () )
-        {
-            if ( XML->Name () == "analyze" )
-                Result = ProcessAnalyzeQuery ( XML );
-            else if ( XML->Name () == "analyzenew" )
-                Result = ProcessAnalyzeNewQuery ( XML );
-            else if ( XML->Name () == "findcognates" )
-                Result = ProcessFindCognates ( XML );
-            else if ( XML->Name () == "synthesize" )
-                Result = ProcessSynthesizeQuery ( XML );
-            else if ( XML->Name () == "showpclass" )
-                Result = ProcessShowPClass ( XML );
-            else if ( XML->Name () == "showpclasses" )          
-                Result = ProcessShowPClasses ( XML );
-    /*
+        XML = XMLElement::ReadFrom(Query);
+        try {
+            if (XML && XML->IsElem()) {
+                if (XML->Name() == "analyze")
+                    Result = ProcessAnalyzeQuery(XML);
+                else if (XML->Name() == "analyzenew")
+                    Result = ProcessAnalyzeNewQuery(XML);
+                else if (XML->Name() == "findcognates")
+                    Result = ProcessFindCognates(XML);
+                else if (XML->Name() == "synthesize")
+                    Result = ProcessSynthesizeQuery(XML);
+                else if (XML->Name() == "showpclass")
+                    Result = ProcessShowPClass(XML);
+                else if (XML->Name() == "showpclasses")
+                    Result = ProcessShowPClasses(XML);
+                /*
             else if ( XML->Name () == "add" )
             {
                 if (  Attrs.Exists ( "synclass", AttrPos ) && Attrs.Exists ( "stem", AttrPos ) && 
@@ -747,24 +690,20 @@ CRMUnit::ProcessQuery ( const String & Query )
 
             }
     */
-            else if ( XML->Name () == "tellinfo" )
-            {
-                Result = "<info version=\"";
-                Result += Version;
-                Result += "\" build=\"";
-                Result += Build;
-                Result += "\" />";
+                else if (XML->Name() == "tellinfo") {
+                    Result = "<info version=\"";
+                    Result += Version;
+                    Result += "\" build=\"";
+                    Result += Build;
+                    Result += "\" />";
+                }
             }
-        }
+        } finally(
+            if (XML) delete XML;) if (Result.IsEmpty()) Result = "<unrecognized />";
+        return "<answer>" + Result + "</answer>";
     }
-    finally (
-        if ( XML ) delete XML;
-    )
-    if ( Result.IsEmpty () ) Result = "<unrecognized />";
-    return "<answer>" + Result + "</answer>";
-}
 
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  __
                                                                _|__|_
     ProcessShowPClass                                         | (o)  |
@@ -772,47 +711,39 @@ CRMUnit::ProcessQuery ( const String & Query )
   ____________________________________________________________________
 */
 
-String
-CRMUnit::ProcessShowPClass ( XMLElement * XML ) const
-{
-    String  Result;
-    String  ThisFlex;
-    int     i, j;
+    String
+    CRMUnit::ProcessShowPClass(XMLElement* XML) const {
+        String Result;
+        String ThisFlex;
+        int i, j;
 
-    if ( ! XML->Attr("name").IsEmpty () )
-    {
-        CRMParadigm* PClass = Stock->FindPClass ( XML->Attr("name") );
-        if ( PClass )
-        {
-            Result = "<pclass name=\"" + PClass->UID + "\">\n\r";
-            for ( i = 0; i < PClass->Items.Count (); ++i )
-            {
-                Result += " <f>\n\r";
-                if ( PClass->Items[i]->ItemType () == ERMPFlex )
-                {
-                    // Single flex in current position
-                    Result += "  <flex ID=\"" + ((CRMParadigm::Flex *) PClass->Items[i] )->ID + "\">\n\r";
-                }
-                else if ( PClass->Items[i]->ItemType () == ERMPFlexes )
-                {
-                    for ( j = 0; j < ( (CRMParadigm::Flexes*)(PClass->Items[i]))->Items.Count (); ++j )
-                    {
-                        Result += "  <flex ID=\"" + ( (CRMParadigm::Flexes*)(PClass->Items[i]))->Items[j] + "\"";
-                        if ( ( (CRMParadigm::Flexes*)(PClass->Items[i]))->Nested[j] )
-                            Result += " nestedID=\"" + ( (CRMParadigm::Flexes*)(PClass->Items[i]))->Nested[j]->UID + "\">\n\r";
-                        else
-                            Result += ">\n\r";
+        if (!XML->Attr("name").IsEmpty()) {
+            CRMParadigm* PClass = Stock->FindPClass(XML->Attr("name"));
+            if (PClass) {
+                Result = "<pclass name=\"" + PClass->UID + "\">\n\r";
+                for (i = 0; i < PClass->Items.Count(); ++i) {
+                    Result += " <f>\n\r";
+                    if (PClass->Items[i]->ItemType() == ERMPFlex) {
+                        // Single flex in current position
+                        Result += "  <flex ID=\"" + ((CRMParadigm::Flex*)PClass->Items[i])->ID + "\">\n\r";
+                    } else if (PClass->Items[i]->ItemType() == ERMPFlexes) {
+                        for (j = 0; j < ((CRMParadigm::Flexes*)(PClass->Items[i]))->Items.Count(); ++j) {
+                            Result += "  <flex ID=\"" + ((CRMParadigm::Flexes*)(PClass->Items[i]))->Items[j] + "\"";
+                            if (((CRMParadigm::Flexes*)(PClass->Items[i]))->Nested[j])
+                                Result += " nestedID=\"" + ((CRMParadigm::Flexes*)(PClass->Items[i]))->Nested[j]->UID + "\">\n\r";
+                            else
+                                Result += ">\n\r";
+                        }
                     }
+                    Result += " </f>\n\r";
                 }
-                Result += " </f>\n\r";
+                Result += "</pclass>\n\r";
             }
-            Result += "</pclass>\n\r";
         }
-    }                      
-    return Result;
-}
+        return Result;
+    }
 
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  __
                                                                _|__|_
     ProcessShowPClasses                                       | (o)  |
@@ -820,28 +751,26 @@ CRMUnit::ProcessShowPClass ( XMLElement * XML ) const
   ____________________________________________________________________
 */
 
-String
-CRMUnit::ProcessShowPClasses ( XMLElement * XML ) const
-{
-    String  Result;
-    String  Flex;
-    String  SClass;
+    String
+    CRMUnit::ProcessShowPClasses(XMLElement* XML) const {
+        String Result;
+        String Flex;
+        String SClass;
 
-    Flex   = XML->Attr( "flex" );
-    SClass = XML->Attr( "sclass" );
-    if ( ! Flex.IsEmpty () && ! SClass.IsEmpty () )
-    {
-        // Obey constraints: show all P-Classes, which belong specified S-Class and contain specified Flex                    
-        Result = Stock->FindPClassesForXML ( Flex, SClass );
-        if ( Result.IsEmpty () ) 
-            Result = "<notfound />";
-        else 
-            Result = "<pclasses flex=\"" + Flex + "\" sclass=\"" + SClass + "\">\n\r" + Result + "\n\r</pclasses>\n\r";
+        Flex = XML->Attr("flex");
+        SClass = XML->Attr("sclass");
+        if (!Flex.IsEmpty() && !SClass.IsEmpty()) {
+            // Obey constraints: show all P-Classes, which belong specified S-Class and contain specified Flex
+            Result = Stock->FindPClassesForXML(Flex, SClass);
+            if (Result.IsEmpty())
+                Result = "<notfound />";
+            else
+                Result = "<pclasses flex=\"" + Flex + "\" sclass=\"" + SClass + "\">\n\r" + Result + "\n\r</pclasses>\n\r";
+        }
+        return Result;
     }
-    return Result;
-}
 
-/*____________________________________________________________________
+    /*____________________________________________________________________
                                                                  _  _
                                                                 \ \/ /
     CRMUnit destructor                                           )  (
@@ -849,7 +778,6 @@ CRMUnit::ProcessShowPClasses ( XMLElement * XML ) const
   ____________________________________________________________________
 */
 
-CRMUnit::~CRMUnit()
-{
-    delete Stock;
-}
+    CRMUnit::~CRMUnit() {
+        delete Stock;
+    }
