@@ -50,7 +50,6 @@ renderWell well =
         | c == Empty = pictures []
         | otherwise  = renderCell (px, py) (cellColor c)
 
--- function to fill the border
 fillBorder :: (Float, Float) -> (Float, Float) -> Picture
 fillBorder (dx, dy) (width, height) = color borderColor $
                              translate x y $ 
@@ -58,7 +57,6 @@ fillBorder (dx, dy) (width, height) = color borderColor $
                               where x = (dx * windowScale - fromIntegral windowWidth / 2)
                                     y = (dy * windowScale - fromIntegral windowHeight / 2)
 
--- nice screen borders
 drawBorders :: Picture
 drawBorders  = pictures 
               [ fillBorder (fromIntegral columns / 2, 0) size1
@@ -84,7 +82,6 @@ drawNameField state = pictures
     , drawTextField state
     ]
 
--- text field where user will print his/her name
 drawTextField :: State -> Picture
 drawTextField state = pictures
         [ color foodColor $ 
@@ -94,7 +91,7 @@ drawTextField state = pictures
        ,  color blue $ 
           translate (-250) (-100) $ 
           scale 0.3 0.3 $ 
-          text ((name state) ++ "|") -- this one for flickering
+          text ((name state) ++ "|")
        ,  color blue $ 
           translate (-250) (-100) $ 
           scale 0.3 0.3 $ 
@@ -130,13 +127,13 @@ drawTableElements :: State -> Picture
 drawTableElements state = pictures(
           ([
             color foodColor $ 
-            translate (-215) 250 $
+            translate (- (fromIntegral (length ("Top 10 players")) * 14)) 250 $
             scale 0.4 0.4 $
             text "Top 10 players"
           , color foodColor $ 
-            translate (-50) (-300) $
+            translate (- (fromIntegral (length ("Exit")) * 9)) (-280) $
             scale 0.3 0.3 $
-            text "exit"
+            text "Exit"
           ]) ++ (tableTiles (records state) 50))
 
 tableTiles :: Records -> Float -> [Picture]
@@ -147,27 +144,26 @@ tableTiles (x:xs) offset =
         scale 0.2 0.2 $
         text ((fst x) ++ " " ++ show (snd x))) : (tableTiles xs (offset + 50.0)))
 
--- each menu element (will appear red if selected)
 drawMenuElements :: State -> Picture
 drawMenuElements state = pictures
       [ color borderColor $ 
-        translate (-50) 200 $
+        translate (- (fromIntegral (length ("Tetris")) * 11)) 200 $
         scale 0.4 0.4 $
         text "Tetris"
       , color (if ((selected state) == 0) then foodColor else blue) $ 
-        translate (-50) (50) $ 
+        translate (- (fromIntegral (length ("Play")) * 9)) (50) $ 
         scale 0.3 0.3 $ 
         text "Play"
       , color (if ((selected state) == 1) then foodColor else blue) $ 
-        translate (-75) (-50) $ 
+        translate (- (fromIntegral (length ("Top 10 players")) * 10)) (-50) $ 
         scale 0.3 0.3 $ 
-        text "Top 10"
+        text "Top 10 players"
       , color (if ((selected state) == 2) then foodColor else blue) $ 
-        translate (-175) (-150) $ 
+        translate (- (fromIntegral (length ("Change your name")) * 11)) (-150) $ 
         scale 0.3 0.3 $ 
         text "Change your name"
       , color foodColor $ 
-        translate (- (fromIntegral (length (name state)) * 8)) (-300) $ 
+        translate (- (fromIntegral (length (name state)) * 8)) (-280) $ 
         scale 0.2 0.2 $ 
         text (name state)
         ]
