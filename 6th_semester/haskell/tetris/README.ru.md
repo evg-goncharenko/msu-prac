@@ -1,13 +1,13 @@
-# Tetris Game
+# Игра Тетрис
 
 *Read this in other languages: [English](README.md), [Русский](README.ru.md).*
 
-How to build:
+Сборка:
 ```bash
 stack build
 ```
 
-How to launch:
+Запуск:
 ```bash
 stack run
 ```

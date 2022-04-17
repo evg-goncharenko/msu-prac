@@ -4,19 +4,12 @@
 module Logic(updateGameState, handleEvent) where
 
 import State
-    ( State(time, deltaTime, secondsToNextMove, piece, piecePos,
-            randomSeed, accelerate, well, score),
-      resetGameState )
 import Piece ( Piece, pieceCW, pieceCCW, validPos, randomPiece )
 import Playfield
     ( Well, renderPiece, pieceCollides, clearAndCountFilledRows )
 import Constants ()
 import Graphics.Gloss ()
 import Graphics.Gloss.Interface.Pure.Game
-    ( Key(Char, SpecialKey),
-      Event(EventKey),
-      KeyState(Down, Up),
-      SpecialKey(KeyDown, KeyLeft, KeyRight) ) -- for Event
 import System.Random ( Random(randomR), StdGen )
 
 -- Piece falling velocity, in cells/second
@@ -34,13 +27,61 @@ effectivePiecePeriod :: State -> Float
 effectivePiecePeriod s = 1.0 / effectivePieceVelocity s
 
 handleEvent :: Event -> State -> State
-handleEvent (EventKey (SpecialKey KeyLeft) Down _ _) s = movePiece (-2) s
-handleEvent (EventKey (SpecialKey KeyRight) Down _ _) s = movePiece 2 s
-handleEvent (EventKey (SpecialKey KeyDown) Down _ _) s = s {accelerate = True}
-handleEvent (EventKey (SpecialKey KeyDown) Up _ _) s = s {accelerate = False}
-handleEvent (EventKey (Char 'a') Down _ _) s = rotateCW s
-handleEvent (EventKey (Char 's') Down _ _) s = rotateCCW s
-handleEvent _ s = s
+handleEvent event state = 
+  case screen state of
+    NameField -> handleText event state
+    Menu -> handleMenu event state
+    Table -> handleTable event state
+    Game -> handleGame event state
+
+handleText :: Event -> State -> State
+handleText (EventKey (SpecialKey keyButton) Down _ _) state = 
+  case keyButton of
+    KeyEnter -> if ((length(name state)) /= 0) then state {screen = Menu} else state
+    _ -> state
+handleText (EventKey (Char key) Down _ _) state = 
+    case key of
+        '\b' -> state {name = deleteLast (name state) }
+        letter -> if (length (name state) < 28) then 
+                    state {name = (name state) ++ [letter]} 
+                  else 
+                    state
+    
+handleText _ state = state
+
+deleteLast :: [a] -> [a]
+deleteLast []     = []
+deleteLast [_]    = []
+deleteLast (h : t)  =[h] ++ deleteLast t
+
+handleMenu :: Event -> State -> State
+handleMenu (EventKey (SpecialKey keyButton) Down _ _) state = 
+  case keyButton of
+      KeyEnter -> case (selected state) of
+                    0 -> state {screen = Game}
+                    1 -> state {screen = Table}
+                    2 -> state {screen = NameField}
+                    _ -> state
+      KeyDown -> if ((selected state) /= 2) then state {selected = (selected state) + 1} else state
+      KeyUp -> if ((selected state) /= 0) then state {selected = (selected state) - 1} else state
+      _ -> state
+handleMenu _ state = state
+
+handleTable :: Event -> State -> State
+handleTable (EventKey (SpecialKey keyButton) Down _ _) state = 
+  case keyButton of
+    KeyEnter -> state {screen = Menu}
+    _ -> state
+handleTable _ state = state
+
+handleGame :: Event -> State -> State
+handleGame (EventKey (SpecialKey KeyLeft) Down _ _) s = movePiece (-2) s
+handleGame (EventKey (SpecialKey KeyRight) Down _ _) s = movePiece 2 s
+handleGame (EventKey (SpecialKey KeyDown) Down _ _) s = s {accelerate = True}
+handleGame (EventKey (SpecialKey KeyDown) Up _ _) s = s {accelerate = False}
+handleGame (EventKey (Char 'a') Down _ _) s = rotateCW s
+handleGame (EventKey (Char 's') Down _ _) s = rotateCCW s
+handleGame _ s = s
 
 -- Moves the falling piece horizontally, if possible
 movePiece :: Int -> State -> State
@@ -65,7 +106,12 @@ rotateCCW = transformPiece pieceCCW
 
 -- Update function passed to gloss
 updateGameState :: Float -> State -> State
-updateGameState t s = unityStyleUpdate (s {time = time s + t, deltaTime = t}) -- ok, after all gloss passes dt to us
+updateGameState t s =   
+  case screen s of
+    NameField -> s
+    Menu -> s
+    Table -> s
+    Game -> unityStyleUpdate (s {time = time s + t, deltaTime = t})
 
 -- my update function
 unityStyleUpdate :: State -> State

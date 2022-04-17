@@ -36,3 +36,14 @@ seed = 19
 cellSize :: Int
 cellSize = 35
 
+columns :: Int
+columns = fst windowSize `div` round windowScale
+
+rows :: Int
+rows = snd windowSize `div` round windowScale
+
+foodColor :: Color
+foodColor = makeColorI 242 43 41 255
+
+borderColor :: Color 
+borderColor = makeColorI 119 194 46 255

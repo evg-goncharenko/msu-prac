@@ -1,10 +1,16 @@
 -- Game State
 
-module State(State(..), initialGameState, resetGameState) where
+module State where
 
 import Playfield
 import Piece
 import System.Random
+
+type Record = (String, Int)
+
+type Records = [Record]
+
+data Screen = NameField | Menu | Table | Game deriving Eq
 
 data State = State
     { well :: Well
@@ -16,7 +22,11 @@ data State = State
     , randomSeed :: StdGen
     , score :: Int
     , accelerate :: Bool
-    } deriving (Show)
+    , screen :: Screen
+    , name :: String
+    , selected :: Int
+    , records :: Records
+    }
 
 initialGameState :: State
 initialGameState = State
@@ -29,6 +39,15 @@ initialGameState = State
     , randomSeed = mkStdGen 0 -- found better way!
     , score = 0
     , accelerate = False
+    , screen = Menu
+    , name = "Player"
+    , selected = 0
+    , records = [("Eugene", 1200), 
+             ("Anastasia", 1200), 
+             ("player1", 300), 
+             ("player2", 100), 
+             ("player3", 40),
+             ("player4", 40)]
     }
 
 -- Resets a game state, maintaining the random seed
