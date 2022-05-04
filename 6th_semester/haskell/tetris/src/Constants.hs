@@ -1,7 +1,10 @@
+-- Constants module
+-- Initializing sizes, colors and resolutions
+
 module Constants where
 
 import Graphics.Gloss 
-import System.Random 
+import System.Random() 
 
 window :: Display
 window = InWindow windowName windowSize windowPosition
@@ -42,8 +45,34 @@ columns = fst windowSize `div` round windowScale
 rows :: Int
 rows = snd windowSize `div` round windowScale
 
-foodColor :: Color
-foodColor = makeColorI 242 43 41 255
+-- Piece falling velocity, in cells/second
+pieceVelocity :: Float
+pieceVelocity = 10
 
-borderColor :: Color 
-borderColor = makeColorI 119 194 46 255
+acceleratedPieceVelocity :: Float
+acceleratedPieceVelocity = 30
+
+mainColor :: Color
+mainColor = makeColorI 255 255 0 255
+
+-- Playfield dimensions
+padding :: Int
+padding = (768 - (20 * cellSize)) `quot` 2
+
+wellWidth :: Int
+wellWidth = 10 * cellSize
+
+wellHeight :: Int
+wellHeight = 20 * cellSize
+
+wallWidth :: Int
+wallWidth = wellWidth + 2 * padding
+
+wallHeight :: Int
+wallHeight = wellHeight + 2 * padding
+
+wellColor :: Color
+wellColor = black
+
+wallColor :: Color
+wallColor = dark (dark white)

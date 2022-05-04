@@ -23,9 +23,20 @@ dependencies:
 - base >= 4.7 && < 5
 - gloss 
 - random
+- parsec >= 3.1.11 && < 4
+- servant
+- servant-client
+- servant-server
+- aeson >= 1.1
+- mtl
+- HDBC >=2.4 && <3.0
+- HDBC-sqlite3 >= 2.3.3.1
 
 library:
   source-dirs: src
+  ghc-options:
+  - -Wall
+  - -Werror
 
 executables:
   tetris-exe:

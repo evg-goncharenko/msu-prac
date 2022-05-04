@@ -6,24 +6,7 @@ import State
 import Playfield
 import Constants
 import Graphics.Gloss
-
-
--- Playfield dimensions
-
-padding :: Int
-padding = (768 - (20 * cellSize)) `quot` 2
-
-
-wellWidth :: Int
-wellWidth = 10 * cellSize
-wellHeight :: Int
-wellHeight = 20 * cellSize
-
-wallWidth = wellWidth + 2 * padding
-wallHeight = wellHeight + 2 * padding
-
-wellColor = black
-wallColor = dark (dark white)
+import DBase()
 
 -- Convert from playfield coordinate to screen coordinate
 playfieldToScreen :: (Int, Int) -> (Int, Int)
@@ -42,49 +25,31 @@ renderCell (px, py) col = translate (fromIntegral sx) (fromIntegral sy) (color c
 
 -- Renders Well playfield to Picture
 renderWell :: Well -> Picture
-renderWell well =
-  pictures (map cellToPicture (coordCells well))
+renderWell w =
+  pictures (map cellToPicture (coordCells w))
     where
       cellToPicture (px,py,c)
         | py > (-3)  = pictures []
         | c == Empty = pictures []
         | otherwise  = renderCell (px, py) (cellColor c)
 
-fillBorder :: (Float, Float) -> (Float, Float) -> Picture
-fillBorder (dx, dy) (width, height) = color borderColor $
-                             translate x y $ 
-                              rectangleSolid width height
-                              where x = (dx * windowScale - fromIntegral windowWidth / 2)
-                                    y = (dy * windowScale - fromIntegral windowHeight / 2)
-
-drawBorders :: Picture
-drawBorders  = pictures 
-              [ fillBorder (fromIntegral columns / 2, 0) size1
-              , fillBorder (fromIntegral columns / 2, fromIntegral rows) size1
-              , fillBorder (0, fromIntegral rows / 2) size2
-              , fillBorder (fromIntegral columns, fromIntegral rows / 2) size2 
-              ]
-              where size1 = (fromIntegral windowWidth + windowScale, windowScale)
-                    size2 = (windowScale, fromIntegral windowHeight)
-
 -- Game State renderer
-render :: State -> Picture
+render :: State -> IO Picture
 render gameState =
-  case screen gameState of
+  return (case screen gameState of
     NameField -> drawNameField gameState
     Table -> renderTable gameState
     Menu -> renderMenu gameState
-    Game -> renderGame gameState
+    Game -> renderGame gameState)
 
 drawNameField :: State -> Picture
 drawNameField state = pictures 
-    [ drawBorders
-    , drawTextField state
-    ]
+    [ drawTextField state ]
 
+-- Filling the user name
 drawTextField :: State -> Picture
 drawTextField state = pictures
-        [ color foodColor $ 
+        [ color mainColor $ 
           translate (-200) 0 $
           scale 0.35 0.35 $
           text "Enter your name"
@@ -96,7 +61,7 @@ drawTextField state = pictures
           translate (-250) (-100) $ 
           scale 0.3 0.3 $ 
           text (name state)
-       ,  color foodColor $ 
+       ,  color mainColor $ 
           translate (-250) (-200) $ 
           scale 0.3 0.3 $ 
           text (
@@ -111,31 +76,29 @@ renderTable :: State -> Picture
 renderTable gameState = table
   where
     table = pictures
-      [ drawBorders
-      , drawTableElements gameState
-      ]
+      [ drawTableElements gameState ]
 
 renderMenu :: State -> Picture
 renderMenu gameState = menu
   where
     menu = pictures
-      [ drawBorders
-      , drawMenuElements gameState
-      ]
+      [ drawMenuElements gameState ]
 
+-- Filling elements of the results table
 drawTableElements :: State -> Picture
 drawTableElements state = pictures(
           ([
-            color foodColor $ 
+            color mainColor $ 
             translate (- (fromIntegral (length ("Top 10 players")) * 14)) 250 $
             scale 0.4 0.4 $
             text "Top 10 players"
-          , color foodColor $ 
+          , color mainColor $ 
             translate (- (fromIntegral (length ("Exit")) * 9)) (-280) $
             scale 0.3 0.3 $
             text "Exit"
           ]) ++ (tableTiles (records state) 50))
 
+-- Drawing the results table
 tableTiles :: Records -> Float -> [Picture]
 tableTiles [] _ = []
 tableTiles (x:xs) offset = 
@@ -144,30 +107,32 @@ tableTiles (x:xs) offset =
         scale 0.2 0.2 $
         text ((fst x) ++ " " ++ show (snd x))) : (tableTiles xs (offset + 50.0)))
 
+-- Drawing the menu
 drawMenuElements :: State -> Picture
 drawMenuElements state = pictures
-      [ color borderColor $ 
+      [ color yellow $ 
         translate (- (fromIntegral (length ("Tetris")) * 11)) 200 $
         scale 0.4 0.4 $
         text "Tetris"
-      , color (if ((selected state) == 0) then foodColor else blue) $ 
+      , color (if ((selected state) == 0) then mainColor else blue) $ 
         translate (- (fromIntegral (length ("Play")) * 9)) (50) $ 
         scale 0.3 0.3 $ 
         text "Play"
-      , color (if ((selected state) == 1) then foodColor else blue) $ 
+      , color (if ((selected state) == 1) then mainColor else blue) $ 
         translate (- (fromIntegral (length ("Top 10 players")) * 10)) (-50) $ 
         scale 0.3 0.3 $ 
         text "Top 10 players"
-      , color (if ((selected state) == 2) then foodColor else blue) $ 
+      , color (if ((selected state) == 2) then mainColor else blue) $ 
         translate (- (fromIntegral (length ("Change your name")) * 11)) (-150) $ 
         scale 0.3 0.3 $ 
         text "Change your name"
-      , color foodColor $ 
+      , color mainColor $ 
         translate (- (fromIntegral (length (name state)) * 8)) (-280) $ 
         scale 0.2 0.2 $ 
         text (name state)
         ]
 
+-- Render entire game with states
 renderGame :: State -> Picture
 renderGame gameState = pictures [ walls, playfield, activePiece, guiStuff ]
   where

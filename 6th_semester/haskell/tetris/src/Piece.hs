@@ -1,4 +1,5 @@
 -- Tetris Piece module
+
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
 module Piece
@@ -16,7 +17,7 @@ module Piece
     ) where
 
 import Data.List
-import Constants
+import Constants()
 import Graphics.Gloss
 
 -- A Piece will consist of a list of 2-tuples of integers.
@@ -27,12 +28,25 @@ import Graphics.Gloss
 data Piece = PieceCoords [(Int, Int)] Color deriving (Show)
 
 -- Piece definitions
+tetrominoI :: Piece
 tetrominoI = PieceCoords [(-3, -1), (-1, -1), (1, -1), (3, -1)] (dark cyan)
+
+tetrominoO :: Piece
 tetrominoO = PieceCoords [(-1, -1), (1, -1), (-1, 1), (1, 1)] (dark yellow)
+
+tetrominoS :: Piece
 tetrominoS = PieceCoords [(-1, -1), (1, -1), (1, 1), (3,1)] (dark green)
+
+tetrominoZ :: Piece
 tetrominoZ = PieceCoords [(-1, -1), (1, -1), (-3,1), (-1, 1)] red
+
+tetrominoT :: Piece
 tetrominoT = PieceCoords [(-1, -1), (1, -1), (3,-1), (1, 1)] (dark magenta)
+
+tetrominoJ :: Piece
 tetrominoJ = PieceCoords [(-1, -1), (1, -1), (3,-1), (-1, 1)] blue
+
+tetrominoL :: Piece
 tetrominoL = PieceCoords [(-3,-1),(-1, -1), (1, -1), (1, 1)] (dark orange)
 
 -- Checks if a piece contains the given coordinate
@@ -41,8 +55,8 @@ pieceContains c (PieceCoords cs _) = c `elem` cs
 
 -- Converts a piece to an ascii-art string
 pieceToAA :: Piece -> String
-pieceToAA piece = intercalate "\n" lines
-    where lines = map rowToString [3,1,-1,-3]
+pieceToAA piece = intercalate "\n" l
+    where l = map rowToString [3,1,-1,-3]
             where rowToString row = concatMap colToString [-3,-1,1,3]
                     where colToString col | pieceContains (col, row) piece = "*"
                                           | otherwise                      = "."
@@ -66,7 +80,7 @@ validPos (x, y) (PieceCoords cs _) = all validCoord cs
 
 -- Converts random integer to piece
 randomPiece :: Double -> Piece
-randomPiece r = case truncate(r * 1000) `mod` 7 of
+randomPiece r = case truncate(r * 1000) `mod` (7::Integer) of
   0 -> tetrominoI
   1 -> tetrominoO
   2 -> tetrominoS
