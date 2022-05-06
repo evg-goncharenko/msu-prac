@@ -1,6 +1,7 @@
 [submodule "5th_semester/functional_programming/refal_lessons/refal"]
 	path = 5th_semester/functional_programming/refal_lessons/refal
 	url = https://github.com/cmc-msu-ai/refal
+	ignore = untracked
 
 [submodule "coursework/rmu/Libs/iconvpp"]
 	path = coursework/rmu/Libs/iconvpp
