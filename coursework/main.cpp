@@ -1,21 +1,13 @@
-#include <rmu/Include/RMUDLL.h>
-#include <rmu/Include/RMUResult.h>
-#include <rmu/SourceBase/MaxMorphFiles/RMUnit.h>
+#pragma once
+#include "rmu/Include/RMUDLL.h"
+#include "rmu/Include/RMUResult.h"
+#include "rmu/SourceBase/MaxMorphFiles/RMUnit.h"
 #include <fstream>
-#include <rmu/Include/RMUError.hpp>
+#include "rmu/Include/RMUError.hpp"
 #include <string>
+#include <cstdio>
 #include <vector>
 
-vector<String> numbers = {
-    "тысяче",
-    "ста", "двухсот", "трехсот", "четырехсот", "пятисот",
-    "шестисот", "семисот", "восьмисот", "девятисот",
-    "двадцати", "тридцати", "сорока", "пятидесяти",
-    "шестижесяти", "семидесяти", "восьмидесяти", "девяноста",
-    "одно", "двухъ", "трехъ", "четырехъ", "двух", "трех", "четырех",
-    "пяти", "шести", "семи", "восьим", "девяти",
-    "десяти", "одиннадцати", "двенадцати", "тринадцати", "четырнадцати",
-    "пятнадцати", "шестнадцати", "семнадцати", "восемнадцати", "девятнадцати"};
 
 class Word {
 private:
@@ -32,9 +24,21 @@ private:
     void _error() {
         error = true;
         throw "Fuck";
-    };
+    }
+
     std::string RMUAnswer;
 
+    vector<std::string> numbers = {
+    "тысяче",
+    "ста", "двухсот", "трехсот", "четырехсот", "пятисот",
+    "шестисот", "семисот", "восьмисот", "девятисот",
+    "двадцати", "тридцати", "сорока", "пятидесяти",
+    "шестижесяти", "семидесяти", "восьмидесяти", "девяноста",
+    "одно", "двухъ", "трехъ", "четырехъ", "двух", "трех", "четырех",
+    "пяти", "шести", "семи", "восьим", "девяти",
+    "десяти", "одиннадцати", "двенадцати", "тринадцати", "четырнадцати",
+    "пятнадцати", "шестнадцати", "семнадцати", "восемнадцати", "девятнадцати"};
+    
 public:
     bool error = false;
     Word(const std::string word, const char* rm) : x(word) {
@@ -42,7 +46,7 @@ public:
         rec = true;
     };
     ~Word();
-    void Word::analize();
+    void analize();
 };
 
 void Word::step_3() {
@@ -60,11 +64,11 @@ void Word::step_3() {
     if (t) {
         x1 = pref;
         x2 = x.substr(pref.size());
-        step_5;
+        step_5();
     } else {
-        step_4;
+        step_4();
     }
-};
+}
 
 void Word::step_4() {
     std::string pref;
@@ -81,11 +85,11 @@ void Word::step_4() {
     if (t) {
         x1 = pref;
         x2 = x.substr(pref.size());
-        step_5;
+        step_5();
     } else {
         _error();
     }
-};
+}
 
 void Word::step_5() {
     std::string request("<analyze form=\"");
@@ -117,7 +121,7 @@ void Word::analize() {
     } else {
         step_3();
     }
-};
+}
 
-void main() {
+int main() {
 }

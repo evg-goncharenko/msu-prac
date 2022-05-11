@@ -22,7 +22,7 @@ typedef void * RMUAnswer;
 #define RMU_BUFFER_TOO_SMALL	-4
 #define RMU_BAD_ARG				-5
 #define RMU_ERROR_LAST			RMU_BAD_ARG
-
+#include <iostream>
 // initialise RMU structures 
 #ifdef __cplusplus
 extern "C" {
@@ -64,7 +64,7 @@ DECLSPEC int RMUGetAnswer(RMUHandle hRMU, const char * word, RMUAnswer * hAnsw);
 // if pBuffer is NULL then the length of buffer is returned
 //
 //////////////////////////////////////////////////////////////////////////////
-DECLSPEC int RMUGetXML(RMUAnswer hAnsw, char * pBuffer, size_t bufSize, int formatted);
+DECLSPEC int RMUGetXML(RMUAnswer hAnsw, char * pBuffer, std::size_t bufSize, int formatted);
 
 
 //////////////////////////////////////////////////////////////////////////////
