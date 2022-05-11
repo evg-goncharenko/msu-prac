@@ -11,3 +11,4 @@ string TranslateToConsole(const string& message);
 string TranslateFromConsole(const string& message);
 
 #endif
+

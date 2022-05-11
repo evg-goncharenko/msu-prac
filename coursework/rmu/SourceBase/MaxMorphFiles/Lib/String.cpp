@@ -49,12 +49,12 @@
   ____________________________________________________________________
 */
 
-#include "String.h"
-#include "Xception.h"
 #include "stdafx.h"
+#include "Xception.h"
+#include "String.h"
 
-static const String ModuleName(__FILE__);
-const String String::DefaultBlankSymbols = " \n\r\t";
+static  const String ModuleName ( __FILE__ );
+        const String String::DefaultBlankSymbols = " \n\r\t";
 
 /*____________________________________________________________________
                                                                   _
@@ -64,11 +64,12 @@ const String String::DefaultBlankSymbols = " \n\r\t";
   ____________________________________________________________________
 */
 
-String::String(const char* NullTerminatedBody) {
+String::String ( const char * NullTerminatedBody )
+{
     Rep.lBuf.Low = 0;
     Rep.lBuf.Ptr = NULL;
-    if (NullTerminatedBody)
-        CreateFrom(NullTerminatedBody, strlen(NullTerminatedBody));
+    if ( NullTerminatedBody )
+        CreateFrom ( NullTerminatedBody, strlen ( NullTerminatedBody ) );
 }
 
 /*____________________________________________________________________
@@ -79,62 +80,78 @@ String::String(const char* NullTerminatedBody) {
   ____________________________________________________________________
 */
 
-String&
-String::Append(const String& NewString) {
-    if (!NewString.IsEmpty()) {
-        if (IsLargeRep()) {
-            int NewStringLength = NewString.Length();
-            if (lRefs(Rep.lBuf.Ptr) == 1 && lLength(Rep.lBuf.Ptr) + NewStringLength + 1 < lSize(Rep.lBuf.Ptr)) {
+String &
+String::Append ( const String & NewString )
+{
+    if ( !NewString.IsEmpty () )
+    {
+        if ( IsLargeRep () )
+        {
+            int NewStringLength = NewString.Length ();
+            if ( lRefs ( Rep.lBuf.Ptr ) == 1 && lLength ( Rep.lBuf.Ptr ) + NewStringLength + 1 < lSize ( Rep.lBuf.Ptr ) )
+            {
                 // New string fits the buffer size and noone refers to it
-                if (NewStringLength == 1) {
+                if ( NewStringLength == 1 )
+                {
                     // Simplest operation: appending single char
-                    lStr(Rep.lBuf.Ptr)[lLength(Rep.lBuf.Ptr)] = *NewString.CStr();
-                } else
-                    memcpy(lStr(Rep.lBuf.Ptr) + lLength(Rep.lBuf.Ptr), NewString.CStr(), NewStringLength * sizeof(char));
-                lLength(Rep.lBuf.Ptr) += NewStringLength;
+                    lStr ( Rep.lBuf.Ptr ) [ lLength ( Rep.lBuf.Ptr ) ] = * NewString.CStr();
+                }
+                else
+                    memcpy ( lStr ( Rep.lBuf.Ptr ) + lLength ( Rep.lBuf.Ptr ), NewString.CStr (), NewStringLength * sizeof ( char ) );
+                lLength ( Rep.lBuf.Ptr ) += NewStringLength;
                 // Append null symbol
-                lStr(Rep.lBuf.Ptr)[lLength(Rep.lBuf.Ptr)] = 0x0;
-            } else {
+                lStr ( Rep.lBuf.Ptr ) [ lLength ( Rep.lBuf.Ptr ) ] = 0x0;
+            }
+            else
+            {
                 int NewSize;
-                if ((lSize(Rep.lBuf.Ptr) << 1) < lLength(Rep.lBuf.Ptr) + NewStringLength + 1) {
-                    NewSize = 3 * sizeof(int) / sizeof(char) + lLength(Rep.lBuf.Ptr) + NewStringLength + 1;
-                    char* TempPtr = new char[NewSize];
-                    memcpy(lStr(TempPtr), lStr(Rep.lBuf.Ptr), lLength(Rep.lBuf.Ptr) * sizeof(char));
-                    memcpy(lStr(TempPtr) + lLength(Rep.lBuf.Ptr), NewString.CStr(), (NewStringLength + 1) * sizeof(char));
-                    lLength(TempPtr) = lLength(Rep.lBuf.Ptr) + NewStringLength;
-                    lSize(TempPtr) = lLength(Rep.lBuf.Ptr) + 1;
-                    lRefs(TempPtr) = 1;
-                    ReleasePtr(Rep.lBuf.Ptr);
+                if ( ( lSize ( Rep.lBuf.Ptr ) << 1 ) < lLength( Rep.lBuf.Ptr ) + NewStringLength + 1 )
+                {
+                    NewSize = 3 * sizeof ( int ) / sizeof ( char ) + lLength( Rep.lBuf.Ptr ) + NewStringLength + 1;
+                    char * TempPtr = new char [NewSize];
+                    memcpy ( lStr ( TempPtr ), lStr ( Rep.lBuf.Ptr) , lLength ( Rep.lBuf.Ptr ) * sizeof ( char ) );
+                    memcpy ( lStr ( TempPtr ) + lLength ( Rep.lBuf.Ptr ), NewString.CStr (), ( NewStringLength + 1 )* sizeof ( char ) );
+                    lLength ( TempPtr ) = lLength ( Rep.lBuf.Ptr ) + NewStringLength;
+                    lSize ( TempPtr ) = lLength ( Rep.lBuf.Ptr ) + 1;
+                    lRefs ( TempPtr ) = 1;
+                    ReleasePtr ( Rep.lBuf.Ptr );
                     Rep.lBuf.Ptr = TempPtr;
-                } else {
+                }
+                else
+                {
                     // Doubling buffer size
-                    ExpandBuffer();
-                    memcpy(lStr(Rep.lBuf.Ptr) + lLength(Rep.lBuf.Ptr), NewString.CStr(), (NewStringLength + 1) * sizeof(char));
-                    lLength(Rep.lBuf.Ptr) = lLength(Rep.lBuf.Ptr) + NewStringLength;
+                    ExpandBuffer ();
+                    memcpy ( lStr ( Rep.lBuf.Ptr ) + lLength ( Rep.lBuf.Ptr ), NewString.CStr (), ( NewStringLength + 1 ) * sizeof ( char ) );
+                    lLength ( Rep.lBuf.Ptr ) = lLength ( Rep.lBuf.Ptr ) + NewStringLength;
                 }
             }
-        } else {
+        }
+        else
+        {
             // Short representation
-            int CurLength = strlen(Rep.sBuf);
-            int NewStringLength = NewString.Length();
-            if (MaxShortLen < CurLength + NewStringLength) {
-                int newSize = 3 * sizeof(int) / sizeof(char) + CurLength + NewStringLength + 1;
-                char* TempPtr = new char[newSize];
-                memcpy(lStr(TempPtr), Rep.sBuf, CurLength * sizeof(char));
-                memcpy(lStr(TempPtr) + CurLength, NewString.CStr(), (NewStringLength + 1) * sizeof(char));
-                lLength(TempPtr) = CurLength + NewStringLength;
-                lSize(TempPtr) = lLength(TempPtr) + 1;
-                lRefs(TempPtr) = 1;
+            int CurLength = strlen ( Rep.sBuf );
+            int NewStringLength = NewString.Length (); 
+            if ( MaxShortLen < CurLength + NewStringLength )
+            {
+                int newSize =  3 * sizeof ( int ) / sizeof ( char ) + CurLength + NewStringLength + 1;
+                char * TempPtr = new char [newSize];
+                memcpy ( lStr ( TempPtr ), Rep.sBuf, CurLength * sizeof ( char ) );
+                memcpy ( lStr ( TempPtr ) + CurLength, NewString.CStr (), ( NewStringLength + 1 ) * sizeof( char ) );
+                lLength ( TempPtr ) = CurLength + NewStringLength;
+                lSize ( TempPtr ) = lLength ( TempPtr ) + 1;
+                lRefs ( TempPtr ) = 1;
                 Rep.lBuf.Low = 0;
                 Rep.lBuf.Ptr = TempPtr;
-            } else {
-                for (int i = 0; i < NewStringLength; ++i)
-                    Rep.sBuf[i + CurLength] = NewString.Rep.sBuf[i];
-                Rep.sBuf[CurLength + NewStringLength] = 0;
             }
+            else
+			{
+                for ( int i = 0; i < NewStringLength; ++i )
+                    Rep.sBuf[i + CurLength] = NewString.Rep.sBuf[i];
+				Rep.sBuf[CurLength + NewStringLength] = 0;
+			}
         }
     }
-    return *this;
+    return * this;
 }
 
 /*____________________________________________________________________
@@ -145,13 +162,14 @@ String::Append(const String& NewString) {
   ____________________________________________________________________
 */
 
-String&
-String::Clear() {
-    if (IsLargeRep())
-        ReleasePtr(Rep.lBuf.Ptr);
+String &
+String::Clear ()
+{
+    if ( IsLargeRep () )
+        ReleasePtr ( Rep.lBuf.Ptr );
     Rep.lBuf.Low = 0;
     Rep.lBuf.Ptr = NULL;
-    return *this;
+    return * this;
 }
 
 /*____________________________________________________________________
@@ -162,14 +180,16 @@ String::Clear() {
   ____________________________________________________________________
 */
 
-void String::CloneBuffer() {
-    int newSize = 3 * sizeof(int) / sizeof(char) + lLength(Rep.lBuf.Ptr) + 1;
-    char* TempPtr = new char[newSize];
-    memcpy(TempPtr, Rep.lBuf.Ptr, newSize * sizeof(char));
-    lRefs(TempPtr) = 1;
-    lLength(TempPtr) = lLength(Rep.lBuf.Ptr);
-    lSize(TempPtr) = lLength(Rep.lBuf.Ptr) + 1;
-    ReleasePtr(Rep.lBuf.Ptr);
+void
+String::CloneBuffer ()
+{
+    int     newSize = 3 * sizeof ( int ) / sizeof ( char ) + lLength ( Rep.lBuf.Ptr ) + 1;
+    char  * TempPtr = new char [newSize];
+    memcpy ( TempPtr, Rep.lBuf.Ptr, newSize * sizeof ( char ) );
+    lRefs ( TempPtr )   = 1;
+    lLength ( TempPtr ) = lLength ( Rep.lBuf.Ptr );
+    lSize ( TempPtr )   = lLength ( Rep.lBuf.Ptr ) + 1;
+    ReleasePtr ( Rep.lBuf.Ptr );
     Rep.lBuf.Ptr = TempPtr;
 }
 
@@ -181,14 +201,16 @@ void String::CloneBuffer() {
   ____________________________________________________________________
 */
 
-void String::CollapseBuffer() {
-    int newSize = 3 * sizeof(int) / sizeof(char) + (lSize(Rep.lBuf.Ptr) >> 1);
-    char* TempPtr = new char[newSize];
-    memcpy(TempPtr, Rep.lBuf.Ptr, newSize * sizeof(char));
-    lRefs(TempPtr) = 1;
-    lLength(TempPtr) = lLength(Rep.lBuf.Ptr);
-    lSize(TempPtr) = lSize(Rep.lBuf.Ptr) >> 1;
-    ReleasePtr(Rep.lBuf.Ptr);
+void
+String::CollapseBuffer ()
+{
+    int newSize =  3 * sizeof ( int ) / sizeof ( char ) + ( lSize ( Rep.lBuf.Ptr ) >> 1 );
+    char * TempPtr = new char [newSize];
+    memcpy ( TempPtr, Rep.lBuf.Ptr, newSize * sizeof ( char ) );
+    lRefs ( TempPtr )   = 1;
+    lLength ( TempPtr ) = lLength ( Rep.lBuf.Ptr );
+    lSize ( TempPtr )   = lSize ( Rep.lBuf.Ptr ) >> 1;
+    ReleasePtr ( Rep.lBuf.Ptr );
     Rep.lBuf.Ptr = TempPtr;
 }
 
@@ -200,20 +222,23 @@ void String::CollapseBuffer() {
   ____________________________________________________________________
 */
 
-int String::Compare(const String& NewString) const {
-    if (&NewString == this)
+int
+String::Compare ( const String & NewString ) const
+{
+    if ( & NewString == this )
         // Preserve self copy
         return 0;
-    else {
-        if (IsLargeRep() && Rep.lBuf.Ptr == NewString.Rep.lBuf.Ptr)
+    else
+    {
+        if ( IsLargeRep () && Rep.lBuf.Ptr == NewString.Rep.lBuf.Ptr )
             // Reference to the same buffer
             return 0;
-        int res(0);
-        int Len = Length();
-        int NewLen = NewString.Length();
-        if (Len != 0 && NewLen != 0)
-            res = memcmp(CStr(), NewString.CStr(), (Len < NewLen ? Len : NewLen) * sizeof(char));
-        return (res == 0 && Len != NewLen) ? Len - NewLen : res;
+        int res (0);
+        int Len    = Length ();
+        int NewLen = NewString.Length ();
+        if ( Len != 0 && NewLen != 0 )
+            res    = memcmp ( CStr (), NewString.CStr (), ( Len < NewLen ? Len : NewLen ) * sizeof ( char ) );
+        return ( res == 0 && Len != NewLen ) ? Len - NewLen : res;
     }
 }
 
@@ -225,42 +250,56 @@ int String::Compare(const String& NewString) const {
   ____________________________________________________________________
 */
 
-void String::CreateFrom(const char* Body, int NewLength) {
-    if (MaxShortLen < NewLength) {
+void
+String::CreateFrom ( const char * Body, int NewLength )
+{
+    if (MaxShortLen < NewLength )
+    {
         // Large string
         Rep.lBuf.Low = 0;
-        int NewSize = 3 * sizeof(int) / sizeof(char) + NewLength + 1;
-        char* Ptr = new char[NewSize];
-        memcpy(lStr(Ptr), Body, NewLength * sizeof(char));
-        lRefs(Ptr) = 1;
-        lLength(Ptr) = NewLength;
-        lSize(Ptr) = NewLength + 1;
-        lStr(Ptr)[NewLength] = 0x0;
+        int NewSize =  3 * sizeof ( int ) / sizeof ( char ) + NewLength + 1;
+        char * Ptr = new char [ NewSize ];
+        memcpy  ( lStr ( Ptr ), Body, NewLength * sizeof ( char ) );
+        lRefs   ( Ptr ) = 1;
+        lLength ( Ptr ) = NewLength;
+        lSize   ( Ptr ) = NewLength + 1;
+        lStr    ( Ptr )[NewLength] = 0x0;
         Rep.lBuf.Ptr = Ptr;
-    } else if (0 < NewLength) {
+    }
+    else if ( 0 < NewLength )
+    {
         // Short string
         Rep.lBuf.Ptr = NULL;
-        memcpy(Rep.sBuf, Body, NewLength * sizeof(char));
+        memcpy ( Rep.sBuf, Body, NewLength * sizeof ( char ) );
         Rep.sBuf[NewLength] = 0x0;
-    } else if (NewLength != 0)
-        throw Xception(Xception::X_MEMORY, "Invalid NewLength value (negative, < 0).", "void String::CreateFrom ( const char * Body, int NewLength )", "String", ModuleName);
+    }
+    else if ( NewLength != 0 )
+        throw Xception ( Xception::X_MEMORY, "Invalid NewLength value (negative, < 0).", "void String::CreateFrom ( const char * Body, int NewLength )", "String", ModuleName );
+
 }
 
-void String::CreateFrom(const String& NewString) {
-    if (NewString.IsLargeRep()) {
+void
+String::CreateFrom ( const String & NewString )
+{
+    if ( NewString.IsLargeRep () )
+    {
         // Large string
         Rep.lBuf.Low = 0;
         Rep.lBuf.Ptr = NewString.Rep.lBuf.Ptr;
-        ++lRefs(Rep.lBuf.Ptr);
-    } else {
+        ++lRefs ( Rep.lBuf.Ptr );
+    }
+    else
+    {
         // Short string
         Rep.lBuf.Low = NewString.Rep.lBuf.Low;
         Rep.lBuf.Ptr = NewString.Rep.lBuf.Ptr;
     }
 }
 
-void String::CreateFrom(int Number) {
-    *this = FromInt(Number);
+void
+String::CreateFrom ( int Number )
+{
+    * this = FromInt ( Number );
 }
 
 /*____________________________________________________________________
@@ -271,24 +310,29 @@ void String::CreateFrom(int Number) {
   ____________________________________________________________________
 */
 
-String&
-String::Erase(int Start, int Size) {
-    int Len = Length();
-    if (Len && 0 <= Start && 0 <= Size && Start + Size <= Len) {
-        if (IsLargeRep()) {
-            if (1 < lRefs(Rep.lBuf.Ptr))
-                CloneBuffer();
-            char* Str = CStr();
-            memcpy(Str + Start, Str + Start + Size, (Len - Start - Size + 1) * sizeof(char));
-            lLength(Rep.lBuf.Ptr) -= Size;
-            if (Len - Size < lSize(Rep.lBuf.Ptr) >> 1)
-                CollapseBuffer();
-        } else {
-            char* Str = CStr();
-            memcpy(Str + Start, Str + Start + Size, (Len - Start - Size + 1) * sizeof(char));
+String &
+String::Erase ( int Start, int Size )
+{
+    int Len = Length ();    
+    if ( Len && 0 <= Start && 0 <= Size && Start + Size <= Len  )
+    {
+        if ( IsLargeRep () )
+        {
+            if ( 1 < lRefs ( Rep.lBuf.Ptr ) )
+                CloneBuffer ();
+            char * Str = CStr ();
+            memcpy ( Str + Start, Str + Start + Size, ( Len - Start - Size + 1 ) * sizeof ( char ) );
+            lLength ( Rep.lBuf.Ptr ) -= Size;
+            if ( Len - Size < lSize ( Rep.lBuf.Ptr ) >> 1 )
+                CollapseBuffer ();
+        }
+        else
+        {
+            char * Str = CStr ();
+            memcpy ( Str + Start, Str + Start + Size, ( Len - Start - Size + 1 ) * sizeof ( char ) );
         }
     }
-    return *this;
+    return * this;
 }
 
 /*____________________________________________________________________
@@ -299,14 +343,16 @@ String::Erase(int Start, int Size) {
   ____________________________________________________________________
 */
 
-void String::ExpandBuffer() {
-    int newSize = 3 * sizeof(int) / sizeof(char) + (lSize(Rep.lBuf.Ptr) << 1);
-    char* TempPtr = new char[newSize];
-    memcpy(lStr(TempPtr), lStr(Rep.lBuf.Ptr), (lLength(Rep.lBuf.Ptr) + 1) * sizeof(char));
-    lRefs(TempPtr) = 1;
-    lLength(TempPtr) = lLength(Rep.lBuf.Ptr);
-    lSize(TempPtr) = lSize(Rep.lBuf.Ptr) << 1;
-    ReleasePtr(Rep.lBuf.Ptr);
+void
+String::ExpandBuffer ()
+{
+    int newSize =  3 * sizeof ( int ) / sizeof ( char ) + ( lSize ( Rep.lBuf.Ptr ) << 1 );
+    char * TempPtr = new char [newSize];
+    memcpy ( lStr ( TempPtr ), lStr ( Rep.lBuf.Ptr ), ( lLength ( Rep.lBuf.Ptr ) + 1 ) * sizeof ( char ) );
+    lRefs   ( TempPtr ) = 1;
+    lLength ( TempPtr ) = lLength ( Rep.lBuf.Ptr );
+    lSize   ( TempPtr ) = lSize ( Rep.lBuf.Ptr ) << 1;
+    ReleasePtr ( Rep.lBuf.Ptr );
     Rep.lBuf.Ptr = TempPtr;
 }
 
@@ -364,61 +410,70 @@ String::GetIncPos ( const String& _pcPattern, int _dStartPos ) const
   ____________________________________________________________________
 */
 
-int String::Find(const char Needle, int Start) const {
-    const char* Haystack = CStr();
-    int HaystackLength(Length());
-
-    while (Start < HaystackLength)
-        if (Haystack[Start] == Needle)
+int
+String::Find ( const char Needle, int Start ) const
+{
+    const char *  Haystack = CStr ();
+    int           HaystackLength ( Length () );
+    
+    while ( Start < HaystackLength ) 
+        if ( Haystack[Start] == Needle )
             return Start;
         else
             ++Start;
     return -1;
 }
 
-int String::Find(const String& Needle, int Start) const {
+int
+String::Find ( const String & Needle, int Start ) const
+{
     int i, j, k;
-    const char* Haystack = CStr();
-    int HaystackLength(Length()), NeedleLength(Needle.Length());
+    const char * Haystack = CStr ();
+    int HaystackLength ( Length () ), NeedleLength ( Needle.Length () );
 
     // Check string lengthes
-    if (NeedleLength == 0)
+    if ( NeedleLength == 0 )
         return 0;
-    if (HaystackLength == 0)
+    if ( HaystackLength == 0 )
         return -1;
-    if (NeedleLength == 1) {
+    if ( NeedleLength == 1 )
+    {
         char needle = Needle[0];
         i = Start;
-        while (i < HaystackLength)
-            if (Haystack[i] == needle)
-                return i;
-            else
-                ++i;
+        while ( i < HaystackLength ) 
+            if ( Haystack[i] == needle ) return i;
+            else ++i;
         return -1;
     }
-    if (HaystackLength < NeedleLength)
+    if ( HaystackLength < NeedleLength )
         return -1;
     // Process representative strings
     unsigned int d[256];
     // Init
-    for (i = 0; i < 256; ++i) d[i] = NeedleLength;
-    for (i = 0; i < NeedleLength - 1; ++i)
-        d[(unsigned char)Needle[i]] = NeedleLength - i - 1;
+    for ( i = 0; i < 256; ++i ) d[i] = NeedleLength;
+    for ( i = 0; i < NeedleLength - 1; ++i )
+        d[ ( unsigned char ) Needle[i]] = NeedleLength - i - 1;
     // Search
     i = NeedleLength + Start;
-    if (i <= HaystackLength) {
-        do {
+    if ( i <= HaystackLength )
+    {
+        do
+        {
             j = NeedleLength;
             k = i;
-            do {
+            do
+            {
                 --k;
                 --j;
-            } while (0 <= j && Haystack[k] == Needle[j]);
-            i += d[(unsigned char)Haystack[i - 1]];
-        } while (0 <= j && i <= HaystackLength);
+            }
+            while ( 0 <= j && Haystack[k] == Needle[j] );
+            i += d[ ( unsigned char ) Haystack[i-1]];
+        }
+        while ( 0 <= j && i <= HaystackLength );
         return j == -1 ? k + 1 : -1;
 
-    } else
+    }
+    else
         return -1;
 }
 
@@ -554,19 +609,24 @@ String::Pattern ( String _cPattern, String* _cArg, ... ) const
   ____________________________________________________________________
 */
 
-char& String::operator[](int Index) {
-    if (Index < Length()) {
-        if (IsLargeRep() && 1 < lRefs(Rep.lBuf.Ptr))
+char &
+String::operator [] ( int Index )
+{
+    if ( Index < Length () ) 
+    {
+        if ( IsLargeRep () && 1 < lRefs ( Rep.lBuf.Ptr ) )
             // Copy on modify
-            CloneBuffer();
-        return CStr()[Index];
+            CloneBuffer ();
+        return CStr () [Index];
     }
-    throw Xception(Xception::X_BOUNDARIES, String("String index ") + String::FromInt(Index) + " is out of bounds (0-" + String::FromInt(Length()) + ")", "char & operator [] ( int Index )", "String", ModuleName);
+    throw Xception ( Xception::X_BOUNDARIES, String ( "String index " ) + String::FromInt ( Index ) + " is out of bounds (0-" + String::FromInt ( Length () ) + ")", "char & operator [] ( int Index )", "String", ModuleName );
 }
 
-char String::operator[](int Index) const {
-    if (Index < Length()) return CStr()[Index];
-    throw Xception(Xception::X_BOUNDARIES, String("String index ") + String::FromInt(Index) + " is out of bounds (0-" + String::FromInt(Length()) + ")", "char operator [] ( int Index ) const", "String", ModuleName);
+char
+String::operator [] ( int Index ) const
+{
+    if ( Index < Length () ) return CStr () [Index];
+    throw Xception ( Xception::X_BOUNDARIES, String ( "String index " ) + String::FromInt ( Index ) + " is out of bounds (0-" + String::FromInt ( Length () ) + ")", "char operator [] ( int Index ) const", "String", ModuleName );
 }
 
 /*____________________________________________________________________
@@ -577,18 +637,21 @@ char String::operator[](int Index) const {
   ____________________________________________________________________
 */
 
-bool String::operator==(const String& NewString) const {
-    if (&NewString == this)
+bool
+String::operator == ( const String & NewString ) const
+{
+    if ( &NewString == this )
         // Preserve self copy
         return true;
-    else {
-        if (IsLargeRep() && Rep.lBuf.Ptr == NewString.Rep.lBuf.Ptr)
+    else
+    {
+        if ( IsLargeRep () && Rep.lBuf.Ptr == NewString.Rep.lBuf.Ptr )
             // Reference to the same buffer
             return true;
-        int Len = Length();
-        if (Len != NewString.Length())
+        int Len = Length ();
+        if ( Len != NewString.Length () )
             return false;
-        return memcmp(CStr(), NewString.CStr(), Len * sizeof(char)) == 0;
+        return memcmp ( CStr (), NewString.CStr (), Len * sizeof ( char ) ) == 0;
     }
 }
 
@@ -600,18 +663,21 @@ bool String::operator==(const String& NewString) const {
   ____________________________________________________________________
 */
 
-bool String::operator!=(const String& NewString) const {
-    if (&NewString == this)
+bool
+String::operator != ( const String & NewString ) const
+{
+    if ( &NewString == this )
         // Preserve self copy
         return false;
-    else {
-        if (IsLargeRep() && Rep.lBuf.Ptr == NewString.Rep.lBuf.Ptr)
+    else
+    {
+        if ( IsLargeRep () && Rep.lBuf.Ptr == NewString.Rep.lBuf.Ptr )
             // Reference to the same buffer
             return false;
-        int Len = Length();
-        if (Len != NewString.Length())
+        int Len = Length ();
+        if ( Len != NewString.Length () )
             return true;
-        return memcmp(CStr(), NewString.CStr(), Len * sizeof(char)) != 0;
+        return memcmp ( CStr (), NewString.CStr (), Len * sizeof ( char ) ) != 0;
     }
 }
 
@@ -623,21 +689,23 @@ bool String::operator!=(const String& NewString) const {
   ____________________________________________________________________
 */
 
-String&
-String::Replace(const String& Needle, const String& Replacer, int Start) {
+String &
+String::Replace ( const String & Needle, const String & Replacer, int Start )
+{
     int pos;
-    int Len = Length();
-    int NeedleLength = Needle.Length();
-
-    if (0 < Len && 0 < NeedleLength &&
-        0 <= (pos = Find(Needle, Start))) {
-        String temp(*this);
-        Clear();
-        CreateFrom(temp.SubStr(0, pos));
-        Append(Replacer);
-        Append(temp.SubStr(pos + NeedleLength, Len - pos - NeedleLength));
+    int Len = Length ();
+    int NeedleLength = Needle.Length ();
+    
+    if ( 0 < Len && 0 < NeedleLength &&
+         0 <= ( pos = Find ( Needle, Start ) ) )
+    {
+        String temp ( *this );
+        Clear ();
+        CreateFrom ( temp.SubStr ( 0, pos ) );
+        Append ( Replacer );
+        Append ( temp.SubStr ( pos + NeedleLength, Len - pos - NeedleLength ) );
     }
-    return *this;
+    return * this;
 }
 
 /*____________________________________________________________________
@@ -648,23 +716,26 @@ String::Replace(const String& Needle, const String& Replacer, int Start) {
   ____________________________________________________________________
 */
 
-String&
-String::ReplaceAll(const String& Needle, const String& Replacer, int Start) {
-    int pos;
+String &
+String::ReplaceAll ( const String & Needle, const String & Replacer, int Start )
+{
+    int   pos;
 
-    int Len = Length();
-    int NeedleLength = Needle.Length();
-
-    if (0 < Len && 0 < NeedleLength) {
-        String temp(*this);
-        Clear();
-        while (0 <= (pos = temp.Find(Needle, Start))) {
-            Append(temp.SubStr(Start, pos - Start) + Replacer);
+    int   Len = Length ();
+    int   NeedleLength = Needle.Length ();
+    
+    if ( 0 < Len && 0 < NeedleLength ) 
+    {
+        String temp ( *this );
+        Clear ();
+        while ( 0 <= ( pos = temp.Find ( Needle, Start ) ) )
+        {
+            Append ( temp.SubStr ( Start, pos - Start ) + Replacer );
             Start = pos + NeedleLength;
         }
-        Append(temp.SubStr(Start, Len - Start));
+        Append ( temp.SubStr ( Start, Len - Start ) );
     }
-    return *this;
+    return * this;
 }
 
 /*____________________________________________________________________
@@ -676,23 +747,26 @@ String::ReplaceAll(const String& Needle, const String& Replacer, int Start) {
 
 */
 
-String&
-String::Reverse() {
-    int i, j = Length();
-    if (j) {
-        if (IsLargeRep() && 1 < lRefs(Rep.lBuf.Ptr))
-            CloneBuffer();
+String &
+String::Reverse ()
+{
+    int i, j = Length ();
+    if ( j )
+    {
+        if ( IsLargeRep () && 1 < lRefs ( Rep.lBuf.Ptr ) )
+            CloneBuffer ();
+        
+        char * Str = CStr ();
+        char   c;
 
-        char* Str = CStr();
-        char c;
-
-        for (i = 0; i < Length() / 2; ++i) {
+        for ( i = 0; i < Length () / 2; ++i )
+        {
             c = Str[i];
             Str[i] = Str[--j];
             Str[j] = c;
         }
     }
-    return *this;
+    return * this;
 }
 
 /*____________________________________________________________________
@@ -703,54 +777,62 @@ String::Reverse() {
   ____________________________________________________________________
 */
 
-int String::RFind(const String& Needle, int Start) const {
+int
+String::RFind ( const String & Needle, int Start ) const
+{
     int i, j, k;
-    const char* Haystack = CStr();
-    int HaystackLength(Length()), NeedleLength(Needle.Length());
+    const char * Haystack = CStr ();
+    int HaystackLength ( Length () ), NeedleLength ( Needle.Length () );
 
     // Check string lengthes
-    if (NeedleLength == 0)
+    if ( NeedleLength == 0 )
         return 0;
-    if (HaystackLength == 0)
+    if ( HaystackLength == 0 )
         return -1;
-    if (NeedleLength == 1) {
+    if ( NeedleLength == 1 )
+    {
         char needle = Needle[0];
         i = Start;
-        while (i < HaystackLength)
-            if (Haystack[i] == needle)
-                return i;
-            else
-                --i;
+        while ( i < HaystackLength ) 
+            if ( Haystack[i] == needle ) return i;
+            else --i;
         return -1;
     }
-    if (HaystackLength < NeedleLength)
+    if ( HaystackLength < NeedleLength )
         return -1;
     // Process representative strings
     int d[256];
-    // Init
-    for (i = 0; i < 256; ++i) d[i] = NeedleLength;
-    for (i = NeedleLength - 1; 0 <= i; --i)
+    // Init    
+    for ( i = 0; i < 256; ++i ) d[i] = NeedleLength;
+    for ( i = NeedleLength - 1; 0 <= i; --i )
         d[(int)(Needle[i])] = i;
     // Search
     i = 0 <= Start ? Start : HaystackLength;
     i -= NeedleLength;
-    if (0 <= i) {
-        do {
+    if ( 0 <= i )
+    {
+        do
+        {
             j = -1;
             k = i - 1;
-            do {
+            do
+            {
                 ++k;
                 ++j;
-                //AfxMessageBox ( ( "Haystack[" + IntToStr ( k ) + "]=" + Haystack[k] + " Needle[" + IntToStr ( j ) + "]=" + Needle[j] ).c_str () );
-            } while (j < NeedleLength && Haystack[k] == Needle[j]);
-            //AfxMessageBox ( ( "d=" + IntToStr ( d[Haystack[i]] ) + " i=" +  IntToStr ( i ) ).c_str () );
-            i -= d[(unsigned char)Haystack[i]];
-        } while (j < NeedleLength && 0 <= i);
-        //AfxMessageBox ( ( "!! j=" + IntToStr ( j ) ).c_str () );
+//AfxMessageBox ( ( "Haystack[" + IntToStr ( k ) + "]=" + Haystack[k] + " Needle[" + IntToStr ( j ) + "]=" + Needle[j] ).c_str () );
+            }
+            while ( j < NeedleLength && Haystack[k] == Needle[j] );
+//AfxMessageBox ( ( "d=" + IntToStr ( d[Haystack[i]] ) + " i=" +  IntToStr ( i ) ).c_str () );
+            i -= d[ ( unsigned char ) Haystack[i]];
+        }
+        while ( j < NeedleLength && 0 <= i );
+//AfxMessageBox ( ( "!! j=" + IntToStr ( j ) ).c_str () );
         return j == NeedleLength ? k - NeedleLength : -1;
-    } else
+    }
+    else
         return -1;
 }
+
 
 /*____________________________________________________________________
                                                                  ___
@@ -760,12 +842,17 @@ int String::RFind(const String& Needle, int Start) const {
   ____________________________________________________________________
 */
 
-void String::SetLength(int newLength) {
-    if (0 < newLength && newLength < Length()) {
-        if (IsLargeRep()) {
-            lLength(Rep.lBuf.Ptr) = newLength;
-            lStr(Rep.lBuf.Ptr)[newLength] = 0x0;
-        } else
+void
+String::SetLength ( int newLength )
+{
+    if ( 0 < newLength && newLength < Length () )
+    {
+        if ( IsLargeRep () ) 
+        {
+            lLength ( Rep.lBuf.Ptr ) = newLength;
+            lStr    ( Rep.lBuf.Ptr )[newLength] = 0x0;
+        }
+        else 
             Rep.sBuf[newLength] = 0x0;
     }
 }
@@ -779,11 +866,12 @@ void String::SetLength(int newLength) {
 */
 
 String
-String::SubStr(int StartPos, int Count) const {
-    if ((0 < Count) && (StartPos + Count <= Length()))
-        return String(CStr() + StartPos, Count);
+String::SubStr ( int StartPos, int Count ) const
+{
+    if ( ( 0 < Count ) && ( StartPos + Count <= Length () ) )
+        return String ( CStr () + StartPos, Count );
     else
-        return String();
+        return String ();
 }
 
 /*____________________________________________________________________
@@ -794,22 +882,27 @@ String::SubStr(int StartPos, int Count) const {
   ____________________________________________________________________
 */
 
-int String::ToInt() const {
-    int Result(0);
 
-    int Sign(1);
-    int Len = Length();
-    const char* Ptr = CStr();
+int
+String::ToInt () const
+{
+    int Result ( 0 );
+
+    int Sign ( 1 );
+    int Len = Length ();
+    const char * Ptr = CStr ();
 
     int i = 0;
-    while (i < Len && Ptr[i] == ' ') ++i;
-    if (Ptr[i] == '-') {
-        Sign = -1;
+    while ( i < Len && Ptr[i] == ' ' ) ++i;
+    if ( Ptr[i] == '-' )
+    {
+        Sign = -1; 
         ++i;
     }
 
-    while (i < Len && '0' <= Ptr[i] && Ptr[i] <= '9') {
-        Result = Result * 10 + (Ptr[i] - '0');
+    while ( i < Len && '0' <= Ptr[i] && Ptr[i] <= '9' )
+    {
+        Result = Result * 10 + ( Ptr[i] - '0' );
         ++i;
     }
     return Result * Sign;
@@ -823,28 +916,31 @@ int String::ToInt() const {
   ____________________________________________________________________
 */
 
-String&
-String::Trim() {
-    int Len = Length();
+String &
+String::Trim ()
+{
+    int Len = Length ();
 
-    if (0 < Len) {
-        int i(0), j(0);
-        char* Str = CStr();
-
+    if ( 0 < Len )
+    {
+        int     i (0), j(0);
+        char  * Str = CStr ();
+        
         // Skip spaces
         i = 0;
-        while (i < Len && Str[i] == ' ') ++i;
+        while ( i < Len && Str[i] == ' ' ) ++i;
         j = Len - 1;
-        while (0 < j && Str[j] == ' ') --j;
-        if (j < i)
-            Clear();
-        else {
-            String temp = SubStr(i, j - i + 1);
-            Clear();
-            CreateFrom(temp);
+        while ( 0 < j && Str[j] == ' ' ) --j;
+        if ( j < i )
+            Clear ();
+        else
+        {
+            String temp = SubStr ( i, j - i + 1 );
+            Clear ();
+            CreateFrom ( temp );
         }
     }
-    return *this;
+    return * this;
 }
 
 /*____________________________________________________________________
@@ -855,36 +951,43 @@ String::Trim() {
   ____________________________________________________________________
 */
 
-String&
-String::TrimBlanks(const String& BlankSymbols) {
-    int Len(Length());
+String &
+String::TrimBlanks  ( const String & BlankSymbols )
+{
+    int Len ( Length () );
 
-    if (0 < Len) {
-        if (IsLargeRep() && 1 < lRefs(Rep.lBuf.Ptr))
-            CloneBuffer();
+    if ( 0 < Len )
+    {
+        if ( IsLargeRep () && 1 < lRefs ( Rep.lBuf.Ptr ) )
+            CloneBuffer ();
 
-        int i(0), j(0);
-        char* Str = CStr();
-
+        int     i (0), j(0);
+        char  * Str = CStr ();
+        
         // Skip spaces
-        while (j < Len) {
-            if (0 <= BlankSymbols.Find(Str[j], 0)) {
-                if (0 < i && Str[i - 1] != ' ') {
+        while ( j < Len )
+        {
+            if ( 0 <= BlankSymbols.Find ( Str[j], 0 ) )
+            {
+                if ( 0 < i && Str[i-1] != ' ' )
+                {
                     // Collapse blanks into single space
                     Str[i] = ' ';
                     ++i;
                 }
-            } else {
-                if (i != j) Str[i] = Str[j];
+            }
+            else
+            {
+                if ( i != j ) Str[i] = Str[j];
                 ++i;
             }
             ++j;
         }
-        if (0 < i && Str[i - 1] == ' ') --i;
+        if ( 0 < i && Str[i-1] == ' ' ) --i;
         Str[i] = 0x0;
-        if (IsLargeRep()) lLength(Rep.lBuf.Ptr) = i;
+        if ( IsLargeRep () ) lLength ( Rep.lBuf.Ptr ) = i;
     }
-    return *this;
+    return * this;
 }
 
 /*____________________________________________________________________
@@ -895,52 +998,63 @@ String::TrimBlanks(const String& BlankSymbols) {
   ____________________________________________________________________
 */
 
-String::~String() {
-    Clear();
+String::~String()
+{
+    Clear ();
 }
 
-String operator+(const String& String1, const String& String2) {
-    String Str(String1);
-    return Str.Append(String2);
+String operator + ( const String & String1, const String & String2 )
+{
+    String Str ( String1 );
+    return Str.Append ( String2 );
 }
 
-String operator+(const char* String1, const String& String2) {
-    String temp(String1);
-    return temp.Append(String2);
+String operator + ( const char * String1, const String & String2 )
+{
+    String temp ( String1 );
+    return temp.Append ( String2 );
 }
 
-String operator+(char Char, const String& String2) {
-    String temp(Char);
-    return temp.Append(String2);
+String operator + ( char Char, const String & String2 )
+{
+    String temp ( Char );
+    return temp.Append ( String2 );
 }
 
-bool operator==(const char* String1, const String& String2) {
-    return String(String1) == String2;
+bool operator == ( const char * String1, const String & String2 )
+{
+    return String ( String1 ) == String2;
 }
 
-bool operator!=(const char* String1, const String& String2) {
-    return String(String1) != String2;
+
+bool operator != ( const char * String1, const String & String2 )
+{
+    return String ( String1 ) != String2;
 }
 
 String
-String::FromInt(int Number) {
-    if (Number != 0) {
-        int sign = 0;
+String::FromInt ( int Number )
+{
+    if ( Number != 0 )
+    {
+        int  sign = 0;
         char digit[2];
 
         digit[1] = 0x0;
         String s;
-        if (Number < 0) {
+        if ( Number < 0 )
+        {
             sign = -1;
             Number = -Number;
         }
-        while (0 != Number) {
+        while ( 0 != Number )
+        {
             digit[0] = Number % 10 + '0';
-            s.Append(digit);
+            s.Append ( digit );
             Number /= 10;
         }
-        if (sign) s.Append("-");
-        return s.Reverse();
+        if ( sign ) s.Append ( "-" );
+        return s.Reverse ();
     }
     return "0";
 }

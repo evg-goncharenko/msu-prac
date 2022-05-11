@@ -4,24 +4,25 @@
 #include <list>
 #include "Lib/Xception.h"
 
-class ILogger {
+class ILogger
+{
 public:
-    virtual void LogEvent(const char *msg) = 0;
-    virtual ~ILogger() = 0;
+	virtual void LogEvent(const char * msg) = 0;
+	virtual ~ILogger() = 0;
 };
 
-class Logger {
-    std::list<ILogger *> _loggers;
-    Logger();
-    ~Logger();
-    static Logger *_instance;
-
+class Logger
+{
+	std::list<ILogger*> _loggers;
+	Logger();
+	~Logger();
+	static Logger * _instance;
 public:
-    static Logger *Instance();
-    static void Destroy();
-    void AddLog(ILogger *);
-    void LogEvent(const char *msg);
-    void LogException(Xception *);
+	static Logger * Instance();
+	static void Destroy();
+	void AddLog(ILogger *);
+	void LogEvent(const char * msg);
+	void LogException(Xception *);
 };
 
 #endif
