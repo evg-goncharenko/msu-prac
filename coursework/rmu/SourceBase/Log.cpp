@@ -40,7 +40,7 @@ void Logger::LogEvent(const char * msg)
 
 void Logger::LogException(Xception * err)
 {
-	LogEvent(String("ÎØÈÁÊÀ:") + err->GetNotification());
+	LogEvent(String("ÐžÐ¨Ð˜Ð‘ÐšÐ:") + err->GetNotification());
 }
 
 

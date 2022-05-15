@@ -146,7 +146,7 @@ void RMUUtils(RMU_UTIL_CODE Number, ...)
 // format of file with words:
 // lexeme synt_class_number stress_scheme_id anytext
 // for example:
-//        многовато 13  S7//
+//        РјРЅРѕРіРѕРІР°С‚Рѕ 13  S7//
 ////////////////////////////////////////////////////////////
 void AddWordsWithoutPClass(const char * FileNamePrefix, const char * WordFileName)
 {
@@ -205,7 +205,7 @@ void AddWordsWithoutPClass(const char * FileNamePrefix, const char * WordFileNam
 // format of file with words:
 // stem synt_class_number_code p_class_id stress_scheme_id //lemma anytext
 // for example:
-//	блокир 9_4 Verb4_2 SVerb4_5  //блокировать 5
+//	Р±Р»РѕРєРёСЂ 9_4 Verb4_2 SVerb4_5  //Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ 5
 ////////////////////////////////////////////////////////////
 void AddWords(const char * FileNamePrefix, const char * WordFileName)
 {

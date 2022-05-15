@@ -1,0 +1,1 @@
+C:\Users\79150\Desktop\coursework\rmu\Bzip2\bzip2-1.0.6\Debug\libbz2.lib

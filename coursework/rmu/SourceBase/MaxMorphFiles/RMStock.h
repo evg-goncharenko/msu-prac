@@ -1237,7 +1237,7 @@ public:
     ERMMorphoClass GetSynClass () const { return ERM_ADJECTIVE; }
     String        GetSynClassName () const { return ERMClassNames[ERM_ADJECTIVE][1]; }
 
-	// GIG 07.06.2015 : static adjectives (like êå÷óà)
+	// GIG 07.06.2015 : static adjectives (like ÐºÐµÑ‡ÑƒÐ°)
 	virtual String GetProperties () const
 	{
 		String retval = CRMLexem::GetProperties ();

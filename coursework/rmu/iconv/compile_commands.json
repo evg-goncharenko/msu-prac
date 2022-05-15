@@ -1,0 +1,6 @@
+[
+{ "file"      : "c_src/iconv.c"
+, "directory" : "/home/anton/Kursach/msu-prac/coursework/rmu/iconv"
+, "command"   : "cc -c -g -O2 -Wall -g -Wall -fPIC -MMD -I\"/usr/lib/erlang/lib/erl_interface-3.13.1/include\" -I\"/usr/lib/erlang/erts-10.6.4/include\" c_src/iconv.c -o c_src/iconv.o"
+}
+]

@@ -122,14 +122,14 @@ static void print_answer(const string& answer)
 
 int main(int argc, char* argv[])
 {
-	char warning[] = "Загрузка файлов морфологии. Ждите...";
+	char warning[] = "Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»РѕРІ РјРѕСЂС„РѕР»РѕРіРёРё. Р–РґРёС‚Рµ...";
 	cout << TranslateToConsole(warning)<< endl;
 	try {
 		RMUDLL morph;
 		char word[1024];
 		for(;;) {
 			try {
-				cout << TranslateToConsole(string("Введите словоформу или quit>")) << endl;
+				cout << TranslateToConsole(string("Р’РІРµРґРёС‚Рµ СЃР»РѕРІРѕС„РѕСЂРјСѓ РёР»Рё quit>")) << endl;
 				cin.getline(word, sizeof word);
 				if (strcmp(word,"quit") == 0) break;
 				string result;
@@ -139,9 +139,9 @@ int main(int argc, char* argv[])
 					list<string> ans_list;
 					morph.Analyse(TranslateFromConsole(word), result, ans_list);
 					if (ans_list.size() == 0)
-						cout << TranslateToConsole(string("Словоформа отсутствует в словаре")) << endl;
+						cout << TranslateToConsole(string("РЎР»РѕРІРѕС„РѕСЂРјР° РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РІ СЃР»РѕРІР°СЂРµ")) << endl;
 					else
-						cout << TranslateToConsole(string("Варианты анализа:")) << endl;
+						cout << TranslateToConsole(string("Р’Р°СЂРёР°РЅС‚С‹ Р°РЅР°Р»РёР·Р°:")) << endl;
 					for_each(ans_list.begin(), ans_list.end(), print_answer);
 				}
 #if defined(RMU_UTIL)
@@ -150,11 +150,11 @@ int main(int argc, char* argv[])
 #endif
 				cout << TranslateToConsole(result) << endl;
 			} catch(const char * msg){
-				cout << TranslateToConsole(string("Ошибка обработки: ") + string(msg)) << endl;
+				cout << TranslateToConsole(string("РћС€РёР±РєР° РѕР±СЂР°Р±РѕС‚РєРё: ") + string(msg)) << endl;
 			}
 		}
 	} catch (const char * msg) {
-		cout << TranslateToConsole(string("Ошибка инициализации: ") + string(msg)) << endl;
+		cout << TranslateToConsole(string("РћС€РёР±РєР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё: ") + string(msg)) << endl;
 		return 1;
 	}
 	return 0;

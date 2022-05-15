@@ -6,7 +6,7 @@
 
 #include "Lib/Xception.h"
 #include "Lib/SCArray.h"
-#include "Lib/XML.h"
+#include "Lib/Xml.h"
 #include "Lib/FileStream.h"
 #include "RMStockManager.h"
 

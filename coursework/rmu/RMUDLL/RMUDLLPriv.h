@@ -6,7 +6,7 @@
 #include "Lib/String.h"
 #include "RMUnit.h"
 #include "RMStockManager.h"
-#include <stdlib.h>
+//#include <malloc.h>
 #include "RMUUtilDLL.h"
 #include <vector>
 #include <algorithm>

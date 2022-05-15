@@ -36,7 +36,7 @@
   16.XI.2001                                                     00.07
       Finished "synthesis" block in "ProcessQuery" method.
   15.XI.2001                                                     00.06
-      Added "ё" letter heuristic adaptation support in the
+      Added "С‘" letter heuristic adaptation support in the
       "ProcessQuery" method. Fixed analysis part and changed the
       "answer" String format.
   05.XI.2001                                                     00.05
@@ -55,6 +55,7 @@
 #include "Lib/Xception.h"
 #include "Lib/Xml.h"
 #include "RMUnit.h"
+#include <iostream>
 
 struct Prediction
 {
@@ -66,32 +67,32 @@ struct Prediction
 const char RRMUnit::Suffixes[256][8] =
 {
     // Diagnostic
-    "aжн", "агн", "анин", "ател", "атор", "афи", "ба", "ащ", "вн", "граф",
-    "онок", "етел", "етр", "ец", "етри", "еват", "есят", "ива", "игa", "идн",
-    "изм", "ител", "истк", "иц", "йш", "ктор", "ла", "нича", "нн", "нн",
-    "нт", "обн", "ова", "оват", "оги", "олог", "онок", "ост", "разы", "сн",
-    "сот", "ств", "тн", "ува", "ушк", "ущ", "ци", "цк", "чат", "чив", "чик",
-    "чн", "щик", "ыва", "ющ", "яни", "янин", "ятел", "ятор", "ящ",
+    "aР¶РЅ", "Р°РіРЅ", "Р°РЅРёРЅ", "Р°С‚РµР»", "Р°С‚РѕСЂ", "Р°С„Рё", "Р±Р°", "Р°С‰", "РІРЅ", "РіСЂР°С„",
+    "РѕРЅРѕРє", "РµС‚РµР»", "РµС‚СЂ", "РµС†", "РµС‚СЂРё", "РµРІР°С‚", "РµСЃСЏС‚", "РёРІР°", "РёРіa", "РёРґРЅ",
+    "РёР·Рј", "РёС‚РµР»", "РёСЃС‚Рє", "РёС†", "Р№С€", "РєС‚РѕСЂ", "Р»Р°", "РЅРёС‡Р°", "РЅРЅ", "РЅРЅ",
+    "РЅС‚", "РѕР±РЅ", "РѕРІР°", "РѕРІР°С‚", "РѕРіРё", "РѕР»РѕРі", "РѕРЅРѕРє", "РѕСЃС‚", "СЂР°Р·С‹", "СЃРЅ",
+    "СЃРѕС‚", "СЃС‚РІ", "С‚РЅ", "СѓРІР°", "СѓС€Рє", "СѓС‰", "С†Рё", "С†Рє", "С‡Р°С‚", "С‡РёРІ", "С‡РёРє",
+    "С‡РЅ", "С‰РёРє", "С‹РІР°", "СЋС‰", "СЏРЅРё", "СЏРЅРёРЅ", "СЏС‚РµР»", "СЏС‚РѕСЂ", "СЏС‰",
     // Semidiagnostic
-    "ан", "енк", "ени", "ист", "ик", "льн", "онк", "ск",
+    "Р°РЅ", "РµРЅРє", "РµРЅРё", "РёСЃС‚", "РёРє", "Р»СЊРЅ", "РѕРЅРє", "СЃРє",
     // Diagnostic male
-    "анин", "ател", "атор", "граф", "енок", "етел", "етр", "ец", "изм",
-    "ител", "ктор", "нт", "олог", "онок", "чик", "щик", "янин", "ятел",
-    "ятор", 
+    "Р°РЅРёРЅ", "Р°С‚РµР»", "Р°С‚РѕСЂ", "РіСЂР°С„", "РµРЅРѕРє", "РµС‚РµР»", "РµС‚СЂ", "РµС†", "РёР·Рј",
+    "РёС‚РµР»", "РєС‚РѕСЂ", "РЅС‚", "РѕР»РѕРі", "РѕРЅРѕРє", "С‡РёРє", "С‰РёРє", "СЏРЅРёРЅ", "СЏС‚РµР»",
+    "СЏС‚РѕСЂ", 
     //       semi
-    "енк", "ик", "ист", "онк", "ск",
+    "РµРЅРє", "РёРє", "РёСЃС‚", "РѕРЅРє", "СЃРє",
     // --"-- female
-    "афи", "етри", "истк", "иц", "оги", "ост", "ушк", "ци",
+    "Р°С„Рё", "РµС‚СЂРё", "РёСЃС‚Рє", "РёС†", "РѕРіРё", "РѕСЃС‚", "СѓС€Рє", "С†Рё",
     //       semi
-    "енк", "ик", "льн", "онк", "ск",
+    "РµРЅРє", "РёРє", "Р»СЊРЅ", "РѕРЅРє", "СЃРє",
     // --"-- neuter
-    "ств", "яни",
+    "СЃС‚РІ", "СЏРЅРё",
     //       semi
-    "али", "ени",
+    "Р°Р»Рё", "РµРЅРё",
     //         semi
-    "ист", "льн", "ск",
+    "РёСЃС‚", "Р»СЊРЅ", "СЃРє",
     //         semi
-    "ани", "ени",
+    "Р°РЅРё", "РµРЅРё",
 };
 
 */
@@ -155,11 +156,11 @@ const char * CRMUnit::Build   = "55/"  __DATE__;
 const int    CRMUnit::PrefixesQnt = 31;
 const char   CRMUnit::Prefixes[64][8] =
 {
-    "по-", "в-", "во-",
-    "вз", "вы", "до", "за",   "из",   "ис",   "на",   "над", "низ", "недо",
-    "по", "об", "от", "пере", "пре",  "пред", "при",  "про", "под", "раз",
-    "рас",
-    "навы", "напод", "повы", "пона", "вс", "пораз", "проза",
+    "РїРѕ-", "РІ-", "РІРѕ-",
+    "РІР·", "РІС‹", "РґРѕ", "Р·Р°",   "РёР·",   "РёСЃ",   "РЅР°",   "РЅР°Рґ", "РЅРёР·", "РЅРµРґРѕ",
+    "РїРѕ", "РѕР±", "РѕС‚", "РїРµСЂРµ", "РїСЂРµ",  "РїСЂРµРґ", "РїСЂРё",  "РїСЂРѕ", "РїРѕРґ", "СЂР°Р·",
+    "СЂР°СЃ",
+    "РЅР°РІС‹", "РЅР°РїРѕРґ", "РїРѕРІС‹", "РїРѕРЅР°", "РІСЃ", "РїРѕСЂР°Р·", "РїСЂРѕР·Р°",
 };
 */
 
@@ -211,22 +212,22 @@ void
 CRMUnit::AdaptSpell ( const String& Form, Strings& Forms ) const
 {
     String  SubForm;
-    int     ReplPos;
+    u_int64_t     ReplPos;
     
     // Check first capital letter
     AdaptCaps ( Form, Forms );
     // Heurisitic adaptation analysis
-    ReplPos = Form.Find ( "е" );
-    if ( Form.Find ( "ё" ) == -1 && 0 <= ReplPos )
+    ReplPos = Form.Find ( "Рµ" );
+    if ( Form.Find ( "С‘" ) == -1 && 0 <= ReplPos )
         do
         {
-            // Make several form patterns with "e" letter replaced by "ё"
+            // Make several form patterns with "e" letter replaced by "С‘"
             SubForm = Form;
-            SubForm[ReplPos] = 'ё';
+            SubForm[ReplPos] = 0xD191;
             // Check first capital letter
             AdaptCaps ( SubForm, Forms );
             // Prepare next pattern
-            ReplPos = Form.Find ( "е", ReplPos + 1 );
+            ReplPos = Form.Find ( "Рµ", ReplPos + 1 );
         }
         while ( ReplPos != -1 );
 }
@@ -378,7 +379,8 @@ CRMUnit::ProcessAnalyzeQuery ( XMLElement * XML ) const
         if ( XML->Attr( "match" ) == "spell" )
             Forms.Add ( XML->Attr("form") );
         else
-            AdaptSpell ( XML->Attr( "form" ), Forms );
+            AdaptSpell ( XML->Attr( "form" ), Forms ); // XML->Attr( "form" ) == "РєСЂСЋС‡СЊСЏ"
+            // std::cout << "\n\n XML and Forms" << XML->Attr( "form" )  << "\n\n";
         for ( k = 0; k < Forms.Count (); k++ )
         {
             Form = Forms[k];
@@ -386,7 +388,7 @@ CRMUnit::ProcessAnalyzeQuery ( XMLElement * XML ) const
             IsPossiblyComparativeMode = false;
             Found = false;
             if ( 4 < Length )
-				IsPossiblyComparativeMode = ( Form.SubStr ( 0, 2 ) == "по" );
+				IsPossiblyComparativeMode = ( Form.SubStr ( 0, 2 ) == "РїРѕ" );
             while ( 0 <= Pos )
             {
                 ThisStem = Form.SubStr ( 0, Pos );

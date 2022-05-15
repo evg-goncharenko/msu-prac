@@ -2341,8 +2341,8 @@ static bool CompareLemma(String lemma, String UID)
 	int index = UID.Find('_');
 	if (index >= 0)
 		UID = UID.SubStr(0,index);
-	lemma.ReplaceAll(String("¸"),String("å"));
-	UID.ReplaceAll(String("¸"),String("å"));
+	lemma.ReplaceAll(String("Ñ‘"),String("Ðµ"));
+	UID.ReplaceAll(String("Ñ‘"),String("Ðµ"));
 	if (lemma != UID)
 		return false;
 	return true;

@@ -113,12 +113,12 @@ StrToInt ( const String & Str )
 {
     return Str.ToInt ();
 }
-
+/*
 bool IsWowel ( char a )
 {
-    return a == 'à' || a == 'å' || a == '¸' || a == 'è' || a == 'î' || a == 'ó' || a == 'û' || a == 'ı' || a == 'ş' || a == 'ÿ';
+    return a == 'Ğ°' || a == 'Ğµ' || a == 'Ñ‘' || a == 'Ğ¸' || a == 'Ğ¾' || a == 'Ñƒ' || a == 'Ñ‹' || a == 'Ñ' || a == 'Ñ' || a == 'Ñ';
 }
-
+*/
 void MakeLower ( String& s, int start )
 {
     for ( int i = start; i < s.Length(); ++i )

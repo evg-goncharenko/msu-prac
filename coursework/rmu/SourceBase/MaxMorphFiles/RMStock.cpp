@@ -314,7 +314,7 @@ CRMParadigm::Contains ( const String & Flex, int StartPos ) const
             // Flex variation
             for ( j = 0; j < ( (Flexes *) Items[i] )->Items.Count (); ++j )
             {
-				// GIG: we should codify nested results even for exact match ("äåëà-åì")
+				// GIG: we should codify nested results even for exact match ("Ð´ÐµÐ»Ð°-ÐµÐ¼")
 				Flexes * pFlexes =  (Flexes *) Items[i];
                 PFlex = pFlexes->Items[j];
 				if (Flex.Find ( PFlex ) == 0 )
@@ -386,7 +386,7 @@ CRMParadigm::ContainsFlex ( const String& Flex, int StartPos ) const
                 PFlex = pFlexes->Items[j];
                 if ( Flex.Find ( PFlex ) == 0 )
                 {
-                    // GIG: we still need to check nested condition even in case of perfect match ("äåëàþù")
+                    // GIG: we still need to check nested condition even in case of perfect match ("Ð´ÐµÐ»Ð°ÑŽÑ‰")
                     // Nested case
                     if (pFlexes->Nested[j] )
                         Result = pFlexes->Nested[j]->ContainsFlex ( Flex.SubStr ( PFlex.Length (), Flex.Length () - PFlex.Length () ) );

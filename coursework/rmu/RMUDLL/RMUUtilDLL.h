@@ -1,4 +1,5 @@
-#if defined(RMU_UTIL) && !defined(__RMU_UTIL_INCLUDED__)
+//#if defined(RMU_UTIL) && !defined(__RMU_UTIL_INCLUDED__)
+#pragma once
 #define __RMU_UTIL_INCLUDED__
 #include "RMUDLL.h"
 #ifdef __cplusplus
@@ -34,6 +35,6 @@ DECLSPEC bool RMUAddToken(RMUHandle hRMU, const char * SyntClass, const char * S
 DECLSPEC bool RMUSaveFile(RMUHandle hRMU, const char * FileNamePrefix);
 #ifdef __cplusplus
 } // extern "C"
-#endif
+//#endif
 #endif
 

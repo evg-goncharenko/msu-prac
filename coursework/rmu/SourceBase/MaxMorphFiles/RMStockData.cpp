@@ -140,7 +140,7 @@ CRMLexem::MorphDataInit::MorphDataInit ()
     Add ( " animate=any gender=female number=single case=nominative" ) .
     Add ( " animate=any gender=female number=single case=genitive" ) .
     Add ( " animate=any gender=female number=single case=dative" ) .
-//	GIG: 30.08.2014: в случае женского рода вычисляется не винительный, а предложный падеж
+//	GIG: 30.08.2014: РІ СЃР»СѓС‡Р°Рµ Р¶РµРЅСЃРєРѕРіРѕ СЂРѕРґР° РІС‹С‡РёСЃР»СЏРµС‚СЃСЏ РЅРµ РІРёРЅРёС‚РµР»СЊРЅС‹Р№, Р° РїСЂРµРґР»РѕР¶РЅС‹Р№ РїР°РґРµР¶
     Add ( " animate=any gender=female number=single case=accusative" ) .
     Add ( " animate=any gender=female number=single case=instrumental" ) .
 //    Add ( " animate=any gender=female number=single case=prepositional" ) .
@@ -294,7 +294,7 @@ CRMLexem::MorphDataInit::MorphDataInit ()
     Add ( " animate=any gender=female number=single case=nominative" ) .
     Add ( " animate=any gender=female number=single case=genitive" ) .
     Add ( " animate=any gender=female number=single case=dative" ) .
-// GIG: 30.08.2014: в случае женского рода вычисляется не винительный, а предложный падеж
+// GIG: 30.08.2014: РІ СЃР»СѓС‡Р°Рµ Р¶РµРЅСЃРєРѕРіРѕ СЂРѕРґР° РІС‹С‡РёСЃР»СЏРµС‚СЃСЏ РЅРµ РІРёРЅРёС‚РµР»СЊРЅС‹Р№, Р° РїСЂРµРґР»РѕР¶РЅС‹Р№ РїР°РґРµР¶
     Add ( " animate=any gender=female number=single case=accusative" ) .
 	Add ( " animate=any gender=female number=single case=instrumental" ) .
 //    Add ( " animate=any gender=female number=single case=prepositional" ) .
@@ -629,21 +629,21 @@ CRMLexem::MorphDataInit::MorphDataInit ()
 
     // CRMParadigm init
     CRMParadigm::NounSuffixes.
-    Add ( "анин" ) . Add ( "ател" ) . Add ( "атор" ) .  Add ( "афи" ) . Add ( "граф" ) .
-    Add ( "онок" ) . Add ( "етел" ) . Add ( "етр" )  . Add ( "ец" )   . Add ( "етри" ) .
-    Add ( "изм" )  . Add ( "ител" ) . Add ( "истк" ) . Add ( "иц" )   . Add ( "ктор" ) .
-    Add ( "нт" )   . Add ( "оги" )  . Add ( "олог" ) . Add ( "онок" ) . Add ( "ост" ) .
-    Add ( "ств" )  . Add ( "ушк" )  . Add ( "ци" )   . Add ( "чик" )  . Add ( "щик" ) .
-    Add ( "яни" )  . Add ( "янин" ) . Add ( "ятел" ) . Add ( "ятор");
+    Add ( "Р°РЅРёРЅ" ) . Add ( "Р°С‚РµР»" ) . Add ( "Р°С‚РѕСЂ" ) .  Add ( "Р°С„Рё" ) . Add ( "РіСЂР°С„" ) .
+    Add ( "РѕРЅРѕРє" ) . Add ( "РµС‚РµР»" ) . Add ( "РµС‚СЂ" )  . Add ( "РµС†" )   . Add ( "РµС‚СЂРё" ) .
+    Add ( "РёР·Рј" )  . Add ( "РёС‚РµР»" ) . Add ( "РёСЃС‚Рє" ) . Add ( "РёС†" )   . Add ( "РєС‚РѕСЂ" ) .
+    Add ( "РЅС‚" )   . Add ( "РѕРіРё" )  . Add ( "РѕР»РѕРі" ) . Add ( "РѕРЅРѕРє" ) . Add ( "РѕСЃС‚" ) .
+    Add ( "СЃС‚РІ" )  . Add ( "СѓС€Рє" )  . Add ( "С†Рё" )   . Add ( "С‡РёРє" )  . Add ( "С‰РёРє" ) .
+    Add ( "СЏРЅРё" )  . Add ( "СЏРЅРёРЅ" ) . Add ( "СЏС‚РµР»" ) . Add ( "СЏС‚РѕСЂ");
 
     CRMParadigm::AdjectiveSuffixes.
-    Add ( "aжн" ) . Add ( "ащ" ) . Add ( "вн" ) . Add ( "граф" ) . Add ( "еват" ) .
-    Add ( "есят" ) . Add ( "идн" )  . Add ( "йш" )  . Add ( "нн" )  . Add ( "обн" ) .
-    Add ( "оват" ) . Add ( "разн" ) . Add ( "сн" )  . Add ( "сот" ) . Add ( "ущ" ) .
-    Add ( "цк" )   . Add ( "чат" )  . Add ( "чив" ) . Add ( "чн" )  . Add ( "ющ" ) .
-    Add ( "ящ" );
+    Add ( "aР¶РЅ" ) . Add ( "Р°С‰" ) . Add ( "РІРЅ" ) . Add ( "РіСЂР°С„" ) . Add ( "РµРІР°С‚" ) .
+    Add ( "РµСЃСЏС‚" ) . Add ( "РёРґРЅ" )  . Add ( "Р№С€" )  . Add ( "РЅРЅ" )  . Add ( "РѕР±РЅ" ) .
+    Add ( "РѕРІР°С‚" ) . Add ( "СЂР°Р·РЅ" ) . Add ( "СЃРЅ" )  . Add ( "СЃРѕС‚" ) . Add ( "СѓС‰" ) .
+    Add ( "С†Рє" )   . Add ( "С‡Р°С‚" )  . Add ( "С‡РёРІ" ) . Add ( "С‡РЅ" )  . Add ( "СЋС‰" ) .
+    Add ( "СЏС‰" );
 
-    CRMParadigm::VerbSuffixes.Add ( "ава" ) . Add ( "ба" ) . Add ( "ова" ) . Add ( "ува" ) . Add ( "ыва" );
+    CRMParadigm::VerbSuffixes.Add ( "Р°РІР°" ) . Add ( "Р±Р°" ) . Add ( "РѕРІР°" ) . Add ( "СѓРІР°" ) . Add ( "С‹РІР°" );
 }
 
 CRMLexem::MorphDataInit CRMLexem::Init;

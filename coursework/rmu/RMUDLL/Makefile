@@ -3,7 +3,7 @@ MAXLIBSRC = ../SourceBase/MaxMorphFiles/Lib/FileConfig.cpp ../SourceBase/MaxMorp
 SOURCEBASE = $(MAXMORPHSRC) $(MAXLIBSRC)
 SOURCES = $(SOURCEBASE) Encode.cpp LexIterator.cpp RMUDLL.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-CXXFLAGS = -g -Wall -I../SourceBase/MaxMorphFiles -I../Include
+CXXFLAGS = -g -Wall -I../SourceBase/MaxMorphFiles -I../Include -DRMU_UTIL
 LIBDIR = ../Libs
 CXX = g++
 
