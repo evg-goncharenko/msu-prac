@@ -47,20 +47,12 @@ void Word::step_4() {
 
 void Word::step_5() {
     std::string result;
-
     // std::cout << " step5 x1=" << x1 << " x2=" << x2 << std::endl;
     std::string request("<analyze form=\"");
     request.append(x2);
     request.append("\">\n\n");
-    // std::cout << request;
-    // try {
-        RMUAnswer = RMUnit->ProcessQuery(request.c_str());
-    // } catch (Xception* pErr) {
-    //     std::cout << "\n\n\n"
-    //               << pErr->GetNotification() << "\n\n\n";
-    // }
-    // std::cout << RMUAnswer << "\n";
-    // RMUAnswer = "<answer> <analyzed form=\"крючья\" lexem=\"крюк\"><noun animated=\"no\" gender=\"male\" number=\"plural\" case=\"nominative\" stress=\"3\"><noun animated=\"no\" gender=\"male\" number=\"plural\" case=\"accusative\" stress=\"3\"> </answer>";
+    RMUAnswer = RMUnit->ProcessQuery(request.c_str());
+
     if ((RMUAnswer.find("unrecognized")) == std::string::npos) {
         step_6();
     } else {
@@ -75,13 +67,10 @@ void Word::step_6() {
     stress = x1.size() / 2;
     if (x1.find('-') != std::string::npos) ++stress;
     x1.append(st);
-    // std::cout << "\n"
-    //           << x1;
+    result = x1;
     st = RMUAnswer.substr(RMUAnswer.find("stress=") + 7);
-    result = st.substr(0, st.find(' '));
+    st = st.substr(0, st.find(' '));
     stress += std::stoi(st);
-    // std::cout << "\n"
-    //           << "stress = " << stress;
 }
 
 void Word::step_7() {
@@ -106,7 +95,7 @@ void Word::analize() {
     }
 }
 
-
+//*! Binary generation:
 // int main() {
 //     std::string answer;
 //     try {

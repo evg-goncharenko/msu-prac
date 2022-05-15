@@ -1,25 +1,23 @@
 #pragma once
 
-#define RMU_UTIL
 #include <algorithm>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <list>
-#include <string>
-#include <vector>
-#include "rmu/Include/RMUResult.h"
-#include "rmu/Include/RMUDLL.h"
-#include "rmu/Include/RMUError.hpp"
-#include "rmu/SourceBase/MaxMorphFiles/RMStockManager.h"
-#include "rmu/RMUDLL/RMUUtilDLL.h"
-#include "rmu/SourceBase/MaxMorphFiles/RMUnit.h"
-
-
+#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <memory>
+#include <string>
+#include <vector>
+
+#include "rmu/Include/RMUDLL.h"
+#include "rmu/Include/RMUError.hpp"
+#include "rmu/Include/RMUResult.h"
+#include "rmu/RMUDLL/RMUUtilDLL.h"
+#include "rmu/SourceBase/MaxMorphFiles/RMStockManager.h"
+#include "rmu/SourceBase/MaxMorphFiles/RMUnit.h"
 
 #ifdef WIN32
 #ifdef RMUDLL_EXPORTS
