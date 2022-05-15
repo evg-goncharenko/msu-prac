@@ -1,11 +1,12 @@
 #include"anz.hpp"
-
+#include<iostream>
 int main() {
     std::string answer;
     try {
         Word w("семибоярщина", "rm.stem.data");
        w.analize();
-       std::cout<< "Result" << w.result<< "\n Stress" <<w.stress; 
+       std::cout<< "Result:" << w.result << std::endl << "Stress:" << w.stress << std::endl;
+       std::cout << "RMUAnswer:" << w.RMUAnswer << std::endl; 
     } catch (Xception* pErr) {
         answer = pErr->GetNotification();
         std::cout << "FINAL_LOG" << answer << std::endl;

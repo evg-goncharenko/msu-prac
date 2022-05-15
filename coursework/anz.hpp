@@ -46,7 +46,7 @@ private:
     bool rec;
     DECLSPEC void _error() {
         error = true;
-        cout << "cant recognize";
+        cerr << "cant recognize\n";
     }
 
 
