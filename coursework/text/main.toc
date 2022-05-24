@@ -1,0 +1,11 @@
+\babel@toc {russian}{}
+\contentsline {chapter}{\numberline {1}Введение}{3}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Постановка задачи}{8}{chapter.2}%
+\contentsline {chapter}{\numberline {3}Алгоритм анализа слова}{9}{chapter.3}%
+\contentsline {chapter}{\numberline {4}Реализация}{11}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Сборка проекта}{11}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Взаимодействие с библиотекой}{12}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Описание класса Word}{12}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Результаты}{14}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Заключение}{15}{chapter.6}%
+\contentsline {chapter}{Список литературы}{16}{Item.18}%
