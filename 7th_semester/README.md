@@ -9,4 +9,5 @@
 
 ### Deep Learning
 - Fully connected deep networks, Pytorch ([hw_10_16](./deep_learning/hw_10_16));
-- Convolutional neural networks, Pytorch ([hw_10_24](./deep_learning/hw_10_24)).
+- Convolutional neural networks, Pytorch ([hw_10_24](./deep_learning/hw_10_24));
+- Semantic segmentation ([hw_11_10](./deep_learning/hw_11_10)).
