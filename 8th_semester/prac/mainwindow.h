@@ -12,24 +12,24 @@ class MainWindow : public QWidget
     {
     Q_OBJECT
     public:
-    MainWindow(QWidget *parent = nullptr)
-        {
-
-        }
+    MainWindow(QWidget *parent = nullptr);
 
 
     private slots:
-        void MainWindow::handler();
+        void handler();
 
     private:
         std::vector<QPushButton*>  buttons;
         std::vector<QTextEdit*>    text_edits;
         std::vector<QLabel*>       labels;
 
-        QTableWidget tableWidget = nullptr;
+        QTableWidget * tableWidget = nullptr;
 
         int screen = 1; //1st screen
 
+
+        int max_steps = -1;
+        char trend = 'B';
 
     };
 

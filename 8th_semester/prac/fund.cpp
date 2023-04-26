@@ -18,7 +18,7 @@
 #include <random>
 #include <iostream>
 #include <fstream>
-#include <nlohmann/json.hpp>
+#include <json.hpp>
 using json = nlohmann::json;
 
 using namespace std;
@@ -332,7 +332,6 @@ void Conjuncture::make_time_step()
     std::string key = (*elementId).first;
 
     //Creating new opportunities
-
     if(key == "DOLLAR")
         {
         std::shared_ptr<Investition> i_ptr = std::make_shared<Deposit>( json( { {"RISK", 30}, {"INVEST_TIME", 5}, {"QUANTITY", 100}, {"BANK", key}, {"CURRENCY_NAME" , "DOLLAR"}, {"DEPOSIT_PERCENT" , rand()} }  ) , shared_from_this() );
@@ -343,6 +342,9 @@ void Conjuncture::make_time_step()
         std::shared_ptr<Investition> i_ptr = std::make_shared<Stock>( json( { {"RISK", 30}, {"INVEST_TIME" , 5}, {"QUANTITY", 100}, {"COMPANY_NAME", key},  {"DIVIDEND_PERCENT" , rand()} }  ) , shared_from_this() );
         investment_list.push_back(   i_ptr    );
         }
+
+    //Fluctuating previous ones:
+
     }
 
 double Conjuncture::get_market_cost(std::string asset_name)
@@ -383,20 +385,3 @@ class Environment
 
 
 
-
-//MainWindow::~MainWindow() {}
-
-/*int main()
-    {
-    std::ifstream ifs("config.json");
-    json jf = json::parse(ifs);
-    Environment env( jf );
-
-    env.step();
-
-    return 0;
-    }*/
-
-
-
-//
