@@ -1,0 +1,24 @@
+{
+  "MARKET":
+    {"DOLLAR" : 43.222,
+     "YANDEX" : 5000.0,
+     "GOOGLE" : 3.0000},
+
+   "RISK":
+    { "DOLLAR" : 1,
+      "YANDEX" : 5,
+      "GOOGLE" : 100          },
+
+    "DIVIDENDS":
+    { "YANDEX" : 1.00,
+      "GOOGLE" : 1.00          },
+
+
+
+
+  "BRIEFCASE":
+    [ { "ASSET"  : "CURRENCY", "RISK" : 30, "INVEST_TIME": 5, "QUANTITY" : 100, "BANK": "SBER", "CURRENCY_NAME": "DOLLAR", "DEPOSIT_PERCENT": 100  }  ] ,
+
+  "FUND_ACCOUNT" : 1000.000,
+  "TAX" : 0.13
+}

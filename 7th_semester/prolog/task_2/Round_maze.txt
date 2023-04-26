@@ -1,0 +1,316 @@
+%   КРУГОВОЙ ЛАБИРИНТ
+
+:- use_module(library(pce)).
+
+%  Вспомогательные функции
+%
+% функция вычисления X степени N двойки
+% (i,i,o), (i,i,i)
+pow_2(2, 1, 2) :- !.
+pow_2(2, N, X) :- N1 is N - 1, pow_2(2, N1, X1), X is X1 * 2.
+
+% функция записи в файл result списка термов L
+write_res(L) :- tell(result), write_rules(L), told().
+write_rules([]).
+write_rules([X|T]) :- term_string(X, S), write(S), write(.), nl, write_rules(T).
+
+
+%  Динамические предикаты
+:- dynamic room/7. % комната лабиринта
+:- dynamic flag/1. % для отрисовки графики
+:- dynamic maze/1. % лабиринт - список конмнат
+:- dynamic ex/1.   % выход из лабиринта
+
+
+%  Генерация лабиринта
+%
+% Внутреннее представление:
+% Тип комната: room(R, No, NE, NW, E, S, W).
+% R - радиус (уровень, начиная с 1)
+% No - номер комнаты
+% NE - путь наверх (правый)
+% NW - путь наверх (левый)
+% E - путь вправо
+% S - путь вниз
+% W - путь влево
+
+% функция инициализации лабиринта
+make_maze(S, Res) :- random_between(1, 3, N),
+    generate_maze(S, [room(2, N, 0, 0, 0, 1, 0)],
+             [room(2, N, 0, 0, 0, 1, 0), room(1, 0, 0, 0, 0, 0, 0)], Res).
+
+% функция генерации лабиринта с радиусом R
+generate_maze(_, [], [_|Res], Res).
+generate_maze(R, [Room1|T1], [Room2|T2], Res) :-
+    make_step(5, R, Room1, T2), where_to_step(R, Room1, T2, Way),
+    take_step(Way, Room1, A, B), add_room(Room2, T2, [Room2|T2], Res1),
+    room_change(Room1, A, Res1, Res2),
+    !, generate_maze(R, [B, A|T1], [B|Res2], Res).
+generate_maze(R, [_|T1], T2, Res) :- generate_maze(R, T1, T2, Res).
+
+% функция проверки, можно ли перейти из комнаты в нужном направлении Mod
+% при Mod == 5 - все возможные
+% 0 - вниз
+% 1 - налево
+% 2 - направо
+% 3 - наверх (левый)
+% 4 - наверх (правый)
+make_step(Mod, Lvl, room(R, No, NE, NW, E, S, W), T) :-
+     ( Mod =:= 5 ; Mod =:= 0 ),
+    R2 is R - 1, R2 > 1, H is No + 1, N2 is div(H, 2),
+    no_such_room(room(R2, N2, NE, NW, E, S, W), T);
+
+     ( Mod =:= 5 ; Mod =:= 1 ),
+    make_left(No, R, N2), no_such_room(room(R, N2, NE, NW, E, S, W), T);
+
+     ( Mod =:= 5 ; Mod =:= 2 ),
+    make_right(No, R, N2), no_such_room(room(R, N2, NE, NW, E, S, W), T);
+
+     ( Mod =:= 5 ; Mod =:= 3 ),
+    R2 is R + 1, R2 < Lvl + 1, N2 is No * 2 - 1,
+    no_such_room(room(R2, N2, NE, NW, E, S, W), T);
+
+     ( Mod =:= 5 ; Mod =:= 4 ),
+    R2 is R + 1, R2 < Lvl + 1, N2 is No * 2,
+    no_such_room(room(R2, N2, NE, NW, E, S, W), T).
+
+% функция проверки, есть ли такая комната в списке
+no_such_room(_, []) :- !.
+no_such_room(room(R, No, _, _, _, _, _), [room(R, No, _, _, _, _, _)|_]) :- !, fail.
+no_such_room(room(R, No, _, _, _, _, _), [_|T2]) :-
+    no_such_room(room(R, No, _, _, _, _, _), T2).
+
+% функция генерации случайного направления из комнаты
+where_to_step(Lvl, Room, T2, Step) :-
+    random_between(0, 4, Step),
+    make_step(Step, Lvl, Room, T2), !.
+where_to_step(Lvl, Room, T2, Step) :- where_to_step(Lvl, Room, T2, Step).
+
+% функция генерации комнаты в направлении Way из старой комнаты
+% направление, старая комната, измененная комната, новая комната
+take_step(0, room(R, No, NE, NW, E, _, W), room(R, No, NE, NW, E, 1, W),
+          room(R2, No2, NU1, NU2, 0, 0, 0)) :-
+    H is mod(No, 2), ( H =:= 0, NU1 is 1, NU2 is 0; H =\= 0, NU1 is 0, NU2 is 1 ),
+    R2 is R - 1,  Help is No + 1, No2 is div(Help, 2).
+take_step(1, room(R, No, NE, NW, E, S, _), room(R, No, NE, NW, E, S, 1),
+          room(R, No2, 0, 0, 1, 0, 0)) :-
+    No > 1, No2 is No - 1; pow_2(2, R, No2).
+take_step(2, room(R, No, NE, NW, _, S, W), room(R, No, NE, NW, 1, S, W),
+          room(R, No2, 0, 0, 0, 0, 1)) :-
+    pow_2(2, R, MN), No < MN, No2 is No + 1; No2 is 1.
+take_step(3, room(R, No, NE, _, E, S, W), room(R, No, NE, 1, E, S, W),
+          room(R2, No2, 0, 0, 0, 1, 0)) :-
+    R2 is R + 1, No2 is No * 2 - 1.
+take_step(4, room(R, No, _, NW, E, S, W), room(R, No, 1, NW, E, S, W),
+          room(R2, No2, 0, 0, 0, 1, 0)) :-
+    R2 is R + 1, No2 is No * 2.
+
+% функция добавления комнаты Room в список (с проверкой на дубликаты)
+add_room(_, [], Res, Res) :- !.
+add_room(room(R, No, _, _, _, _, _), [room(R, No, _, _, _, _, _)|_], [_|T], T) :- !.
+add_room(Room, [_|T], Acc, Res) :- add_room(Room, T, Acc, Res).
+
+% функция изменения комнаты A на B в списке комнат
+room_change(_, _, [], []) :- !.
+room_change(room(R, No, NE1, NW1, E1, S1, W1), room(R, No, NE2, NW2, E2, S2, W2),
+           [room(R, No, NE1, NW1, E1, S1, W1)|T],
+           [room(R, No, NE, NW, E, S, W)|Res]) :-
+            !, S is max(S1, S2), E is max(E1, E2), W is max(W1, W2),
+            NE is max(NE1, NE2), NW is max(NW1, NW2),
+            room_change(room(R, No, NE1, NW1, E1, S1, W1),
+                        room(R, No, NE2, NW2, E2, S2, W2), T, Res).
+room_change(A, B, [X|T], [X|Res]) :- room_change(A, B, T, Res).
+
+% функция сортировки готового лабиринта
+my_sort(Sort, Sorted) :- sort(2, @=<, Sort, Res), sort(1, @=<, Res, Sorted).
+
+
+make_right(No, R, Res) :- pow_2(2, R, Max), No < Max, !, Res is No + 1.
+make_right(_, _, Res) :- Res is 1.
+
+make_left(No, _, Res) :- No > 1, !, Res is No - 1.
+make_left(_, R, Res) :- pow_2(2, R, Res).
+
+
+
+
+%  Нахождение пути из лабиринта
+
+% функция генерации маршрута из лабиринта
+gen_path(Maze, Max, Exit, Path) :-
+    find_room(Maze, Max, Exit, Finish), start_room(Maze, Start),
+    seek_path(Maze, Max, Start, Finish, Path, []),
+    !, write_res([room(1,0,0,0,0,0,0)|Path]).
+
+% функция поиска комнаты с номером Exit
+find_room([room(R, Exit, NE, NW, E, S, W)|_], R, Exit,
+          room(R, Exit, NE, NW, E, S, W)) :- !.
+find_room([_|T], R, Exit, Res) :- find_room(T, R, Exit, Res).
+
+% функция поиска начальной комнаты
+start_room([room(2, No, NE, NW, E, 1, W)|_], room(2, No, NE, NW, E, 1, W)) :- !.
+start_room([_|T], Res):- start_room(T, Res).
+
+% функция составления маршрута
+seek_path(_, _, room(R, Exit, NE, NW, E, S, W), room(R, Exit, NE, NW, E, S, W),
+          [room(R, Exit, NE, NW, E, E, W)], _).
+seek_path(Maze, Max, X, Y, [X|T], P) :-
+    room_neighbour(Maze, Max, X, A), no_such_room(A, P),
+    seek_path(Maze, Max, A, Y, T, [X|P]).
+
+% функция поиска соседних комнат
+room_neighbour(Maze, Max, room(R, No, 1, _, _, _, _), Res) :-
+    R2 is R + 1, R2 < Max + 1, No2 is No * 2, find_room(Maze, R2, No2, Res).
+room_neighbour(Maze, Max, room(R, No, _, 1, _, _, _), Res) :-
+    R2 is R + 1, R2 < Max + 1, No2 is No * 2 - 1, find_room(Maze, R2, No2, Res).
+room_neighbour(Maze, _, room(R, No, _, _, 1, _, _), Res) :-
+    make_right(No, R, No2), find_room(Maze, R, No2, Res).
+room_neighbour(Maze, _, room(R, No, _, _, _, 1, _), Res) :-
+    R2 is R - 1, R2 > 1, H is No + 1, No2 is div(H, 2), find_room(Maze, R2, No2, Res).
+room_neighbour(Maze, _, room(R, No, _, _, _, _, 1), Res) :-
+    make_left(No, R, No2), find_room(Maze, R, No2, Res).
+
+
+%  Графика
+
+radius(20).
+center(400, 200).
+diameter(Max, D) :- radius(R), D is 2*Max*R.
+flag(0).
+
+% функция отрисовки лабиринта
+draw(P , _, []) :- send(P, open).
+draw(P, Max, [R|T]) :- draw_room(P, Max, R), draw(P, Max, T).
+
+% функция отрисовки комнаты
+draw_room(P, Max, room(1, 0, 0, 0, 0, 0, 0)) :-
+    diameter(Max, D), center(X,Y), radius(R), CX is X-R*Max, CY is Y-R*Max,
+    send(P, display, new(@(circ), circle(D)), point(CX,CY)),
+    send(@(circ), colour, colour(orange)), send(@(circ), fill_pattern, colour(orange)).
+draw_room(P, Max, room(X, Y, NE, NW, _, S, W)) :-
+    draw_lline(P, X, Y, W), draw_darc(P, X, Y, S), draw_uarc(P, Max, X, Y, NW, NE).
+
+% функция отрисовки отрезка
+draw_lline(_, _, _, 1).
+draw_lline(P, X, Y, 0) :-
+    center(CX, CY), radius(R), pow_2(2, X, N),
+    Alpha is 2*pi/N*(Y-1), R1 is R*(X-1), R2 is R*X,
+    LX1 is CX + sin(Alpha)*R1, LY1 is CY - cos(Alpha)*R1,
+    LX2 is CX + sin(Alpha)*R2, LY2 is CY - cos(Alpha)*R2,
+    send(P, display, new(_, line(LX1, LY1, LX2, LY2))).
+
+% функция отрисовки полуокружностей
+draw_darc(_, _, _, 1).
+draw_darc(P, X, Y, 0) :-
+    center(CX, CY), radius(R), R1 is R*(X-1), pow_2(2, X, N),
+    Alpha is 360/N, beta(Alpha, Y, Beta),
+    send(P, display, new(_, arc(R1, Beta, Alpha)), point(CX, CY)).
+
+draw_uarc(P, X, X, Y, UL, UR) :- !, NX is X+1, NY1 is 2*Y-1, NY2 is 2*Y,
+    draw_darc(P, NX, NY1, UL), draw_darc(P, NX, NY2, UR).
+draw_uarc(_, _, _, _, _, _).
+
+beta(A, Y, B) :- Fi is A*(Y-1), (Fi < 90; (Fi < 270, Fi > 180)), !, B is 90 - Fi - A.
+beta(A, Y, B) :- B is 90 - (A*Y).
+
+% функция отрисовки маршрута
+draw_solution(P, [R1, R2|T]) :-
+    draw_path(P, R1, R2, DX, DY), draw_solution(P, [R2|T], DX, DY).
+
+draw_solution(P, [room(X, Y, _, _, _, _, _)], DX, DY) :-
+    X1 is X+1, Y1 is 2*Y,
+    draw_path(P, room(X, Y, _, _, _, _, _), room(X1, Y1, _, _, _, _, _), DX, DY, _, _),
+    send(P, open).
+draw_solution(P, [R1, R2|T], DX, DY) :-
+    draw_path(P, R1, R2, DX, DY, NDX, NDY), draw_solution(P, [R2|T], NDX, NDY).
+
+% функция отрисовки маршрута из одной комнаты в другую в направлении
+% (DX, DY)
+draw_path(P, room(1, 0, 0, 0, 0, 0, 0), room(X, Y, _, _, _, _, _), DX, DY) :-
+    center(CX, CY), radius(R), pow_2(2, X, N), Alpha is 2*pi/N*(Y-0.5), R1 is R*(X-0.5),
+    DX is CX + sin(Alpha)*R1, DY is CY - cos(Alpha)*R1,
+    send(P, display, new(_, line(CX, CY, DX, DY))).
+
+draw_path(P, room(X, Y1, _, _, _, _, _), room(X, Y2, _, _, _, _, _), DX, DY, LX2, LY2) :-
+    !, Y is max(Y1, Y2),
+    center(CX, CY), radius(R), pow_2(2, X, N), Alpha is 2*pi/N*(Y-0.5),
+    R2 is R*(X-0.5), LX2 is CX + sin(Alpha)*R2, LY2 is CY - cos(Alpha)*R2,
+    send(P, display, new(_, line(DX, DY, LX2, LY2))).
+draw_path(P, room(X1, _, _, _, _, _, _), room(X2, Y2, _, _, _, _, _), DX, DY, LX2, LY2) :-
+    X1 < X2, !, X is X2, Y is Y2,
+    center(CX, CY), radius(R), pow_2(2, X, N), Alpha is 2*pi/N*(Y-0.5),
+    R2 is R*(X-0.5), LX2 is CX + sin(Alpha)*R2, LY2 is CY - cos(Alpha)*R2,
+    send(P, display, new(_, line(DX, DY, LX2, LY2))).
+draw_path(P, room(X1, Y1, _, _, _, _, _), room(X2, _, _, _, _, _, _), DX, DY, LX1, LY1) :-
+    X1 > X2, !, X is X1, Y is Y1,
+    center(CX, CY), radius(R), pow_2(2, X, N), Alpha is 2*pi/N*(Y-0.5),
+    R1 is R*(X-1.5), LX1 is CX + sin(Alpha)*R1, LY1 is CY - cos(Alpha)*R1,
+    send(P, display, new(_, line(LX1, LY1, DX, DY))).
+
+
+%  Запуск программы
+
+maze([]).
+ex(0).
+
+
+main() :-
+    % создаем окно
+    new(D, dialog), send(D, width(800)), send(D, height(100)),
+    new(P,  picture('Round maze', size(800, 500))),
+
+    % создаем лабиринт, случайно создаем выход
+    make_maze(5, S), my_sort(S, M), pow_2(2, 5, Max), random_between(1, Max, Exit),
+    retract(ex(_)), asserta(ex(Exit)), change_ending(5, Exit, M, Maze),
+
+    % отрисовываем лабиринт
+    retract(maze(_)), asserta(maze(Maze)), draw(P, 5, Maze),
+
+    % назначаем кнопки и ползунок размеров
+    send(D, append, new(Circ, int_item(circles, low := 4, high := 20, default := 5))),
+    send(D, append, new(_, button(next, message(@(prolog), show_next, P, Circ?selection)))),
+    send(D, append, new(_, button(solution, message(@(prolog), show_sol, P, Circ?selection)))),
+    send(D, append, new(_, button(exit, message(@(prolog), exit, D)))),
+    send(D, below, P),
+    send(D, open), !.
+
+
+% функция для кнопки exit
+exit(D) :-
+    retract(flag(_)), asserta(flag(0)),
+    free(@(circ)),
+    send(D, destroy).
+
+% функция для кнопки solution
+show_sol(P, Max) :- flag(0), !, retract(flag(0)), asserta(flag(1)),
+    send(P, clear), free(@(circ)), maze(S), ex(Exit),
+    draw(P, Max, S), gen_path(S, Max, Exit, Path),
+    draw_solution(P, [room(1, 0, 0, 0, 0, 0, 0)|Path]).
+show_sol(P, Max) :- flag(1), retract(flag(1)), asserta(flag(0)),
+    send(P, clear), free(@(circ)), maze(S),
+    draw(P, Max, S).
+
+% функция для кнопки next
+show_next(P, Max) :-
+    send(P, clear), free(@(circ)),
+    retract(flag(_)), asserta(flag(0)),
+    make_maze(Max, S),!, my_sort(S, NS), pow_2(2, Max, NMax),
+    random_between(1, NMax, Exit), retract(ex(_)), asserta(ex(Exit)),
+    change_ending(Max, Exit, NS, Maze),
+    retract(maze(_)), asserta(maze(Maze)),
+    draw(P, Max, Maze).
+
+change_ending(_, _, [], []).
+change_ending(Max, Exit, [room(Max, Exit, _, _, E, S, W)|T],
+              [room(Max, Exit, 1, 1, E, S, W)|T1]) :-
+    change_ending(Max, Exit, T, T1).
+change_ending(Max, Exit, [A|T1], [A|T2]) :- change_ending(Max, Exit, T1, T2).
+
+
+
+
+
+
+
+
+
