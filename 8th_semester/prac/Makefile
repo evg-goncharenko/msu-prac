@@ -1161,8 +1161,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		/opt/anaconda3/include/qt/QtWidgets/qboxlayout.h \
 		/opt/anaconda3/include/qt/QtWidgets/qlayout.h \
 		/opt/anaconda3/include/qt/QtWidgets/qlayoutitem.h \
-		/opt/anaconda3/include/qt/QtWidgets/qgridlayout.h \
-		json.hpp
+		/opt/anaconda3/include/qt/QtWidgets/qgridlayout.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
