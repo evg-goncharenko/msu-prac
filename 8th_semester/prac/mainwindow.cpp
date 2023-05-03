@@ -265,7 +265,7 @@ void fill_table( QTableWidget * tableWidget,   Environment *env_ptr )
         }
 
         {
-            QString sItem =  QString::number(initial_costs[row]);
+            QString sItem =  QString::number(initial_costs[row], 'f', 0);
 
             QVariant oVariant(sItem);
 
@@ -277,7 +277,7 @@ void fill_table( QTableWidget * tableWidget,   Environment *env_ptr )
 
 
         {
-            QString sItem =  QString::number(costs[row]);
+            QString sItem =  QString::number(costs[row], 'f', 0);
 
             QVariant oVariant(sItem);
 
@@ -289,7 +289,7 @@ void fill_table( QTableWidget * tableWidget,   Environment *env_ptr )
 
 
         {
-            QString sItem =  QString::number(profits[row]);
+            QString sItem =  QString::number(profits[row], 'f', 0);
 
             QVariant oVariant(sItem);
 
@@ -300,7 +300,7 @@ void fill_table( QTableWidget * tableWidget,   Environment *env_ptr )
         }
 
         {
-            QString sItem = QString::number(total[row]);
+            QString sItem = QString::number(total[row], 'f', 0);
 
             QVariant oVariant(sItem);
 
@@ -317,7 +317,7 @@ void fill_table( QTableWidget * tableWidget,   Environment *env_ptr )
 
 
     tableWidget->show();
-    tableWidget->setGeometry(QRect(QPoint(200, 200), QSize(500, 500)));
+    tableWidget->setGeometry(QRect(QPoint(50, 200), QSize(750, 500)));
 
 
 
@@ -368,9 +368,19 @@ void MainWindow::handler()
         }
 
 
+
+
     if(screen == 1)
         {
-        tableWidget = new QTableWidget(12, 5, this);
+//         std::vector<std::string> names;
+//         names = (*env_ptr).get_names();
+
+        int q = (*env_ptr).get_q_briefcase();
+
+        //Total
+        q++;
+
+        tableWidget = new QTableWidget(q, 5, this);
 
         QStringList name;
         name << "Asset name" << "Initial cost" << "Current cost" << "Extracted profit" << "Asset profit";

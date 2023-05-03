@@ -94,7 +94,15 @@ class Investition
             {
             //cost = invest_json["COST"];
 
-            risk = invest_json["RISK"];
+            try
+                {
+                risk = invest_json.at("RISK");
+                }
+            catch(...)
+                {
+                //Asset can not have the RISK bound to this asset
+                }
+
             investition_time = invest_json["INVEST_TIME"];
             quantity = invest_json["QUANTITY"];
 
@@ -375,6 +383,11 @@ class InvestFund
             return ret_vector;
             }
 
+        int get_q_briefcase()
+            {
+            return fund_briefcase.size();
+            }
+
         std::vector<double> get_costs()
             {
             std::vector<double> ret_vector;
@@ -544,6 +557,11 @@ class Environment
         std::vector<std::string> get_names()
             {
             return (*investfund_ptr).get_names();
+            }
+
+        int get_q_briefcase()
+            {
+            return (*investfund_ptr).get_q_briefcase();
             }
 
 
