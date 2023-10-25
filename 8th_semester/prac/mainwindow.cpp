@@ -141,25 +141,24 @@ void MainWindow::brief_handler()
 
         brief_labels.push_back( new QLabel("Портфель: название актива", this) );
         brief_labels.push_back( new QLabel("Портфель: Количество акций", this) );
-        brief_labels.push_back( new QLabel("Портфель: Риск данной акции", this) );
+        //brief_labels.push_back( new QLabel("Портфель: Риск данной акции", this) );
         brief_labels.push_back( new QLabel("Портфель: Дивиденды данной акции", this) );
 
         brief_labels[0]->setGeometry(QRect(QPoint(200, 200), QSize(300, 50)));
         brief_labels[1]->setGeometry(QRect(QPoint(200, 300), QSize(300, 50)));
         brief_labels[2]->setGeometry(QRect(QPoint(200, 400), QSize(300, 50)));
-        brief_labels[3]->setGeometry(QRect(QPoint(200, 500), QSize(300, 50)));
+        //brief_labels[3]->setGeometry(QRect(QPoint(200, 500), QSize(300, 50)));
 
         brief_labels[0]->setWordWrap(true);
         brief_labels[1]->setWordWrap(true);
 
         brief_text_edits.push_back( new QTextEdit("", this)   );
         brief_text_edits.push_back( new QTextEdit("", this)   );
-        brief_text_edits.push_back( new QTextEdit("", this)   );
+        //brief_text_edits.push_back( new QTextEdit("0", this)   );
         brief_text_edits.push_back( new QTextEdit("", this)   );
         brief_text_edits[0]->setGeometry(QRect(QPoint(500, 200), QSize(100, 50)));
         brief_text_edits[1]->setGeometry(QRect(QPoint(500, 300), QSize(100, 50)));
         brief_text_edits[2]->setGeometry(QRect(QPoint(500, 400), QSize(100, 50)));
-        brief_text_edits[3]->setGeometry(QRect(QPoint(500, 500), QSize(100, 50)));
 
         brief_buttons.push_back( new QPushButton("Закончить ввод акций", this)   );
         brief_buttons[0]->setGeometry(QRect(QPoint(200, 600), QSize(200, 50)));
@@ -183,34 +182,31 @@ void MainWindow::brief_handler()
 
         std::string asset_name = brief_text_edits[0]->toPlainText().toStdString();
         int quantity =    std::stoi( brief_text_edits[1]->toPlainText().toStdString());
-        int risk = std::stoi( brief_text_edits[2]->toPlainText().toStdString());
-        double dividends = std::stod( brief_text_edits[3]->toPlainText().toStdString());
+        //int risk = std::stoi( brief_text_edits[2]->toPlainText().toStdString());
+        double dividends = std::stod( brief_text_edits[2]->toPlainText().toStdString());
 
 
-        std::cout << brief_text_edits[3]->toPlainText().toStdString() << std::endl;
+        std::cout << brief_text_edits[2]->toPlainText().toStdString() << std::endl;
         std::cout << dividends << std::endl;
 
 
         //"ASSET"  : "STOCK", "RISK" : 30, "INVEST_TIME": 5, "QUANTITY" : 100, "COMPANY_NAME": "GOOGLE",  "DIVIDEND_PERCENT": 0.03
-        json tmp =  {  { "ASSET"   ,"STOCK"} , { "RISK"  , risk} , { "INVEST_TIME" ,5} , { "QUANTITY"  , quantity} , { "COMPANY_NAME" , asset_name } , {  "DIVIDEND_PERCENT" ,  dividends }  };
+        json tmp =  {  { "ASSET"   ,"STOCK"} , /*{ "RISK"  , risk} ,*/ { "INVEST_TIME" ,5} , { "QUANTITY"  , quantity} , { "COMPANY_NAME" , asset_name } , {  "DIVIDEND_PERCENT" ,  dividends }  };
 
         jf["BRIEFCASE"].push_back(tmp);
 
         brief_text_edits[0]->setPlainText("");
         brief_text_edits[1]->setPlainText("");
         brief_text_edits[2]->setPlainText("");
-        brief_text_edits[3]->setPlainText("");
         }
 
 
         brief_labels[0]->setVisible(true);
         brief_labels[1]->setVisible(true);
         brief_labels[2]->setVisible(true);
-        brief_labels[3]->setVisible(true);
         brief_text_edits[0]->setVisible(true);
         brief_text_edits[1]->setVisible(true);
         brief_text_edits[2]->setVisible(true);
-        brief_text_edits[3]->setVisible(true);
         brief_buttons[0]->setVisible(true);
         brief_buttons[1]->setVisible(true);
 
