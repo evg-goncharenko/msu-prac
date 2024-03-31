@@ -1,0 +1,79 @@
+{
+    "answers": [
+        {
+            "value": "<pre><code>from smtplib import SMTP_SSL\nfrom email.MIMEMultipart import MIMEMultipart\nfrom email.MIMEBase import MIMEBase\nfrom email import Encoders\nimport os\n\nfilepath = \"/path/to/file\"\nbasename = os.path.basename(filepath)\naddress = \"name@server\"\n\n# Compose attachment\npart = MIMEBase('application', \"octet-stream\")\npart.set_payload(open(filepath,\"rb\").read() )\nEncoders.encode_base64(part)\npart.add_header('Content-Disposition', 'attachment; filename=\"%s\"' % basename)\n\n# Compose message\nmsg = MIMEMultipart()\nmsg['From'] = address\nmsg['To'] = address\nmsg.attach(part)\n\n# Send mail\nsmtp = SMTP_SSL()\nsmtp.connect('smtp.yandex.ru')\nsmtp.login(address, 'password')\nsmtp.sendmail(address, address, msg.as_string())\nsmtp.quit()\n</code></pre>\n"
+        },
+        {
+            "value": "<p>Для сохранения кластера базы данных:<br>\n</p>\n<pre><code>pg_dumpall -U postgres -w &gt; backup\n</code></pre>\n<p>Для восстановления кластера базы данных:<br>\n</p>\n<pre><code>psql -U postgres -w -f backup postgres\n</code></pre>\n"
+        },
+        {
+            "value": "<p>Для подобного поиска подходит команда find.<br>\n</p>\n<pre><code>find . -name имя_файла -print\n</code></pre>\n"
+        },
+        {
+            "value": "<p>Нужно прописать параметры прокси в настройках svn.<br>\n</p>\n<pre><code>sudo nano /etc/subversion/servers\n[global]\nhttp-proxy-host = defaultproxy.whatever.com\nhttp-proxy-port = 7000\n</code></pre>\n"
+        },
+        {
+            "value": "<p>Команда <code>wc</code> выводит количество переводов строк, слов и байтов в текстовом файле.\nНапример.</p>\n<pre><code>echo &quot;Первая сторока&quot; &gt; текст\necho &quot;Вторая сторока&quot; &gt;&gt; текст\nwc -l текст\n2 текст \n</code></pre>\n\n"
+        },
+        {
+            "value": "<p>Например, так:</p>\n\n<pre><code>grep -lr -e 'было' . | xargs sed -i 's/было/стало/g'\n</code></pre>\n\n"
+        },
+        {
+            "value": "<p>Нужно прописать параметры прокси в настройках git.</p>\n\n<ol>\n<li><p>Создать скрипт git_proxy_command.sh  </p>\n\n<pre><code>(echo \"CONNECT $1:$2 HTTP/1.0\"; echo; cat ) | nc прокси порт | (read a; read a; cat )   \n</code></pre></li>\n<li><p>Установить переменную окружения GIT_PROXY_COMMAND  </p>\n\n<pre><code>export GIT_PROXY_COMMAND=git_proxy_command.sh\n</code></pre></li>\n</ol>\n\n"
+        },
+        {
+            "value": "<p>гигабайт GB 1000000000 байт<br>\nгибибайт GiB 1073741824 байт</p>\n"
+        },
+        {
+            "value": "<p>в терминале - <code>sudo passwd root</code></p>\n\n"
+        },
+        {
+            "value": "<p>Anonymous SHared MEMory (ASHMEM) изпользует виртуальную память, а Physical MEMory (PMEM) использует физическую память. Обычно PMEM используется тогда, когда нужна значительная неразрывная физическая область памяти.</p>\n"
+        },
+        {
+            "value": "<p>Чтобы писать код, нужно подключить заголовок /linux/ashmem.h. Далее ход действий, например, следующий:<br>\n</p>\n<ol>\n<li>Открыть дескриптор <code>ASHMEM_NAME_DEF</code>.</li>\n<li>Задать имя <code>ASHMEM_SET_NAME</code>.</li>\n<li>Задать размер <code>ASHMEM_SET_SIZE</code>.</li>\n<li>Отобразить память.</li>\n<li>Использовать память.</li>\n<li>Закрыть дескриптор.</li>\n</ol>\n"
+        },
+        {
+            "value": "<p>Это density-independent pixels, абстрактные пиксели, зависящие от физического разрешения экрана. При разрешении экрана в 160 dpi абстрактный пиксель равен физическому. При изменении разрешения размер абстрактного пискеля будет пересчитываться пропорционально.</p>\n"
+        },
+        {
+            "value": "<p>Чтобы через обозреватель выйти в сеть (например, на google.ru) изменить прокси там </p>\n\n<pre><code>Wireless &amp; networks settings &gt; Mobile networks &gt; Access Point Names &gt; TelKila &gt; Proxy | Port\n</code></pre>\n\n"
+        },
+        {
+            "value": "\n"
+        },
+        {
+            "value": "<p>Можно использовать localStorage API.<br>\n</p>\n<p>Запись:<br>\n<code>localStorage[\"setting\"] = value;</code><br>\n</p>\n<p>Чтение:<br>\n<code>value = localStorage[\"setting\"];</code></p>\n"
+        },
+        {
+            "value": "<p>Перейти на страницу chrome://plugins, найти Flash и отключить.</p>\n"
+        },
+        {
+            "value": "<ol>\n<li>Убедиться, что модуль gettext установлен.</li>\n<li>Взять нужный .po файл и перевести все строки.</li>\n<li>Скомпилировать .po файл командой <code>django-admin.py compilemessages --locale=ru_RU</code> (или подобной).</li>\n</ol>\n"
+        },
+        {
+            "value": "<p>Вместо <code>event.getX()</code>, <code>event.getY()</code> нужно использовать <code>event.getHistoricalX()</code>, <code>event.getHistoricalY()</code>, в цикле по <code>i</code> пробегая по всем точкам.</p>\n"
+        },
+        {
+            "value": "\n"
+        },
+        {
+            "value": "\n"
+        },
+        {
+            "value": "<p>Объектный файл состоит из</p>\n<ol>\n<li>заголовка файла, содержащего карту файла</li>\n<li>таблицы заголовков программ</li>\n<li>набора сегментов, содержащего информацию необходимую для сборки программы</li>\n<li>набора секций, содержащего информацию необходимую для выполнения программы</li>\n<li>таблицы заголовков секций</li>\n</ol>\n<p>Файлы, используемые для выполнения программ должны содержать таблицу заголовков программ, а файлы, используемые для сборки должны содержать таблицу заголовков секций. Порядок сегментов и секций может быть любым.</p>\n\n"
+        },
+        {
+            "value": "<p>Формат объектных файлов ELF поддерживает самые разные процессоры от 8-ми до 64-х битных архитектур. Объектные файлы содержат часть управляющих данных в машинно-независимом виде, что дает возможность правильно трактовать их содержимое на разных машинах.</p>\n"
+        },
+        {
+            "value": "<p>В заголовке ELF файла есть специальное поле (e_type), предназначенное для задания типа файла. По его значению можно определить тип файла. Например, значение 1 (ET_REL) задает перемещаемый файл.</p>\n"
+        },
+        {
+            "value": "<p>Если точка входа в процесс есть, то она задается в поле e_entry заголовка ELF файла.</p>\n"
+        },
+        {
+            "value": "\n"
+        }
+    ]
+}
