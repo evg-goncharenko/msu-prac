@@ -13,6 +13,11 @@ def parse_large_json(file_path):
         # Потоковая обработка элементов JSON
         for post in ijson.items(file, 'item'):
             post_type = post.get('PostTypeId')
+            post_tag = post.get('Tags')
+            
+            # Формируем только пары вопрос-ответ связанные с темой python:
+            if (post_tag is not None) and (post_tag.find('python') == -1):
+                continue
             if post_type == '1':  # Вопрос
                 qa_pairs[post['Id']] = [post['Title'] + ' ' + post['Body'], '']  # Инициализация с пустым ответом
             elif post_type == '2':  # Ответ
