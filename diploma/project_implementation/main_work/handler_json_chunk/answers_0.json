@@ -1,0 +1,244 @@
+{
+    "answers": [
+        {
+            "value": "<pre><code>from smtplib import SMTP_SSL\nfrom email.MIMEMultipart import MIMEMultipart\nfrom email.MIMEBase import MIMEBase\nfrom email import Encoders\nimport os\n\nfilepath = \"/path/to/file\"\nbasename = os"
+        },
+        {
+            "value": "<p>Нужно добавить в начало специальный комментарий.</p>\n<pre><code>#! /usr/bin/env python\n# -*- coding: utf-8 -*-\n\nprint \"Привет\"\n</code></pre>"
+        },
+        {
+            "value": "<p>При выполнении <code>makemessage</code> как <code>fuzzy</code> помечаются строки имеющие близкий <code>msgid</code>. Такие строки не попадают в итоговый <code>*.mo</code> из <code>*.po</code>, как "
+        },
+        {
+            "value": "<p>Принципиально эти два способа эквивалентны. Различия будут проявляться на уровне базы данных. При наследовании базового класса будет создана одна таблица наследующего класса, при этом нельзя создат"
+        },
+        {
+            "value": "<p>Есть несколько способов реализовать подобное поведение. </p>\n\n<h2>Глобальные переменные</h2>\n\n<p>Первое, что может прийти в голову, это использовать глобальные переменные.<br>\nВажно учитывать то, ч"
+        },
+        {
+            "value": "<p>Используя escape-последовательности:</p>\n<pre><code>quote = \"\\\"\"\nquote = \"\\42\"\nquote = \"\\x22\"\n</code></pre>\n<p>Используя одинарные кавычки:</p>\n<pre><code>quote = '\"'\n</code></pre>\n<p>Используя тро"
+        },
+        {
+            "value": "<h1><a href=\"https://wiki.python.org/moin/IntegratedDevelopmentEnvironments\" rel=\"nofollow noreferrer\">IDE</a>:</h1>\n\n<ul>\n<li><a href=\"http://www.jetbrains.com/pycharm\" rel=\"nofollow noreferrer\">PyCh"
+        },
+        {
+            "value": "<p>Вообще говоря, обычно делают одним из этих двух способов:<br>\n</p>\n<pre><code>diff = set(dict2)-set(dict1)\n</code></pre>\n<p>Или так:<br>\n</p>\n<pre><code>diff = [ k for k in dict2 if k not in dict1 "
+        },
+        {
+            "value": "<p><a href=\"http://en.wikipedia.org/wiki/Pyjamas_(software)\">Pyjamas</a></p>"
+        },
+        {
+            "value": "<p>Попробуйте использовать стандартные средства</p>\n<pre><code>someString = \"string\"\nsomeString.encode('utf-8')\n# или \notherString = unicode(someString, 'utf-8')\n</code></pre>\n<p>Если есть возможность"
+        },
+        {
+            "value": "<p>Возможно, удобнее всего будет использовать IDE для Питона, например <a href=\"http://pydev.org\">PyDev</a> (это плагин к Eclipse) или PyCharm. Там отладчик интегрирован. Если вас не смущает консольны"
+        },
+        {
+            "value": "<p>Доступно с версии 1.1</p>\n<p><a href=\"http://www.jetbrains.com/pycharm/whatsnew/\">You can set up \"Remote Hosts\" to be FTP, SFTP, etc. PyCharm can open projects from such remote location and autoupl"
+        },
+        {
+            "value": "<p><a href=\"http://docs.python.org/\">Официальная документация</a> по языку Python. Ну и если знаний совсем нет, то ищите книгу Марка Лутца \"Изучаем Python\" -- одна из лучших (имхо).</p>"
+        },
+        {
+            "value": "<p>А почему вообще встаёт вопрос о реализации отправки на каком-то другом языке? Для Linux я использую <a href=\"http://etpan.org/libetpan.html\" rel=\"nofollow\">эту библиотеку</a> (pure C). Вроде бы и п"
+        },
+        {
+            "value": "<ul>\n<li><a href=\"http://docs.python.org/library/hashlib.html\">hashlib</a> -  MD5, SHA-1,SHA224, SHA256, SHA384, SHA512</li>\n<li><a href=\"http://www.pycrypto.org\">pycrypto</a> - Python Cryptography To"
+        },
+        {
+            "value": "<p>А в чём, собственно, проблема?\nБерёте <a href=\"http://www.pythonware.com/products/pil/\">PIL</a>, рисуете нужную картинку. Создаёте response с правильным mime'ом: <code>response = HttpResponse(mimet"
+        },
+        {
+            "value": "<p>А чего искать-то, когда фавориты давно известны? :)</p>\n<ul>\n<li><a href=\"http://pydev.org/\">PyDev</a></li>\n<li><a href=\"http://www.aptana.com/\">Aptana Studio</a></li>\n</ul>\n<hr>\n<p>Проблемы у кажд"
+        },
+        {
+            "value": "<p>Я бы посоветовал не связываться с голым CGI лишний раз. Посмотрите в сторону mod_python или пришедшего ему на смену mod_wsgi.</p>\n<p>А чтобы было ещё проще, используйте какой-нибудь фреймворк высок"
+        },
+        {
+            "value": "<p>Достаточно написать так:</p>\n<pre><code>objects.filter(children__isnull=True, children__point=0)\n</code></pre>\n<p>UPD: Я понял вопрос как пересечение (AND) запросов. Если требуется объединение (OR)"
+        },
+        {
+            "value": "<p>Как же так? Не может такого быть, чтобы было нельзя. Это не настройки браузера. Когда вы отдаёте страницы, то вы указываете в HTTP-заголовках expiration date и можете указать режим кэширования. Ста"
+        },
+        {
+            "value": "<p>Ну так всё кристально ясно. Действительно, во всём дереве наследования нет аттрибута <code>__setitem__</code>. Зато у <code>Browser</code> определён метод <code>__getattr__</code>, который проверяе"
+        },
+        {
+            "value": "<p>Я так понимаю, что при определении цвета необходимо пройти следующим путём:</p>\n<pre><code>Cell.xf_index\nBook.xf_list\nXF.background\nXFBackground.background_colour_index\nBook.colour_map\n</code></pre"
+        },
+        {
+            "value": "<p>Дело в том, что Джанго не позволяет изменять существующие модели. С их точки зрения надо удалить таблицу в базе и создать заново с помощью <code>syncdb</code>.</p>\n<p>Судя по тому, что Вы пытаетесь"
+        },
+        {
+            "value": "<pre><code>import subprocess\n\ndef check_service_exists():\n    result = None\n    pass\n    return result\n\ndef start_service():\n    subprocess.call([start_service,\"param1\", \"param2\"])\n    return 0\n\ndef s"
+        },
+        {
+            "value": "<ol>\n<li>использование сторонних шаблонизаторов например <a href=\"http://habrahabr.ru/blogs/django/49636/\">cheetah</a> или кэширование шаблонов с помощью django.</li>\n</ol>"
+        },
+        {
+            "value": "<p>Если параметр не установлен, то будет использоваться значение из </p>\n<pre><code>socket._GLOBAL_DEFAULT_TIMEOUT\n</code></pre>\n<p>Довольно нелогично. Я бы на вашем месте выставлял бы его руками.</p>"
+        },
+        {
+            "value": "<p>Так вы скрипты создавайте =) (создание: File - New window, запуск скрипта: Run - Run module)</p>\n<p>А интерактивный интерпретатор - полезная вещь, но не для этого.</p>\n<p>Если просто ошибка в коман"
+        },
+        {
+            "value": "<p><a href=\"http://www.kolger.ru/2009/04/math-in-django-templates\">Математические операции в шаблонах Django</a>.</p>"
+        },
+        {
+            "value": "<pre><code>user = models.ForeignKey( User, verbose_name=u\"Пользователь\" )\n</code></pre>"
+        },
+        {
+            "value": "<p>По Пайтону.\nПо моим наблюдениям, количество новых веб-ресурсов на Python, Ruby и остальных \"набирающих моду\" в вебе языков примерно равен количеству (или чуть меньше) написанных на старом добром РН"
+        },
+        {
+            "value": "<p>В twisted нашелся метод для таких вещей</p>\n<pre><code>reactor.callLater(3600, createBuilding)\n</code></pre>\n<p>через 60 минут будет выполнена функция createBuilding, подробней <a href=\"http://twis"
+        },
+        {
+            "value": "<p>В вашем примере встречая подобную строку: \"aa,bb,cc\" она считается как \"aabbcc 1\", а должно быть:\n    aa 1\n    bb 1\n    cc 1</p>\n<p>Итак, мой вариант на Perl:</p>\n<pre><code>#!/usr/bin/perl\nuse str"
+        },
+        {
+            "value": "<p>Попробуйте через функцию winapi WindowFromPoint http://msdn.microsoft.com/en-us/library/ms633558(v=vs.85).aspx</p>\n<p>Этой функции нет в модуле win32api, поэтому придется похоже написать на С или н"
+        },
+        {
+            "value": "<p>Есть модуль <a href=\"http://docs.python.org/library/traceback.html\">traceback</a>. Пример:</p>\n<pre><code>import traceback\n\ndef f():\n    raise Exception('hello')\n\ntry:\n    f()\nexcept Exception, e:\n"
+        },
+        {
+            "value": "<ul>\n<li><a href=\"http://cython.org/\">Cython</a> - это язык, основанный на Python, который компилируется в C/C++; чтобы получить компилируемый из Python код, нужна дополнительная работа.</li>\n<li><a h"
+        },
+        {
+            "value": "<p>Net-SNMP имеет <a href=\"https://net-snmp.svn.sourceforge.net/svnroot/net-snmp/trunk/net-snmp/python/README\">привязки</a> для Python. Поэтому если есть желание использовать что-то, похожее на Net-SN"
+        },
+        {
+            "value": "<p>Есть возможность установить <a href=\"http://code.google.com/p/android-scripting/\">sl4a</a>, там и питон, и перл, и пхп...</p>"
+        },
+        {
+            "value": "<p><a href=\"http://xmpppy.sourceforge.net/\">xmpppy</a>?</p>"
+        },
+        {
+            "value": "<p>server.repr() - это не баг, это реализация POP-протокола. Ваши сообщения не уменьшаются - они просто загружаются, а на сервере удаляются. Это нормальное поведение клиента POP - \"забрать\" почту. А у"
+        },
+        {
+            "value": "<p>Язык сам по себе не имеет такой характеристики как скорость исполнения. Важны средства времени  исполнения.</p>\n<ul>\n<li>CPython интерпретируется и обычно медленнее, чем Java, особенно если в Java "
+        },
+        {
+            "value": "<p>Разве что</p>\n<ul>\n<li><a href=\"http://python.su/tag/pygtk/\">http://python.su/tag/pygtk/</a></li>\n<li><a href=\"http://translated.by/you/python-pygame-introduction/into-ru/\">http://translated.by/you"
+        },
+        {
+            "value": "<pre><code>import urllib\nwww = urllib.urlopen('http://www.lenta.ru')\n<a href=\"http://www.info\">www.info</a>().items()\n[('date', 'Tue, 17 May 2011 17:13:04 GMT'), ('content-type', 'text/html; charset=w"
+        },
+        {
+            "value": "<p>Найдите библиотеку <a href=\"http://graphics.py\">graphics.py</a> она содержит примитивы на основе TK, которое уже есть в языке</p>"
+        },
+        {
+            "value": "<blockquote>\n<p>код перевода строки, как известно, равен 13</p>\n</blockquote>\n<p>Вы заблуждаетесь. Код 13 имеет символ \\r (carriage return, CR), а код 10 имеет символ \\n (line feed, LF). <a href=\"http"
+        },
+        {
+            "value": "<p><a href=\"http://php.net/manual/en/function.system.php\">system</a>:</p>\n<blockquote>\n<p>system — Execute an external program and display the output</p>\n</blockquote>\n<p>Например:</p>\n<pre><code>$las"
+        },
+        {
+            "value": "<ul>\n<li>Курс для начинающих - <a href=\"http://www.intuit.ru/department/pl/python/\">язык программирования Python</a>.</li>\n<li>Вводная статья - <a href=\"http://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D0%B7"
+        },
+        {
+            "value": "<p>Мне кажется, подключать дополнительные приложения и писать кастомные команды для выполнения задач по крону - это слишком много лишних телодвижений.<br>\nДостаточно написать простой Python-скрипт, в "
+        },
+        {
+            "value": "<pre><code>u_count = User.objects.all().distinct().count()\n</code></pre>"
+        },
+        {
+            "value": "<ul>\n<li>\n<p>берёте почти любую Embedded Linux платформу </p>\n</li>\n<li>\n<p>собраете для неё питон или берёте уже собранный</p>\n</li>\n<li>\n<p>Python on Embedded получен</p>\n</li>\n</ul>\n<p>Правда тут о"
+        },
+        {
+            "value": "<p>Советую почитать вот здесь: <a href=\"http://www.linux.org.ru/forum/development/6369736\">python/urllib зависает запрос через прокси</a>.</p>"
+        },
+        {
+            "value": "<p>В принципе нужно всё названное вами + Django. Нужные библиотеки - это уже зависит от того, что будете делать. Лично я всегда заменяю стандартную админку на grappelly, докидываю debugtoolbar. Ну а д"
+        },
+        {
+            "value": "<p>Используйте стандартный модуль <a href=\"http://docs.python.org/library/codecs.html\">codecs</a>, в нем для функции open можно задать кодировку.</p>"
+        },
+        {
+            "value": "<p>Go  (надергано с python, С и еще по мелочи) \nразвлекается им Google</p>"
+        },
+        {
+            "value": "<p>Я начинал с Марка Лутца(4-е издание)...не скажу что много узнал,(много в этой книге упущено, несмотря на ее объем в 1200 страниц), хотя многому с него научился, пока всего 2 месяца изучаю питон..</"
+        },
+        {
+            "value": "<p>Если вы используете встроенные сервер для разработки, то вам нужно поместить файл стилей в папку со статикой(статическими файлами). Для этого в urls.py вам нужно вставить</p>\n<pre><code>(r'^statika"
+        },
+        {
+            "value": "<p>Юзай urlencode.</p>\n<pre><code>import urllib\n\n# Это твои GET-параметры, которые ты как-то сюда передал\nparam1 = 'value1'  \nparam2 = 'value2'\n\n# Твой какой-то код, паттерны  \nparams = urllib.urlenco"
+        },
+        {
+            "value": "<p>Примерно так (один из ответов гугла):</p>\n<pre><code>from Tkinter import *\nroot = Tk()\nx = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2\ny = (root.winfo_screenheight() - root.winfo_reqheig"
+        },
+        {
+            "value": "<p>В свое время помогла вот эта статья <a href=\"http://habrahabr.ru/blogs/python/111263/\">ICQ бот на Python</a>.</p>"
+        },
+        {
+            "value": "<p>У вас выбран вполне годный способ. При беглом прочтении джанговсокого <a href=\"https://code.djangoproject.com/browser/django/trunk/django/core/urlresolvers.py#L209\" rel=\"nofollow noreferrer\">урлрес"
+        },
+        {
+            "value": "<p>Тоже когда-то был такой баг, вроде обновил grappelli и его не стало. Сейчас Django 1.3, Python 2.6, grappelly 2.3.2, бага нет.</p>"
+        },
+        {
+            "value": "<p>Да, безусловно, причем для очень многих СУБД.\nОднако, работать с СУБД напрямую - грустно и (идеологически) неправильно. Гораздо удобнее использовать ORM (object-relation mapping), в Python наиболее"
+        },
+        {
+            "value": "<p>В принципе, связка достаточно быстрая. Но у вас, скорее всего просто сильно не оптимизированный код и/или SQL-запросы, не используется кэширование и т.д.\nЯ разворачивал примерно на вашей конфигурац"
+        },
+        {
+            "value": "<p>Ох, заработался я, такую глупую ошибку допустил... Не присваивал результат сортировки переменной, а просто так и оставлял, как указал в листинге. Оба способа рабочие, может кому-нибудь пригодятся, "
+        },
+        {
+            "value": "<p>Рекомендую <a href=\"http://www.pybrain.org/pages/features\">PyBrain</a>: разные типы нейронных сетей (включая экзотические, вроде LSTM) и разные алгоритмы обучения этих сетей. Все это на Питоне. Мож"
+        },
+        {
+            "value": "<p>Для Android существует т.н. <a href=\"http://code.google.com/p/android-scripting/\">SL4A</a> (Scripting Layer for Android), который позволяет исполнять скрипты различных интерпретаторов на Android. В"
+        },
+        {
+            "value": "<p>Отвечаю на свой вопрос сам. В недрах django нашёл код куда можно внедриться без особых проблем, да и с доступом к request. Получилось очень даже красиво.</p>\n<pre><code>class NewsContentAdmin(admin"
+        },
+        {
+            "value": "<p>Хотите убрать из админки модели User и Group? Тогда вот так в любом вашем admin.py:</p>\n<pre><code>from django.contrib.auth.models import User, Group\nadmin.site.unregister(User)\nadmin.site.unregist"
+        },
+        {
+            "value": "<p>Кеш он глупый, умеет хранить только базовые типы данных. Поэтому сложные структуры которые зависят от классов или типов указанных в приложении нужно сериализовать перед записью в кеш и десериализов"
+        },
+        {
+            "value": "<p>Навскидку (т.к. set, элементы на выходе будут уникальными, т.е. без повторений) + не важно какие индексы у элементов, которые есть в обоих списках:<br>\n</p>\n<pre><code>list1 = [u'Вася', u'Петя', u'"
+        },
+        {
+            "value": "<p>Можно обернуть ввод в try-except, как указали ответом выше и подставлять дефолтное значение, если будет введено что-то отличное от цифры, добавлю просто пример:</p>\n<pre><code>val = 0.0\ntry:\n    va"
+        },
+        {
+            "value": "<p>Попробуйте маршрут к <code>resort_detail_additional</code> переместить перед маршрутом к <code>resort_detail_description</code>.</p>\n<p>Либо замените первую регулярку на <code>r'^(?P&lt;country&gt;"
+        },
+        {
+            "value": "<p>Материала по сабжу полно. Есть даже небеизвестная <a href=\"http://www.ozon.ru/context/detail/id/4005805/\">бумажная книга</a> на русском и ещё кое какие <a href=\"http://www.ozon.ru/?context=search&a"
+        },
+        {
+            "value": "<p>Python + Django:</p>\n<ul>\n<li><a href=\"http://www.satchmoproject.com/\">Satchmo</a><br>\n</li>\n<li><a href=\"http://www.getlfs.com/start\">LFS</a><br>\n</li>\n</ul>"
+        },
+        {
+            "value": "<ul>\n<li><a href=\"http://wwwsearch.sourceforge.net/mechanize/\">mechanize</a>: реализует программный просмотр страниц с сохранением состояния.</li>\n<li><a href=\"http://scrapy.org/\">scrapy</a>: использу"
+        },
+        {
+            "value": "<p><a href=\"https://docs.djangoproject.com/en/dev/ref/models/fields/#decimalfield\">DecimalField</a></p>"
+        },
+        {
+            "value": "<p>Это из стандарного хелпа питона:</p>\n<blockquote>\n<p><code>Help on built-in function beginInsertRows:</code></p>\n<p><code>beginInsertRows(...)\n    QAbstractItemModel.beginInsertRows(QModelIndex, in"
+        },
+        {
+            "value": "<pre><code>id_que = 1\nid_ans = 2\nuser_id = 252\nuserQueAns = UserQueAns(\n    id_que = UserQuestion.objects.get(id = id_que),\n    id_ans = UserAnswerQue.objects.get(id = id_ans),\n    user_id = User.obje"
+        },
+        {
+            "value": "<p>применить while</p>\n<pre><code>cont = True #продолжать ли цикл\nwhile(cont):\n  input()\n  if startch == '1':\n    чего-то сделать\n  .............\n  if startch == 'выйти': #ввели значение, которое заве"
+        },
+        {
+            "value": "<p>Все станет очевидней, если добавить \"id()\" в Ваш пример</p>\n<pre><code>&gt;&gt;&gt; a = [1,2,3]\n&gt;&gt;&gt; id(a)\n14342744\n&gt;&gt;&gt; b = a\n&gt;&gt;&gt; id(b)\n14342744\n&gt;&gt;&gt; a = a + a\n&gt"
+        },
+        {
+            "value": "<p><a href=\"http://cx-freeze.sourceforge.net/\">cx_Freeze</a>:</p>\n<blockquote>\n<p><code>cx_Freeze</code> is a set of scripts and modules for freezing Python scripts into executables in much the same w"
+        }
+    ]
+}

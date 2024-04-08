@@ -1,0 +1,244 @@
+{
+    "answers": [
+        {
+            "value": "<p>Декоратор</p>\n<pre><code>@classmethod\n</code></pre>"
+        },
+        {
+            "value": "<p>Да, можно:</p>\n<pre><code>from ctypes import CDLL\n\nlib = CDLL('some.dll')\nlib.someFunction()\n</code></pre>\n<p>Почитать про ctypes можно в <a href=\"https://docs.python.org/3/library/ctypes.html\" rel"
+        },
+        {
+            "value": "<p><a href=\"https://docs.djangoproject.com/en/1.3/topics/class-based-views/#decorating-in-urlconf\">Decorating in URLconf</a></p>\n<blockquote>\n<p>The simplest way of decorating\nclass-based views is to "
+        },
+        {
+            "value": "<p>urllib -> urlopen - открывает файл по данной ему ссылке для чтения, далее можете его просто считать read(), открыть файл для бинарной записи, и записать в него то что прочитали по http. Пример скач"
+        },
+        {
+            "value": "<p>Ответ можно увидеть здесь:</p>\n<p>http://stackoverflow.com/questions/3528663/django-form-pass-parameter-from-template-to-view-by-submit-button</p>\n<p>т.е. в странице должно быть:</p>\n<pre><code>inp"
+        },
+        {
+            "value": "<p>На первый взгляд проблема может быть в строке</p>\n<pre><code>sorted(List_file2)\n</code></pre>\n<p>Попробуйте так:</p>\n<pre><code>List_file2 = sorted(List_file2)\n</code></pre>\n<p>или</p>\n<pre><code>L"
+        },
+        {
+            "value": "<p>Я бы слеши перед точками проставил бы, а то получается, что 10a0b11c2 пройдет:) Ну и скобочки поставил бы, а то выражение 12 пройдет или \"15.\"\nС другой стороны, Ваше выражение пропускает что то вид"
+        },
+        {
+            "value": "<p>Ваш скрипт как-то обрабатывает опцию \"-h\" ?</p>\n<p>Если нет, то ничего и не произойдет. Самое простое решение это:</p>\n<pre><code>import sys\n#.......\n#в точке входа\nif ( \"-h\" in sys.argv[1:] ) : #о"
+        },
+        {
+            "value": "<p><code>re.U</code> должна была сработать. В какой кодировке у вас строки?</p>\n<blockquote>\n<p>но видимо что бы они проходили как w у меня должна стоять локаль</p>\n</blockquote>\n<p>Ну, попробовать <c"
+        },
+        {
+            "value": "<p>Вы неправильно используете именованные параметры. Если их явно не указывать, то параметры передаются по очереди, поэтому, когда вы пишите</p>\n<pre><code>search(pod_str, city)\n</code></pre>\n<p>вы пр"
+        },
+        {
+            "value": "<pre><code>'some string'.encode()\n</code></pre>"
+        },
+        {
+            "value": "<pre><code>def opr(s):\n    return raw_input('Enter %s: ' % (s))\n\ndef laptop(argv):\n    val1 = val2 = val3 = val4 = None\n    .........\n    if val1 is None:\n        val1 = opr('value1')\n    .........\n</"
+        },
+        {
+            "value": "<p>На каком-нибудь языке это выглядело-бы так:</p>\n<pre><code>while ( 1 ){\n  obj = raw_input( 'Enter %s: ' % (s) );\n  if ( obj &gt;= -90 and obj &lt;= 90 ) break;\n}\n</code></pre>"
+        },
+        {
+            "value": "<p>Давайте больше подробностей, что не получается.</p>\n<p>Дело в том, что эта библиотека компилирует все в *.pyc и засовывает в два архива (один с именем <code>library</code>, второй с именем вашего e"
+        },
+        {
+            "value": "<p>Проблемы с использованием <code>cxfreeze</code> и модуля <code>random</code> нет. По крайней мере на современных версиях:</p>\n\n\n\n<pre class=\"lang-bsh prettyprint-override\"><code>$ cxfreeze --versio"
+        },
+        {
+            "value": "<p>Никак. В любом случаи или придётся ставить интерпретатор (тогда скрипты сразу по умолчанию с расширением .py буду запускаться интерпретатором), или создавать контейнер, который будет включать в себ"
+        },
+        {
+            "value": "<pre><code>def read_key(file_key):\n    result = {}\n    with open(file_key) as f:\n       for line in f:\n           key, value = line.split()\n           result[key] = value\n    return result\n</code></pr"
+        },
+        {
+            "value": "<p>Смотреть в сторону rsa или aes шифрования. <a href=\"http://pypi.python.org/pypi/rsa\">Вот</a>, к примеру, либа для RSA. </p>"
+        },
+        {
+            "value": "<p>Рекомендую Вам использовать <a href=\"http://django-mptt.github.com/django-mptt/\">django-mtpp</a>. Она была создана как раз для отображения древовидных структур в реляционной модели.</p>\n<p>А что ка"
+        },
+        {
+            "value": "<p>Для этого можно воспользоваться модулем <a href=\"http://docs.python.org/library/inspect.html\">inspect</a></p>\n<pre><code>&gt;&gt;&gt; import inspect\n&gt;&gt;&gt; def foo(a, b=0, c=0):\n...     pass\n"
+        },
+        {
+            "value": "<p>Насколько я помню там TypeError нужно ловить. \n<a href=\"http://docs.python.org/library/functions.html#int\">Документация</a>.</p>"
+        },
+        {
+            "value": "<p>Возможно вам поможет заведение промежуточной модели, в ней можно хранить флаг обязательности. <a href=\"https://docs.djangoproject.com/en/dev/topics/db/models/#extra-fields-on-many-to-many-relations"
+        },
+        {
+            "value": "<p>Таблица БД повреждена вследствие каких-то коллизий, как-то: базы данных выключили не как положено и т.д. Сделайте repair таблички.</p>"
+        },
+        {
+            "value": "<p><code>base64encode/base64decode</code>?</p>"
+        },
+        {
+            "value": "<pre><code>print \" \".join(map(str, z))\n</code></pre>"
+        },
+        {
+            "value": "<p>В общем кодировку выдает на самом деле utf-8, однако браузеры почему-то автоматически неправильно определяют кодировку? \nВозможно некоторые браузеры смотрят на кодировку в документе в первую очеред"
+        },
+        {
+            "value": "<p>Параметры передаются в строковой переменной? Тогда можно так:</p>\n<pre><code>HOST = '127.0.0.1' DBASE = 'disp' USER = 'cpps' PASS = '123'\nconn = pyodbc.connect(\"DRIVER={SQL Server};SERVER=%(HOST)s;"
+        },
+        {
+            "value": "<p>Если получили broken pipe, то значит соединение уже разорвано.  Вы уже его потеряли. Поэтому, потерять его уже не получится (юмор).\nЛучше поискать, почему сокет разрывается (проблемы со связью, нес"
+        },
+        {
+            "value": "<p><a href=\"http://www.spoj.pl/problems/classical/\">Здесь</a> можно решать задачи на многих языках программирования, в т.ч. на питоне, решения автоматически прогоняются по тестам, что гораздо удобнее,"
+        },
+        {
+            "value": "<p>лучшая практика - начать делать что-то реальное, а не исскуственно придуманные кем-то бесцельные задания.</p>\n<p>Вы начинаете познавать язык для чего? У вас есть какая-то цель? Или просто так, \"на "
+        },
+        {
+            "value": "<p>А можно поточнее, что именно нужно?  Интеграция кода в <code>globals()</code> делается так: </p>\n\n<pre><code>execfile(\"filename\", globals()). \n</code></pre>\n\n<p>Вызов из консоли: </p>\n\n<pre><code>i"
+        },
+        {
+            "value": "<pre><code>pattern = re.compile('&lt;label t=\"(?P&lt;t&gt;.*?)\" t1=\"(?P&lt;t1&gt;.*?)\" title=\"(?P&lt;title&gt;.*?)\"')\nt='&lt;label t=\"36.79501866\" t1=\"60.41651212\" title=\"Jahmal TGK!!\"/&gt;'\ncort = (2"
+        },
+        {
+            "value": "<p>Ну вы знаете, один мой друг долгое время утверждал что опель это офигенные машины. Потом попробовал другие, и начал понимать разницу.Возьмите и напишите сайт на одном и другом, потом сравните свои "
+        },
+        {
+            "value": "<pre><code>except Exception as err:\n</code></pre>"
+        },
+        {
+            "value": "<p>На сколько я понял, Вам необходмо воспользоваться наследованием форм от моделей <a href=\"https://docs.djangoproject.com/en/dev/topics/forms/modelforms/\">документация</a>. Используя правильное насле"
+        },
+        {
+            "value": "<p>Г. Россум, Ф.Л.Дж. Дрейк, Д.С. Откидач\nЯзык программирования Python</p>\n<p>Среда разработки: Sublime Text 2</p>\n<p>Framework: Django :)</p>\n<p>Вменяемого хостинга мало.\nЧистый Python без проблем, D"
+        },
+        {
+            "value": "<p>Можно использовать регексп </p>\n<pre><code>import re\ntext = \"hello, mam \\n hello, dead, it's very good\"\npattern = re.compile('.*$', re.M) \nvalues = pattern.findall(text) # создает список строк\nfor "
+        },
+        {
+            "value": "<p>Что значит \"по дате активности определённого типа\"? Если у вас какая-то iterable коллекция, то можно отсортировать функцией sorted (для списков есть метод сорт). Рисуете функцию, задающую порядок и"
+        },
+        {
+            "value": "<p>Попробуем чудо телепатии...</p>\n<p>Наверное в Вашем случае (модификация конфигурационного файла) самым правильным будет открыть на запись <strong>file-2</strong> (лучше сгенерить уникальное имя), с"
+        },
+        {
+            "value": "<p>Конечно не то, что хотел, но этим можно обойтись.</p>\n<p>Реализовал с помощью <a href=\"https://docs.djangoproject.com/en/1.3/topics/db/managers/\">class Manager</a> подсказал <a href=\"/users/672/rnd"
+        },
+        {
+            "value": "<p>Посмотри тут: <a href=\"http://wiki.python.org/moin/GuiProgramming\">GUI Programming in Python</a>.</p>"
+        },
+        {
+            "value": "<p>В том месте где Вы указали, просто:</p>\n<pre><code>profile = Profile.objects.create(user=user, contact_person=username)\n</code></pre>"
+        },
+        {
+            "value": "<p>Ну, собственно, Гугл отвечает вполне конкретно:\n<a href=\"http://packages.python.org/Pyro4/intro.html#simple-example\">Simple Example,</a>\n<a href=\"http://packages.python.org/Pyro4/tutorials.html#run"
+        },
+        {
+            "value": "<p>Псевдокод:</p>\n<pre><code>Массив\nСоответствие = МассивИзЧиселДиапазона( 0, Массив.длина - 1 ).Перемешать()\nПеремешанныйМассив = []\n\nДля Ключ=&gt;Значение из Соответствие:\n  ПеремешанныйМассив.Добав"
+        },
+        {
+            "value": "<p>Достаточно указать</p>\n<pre><code>&lt;meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" /&gt;\n</code></pre>\n<p>в блоке <code>&lt;head&gt;</code> страницы с формой</p>"
+        },
+        {
+            "value": "<p>Если надо написать простенький кликер,я бы посоветовал использовать Pyauto gui. Там можно сравнивать место нажатия мышки по изображению или так же прописывать координаты. Чтобы получить бОльший кон"
+        },
+        {
+            "value": "<p>Установить схему можно, выполнив следующее:</p>\n\n<pre><code>c = cx_Oracle.Connection('login', 'password', 'name db')\nc.current_schema = 'name schema'\n</code></pre>\n\n<p>Поподробней вот <a href=\"http"
+        },
+        {
+            "value": "<p>Чему равен ваш \"dl\"? Если он больше чем размерность d - то в чем тогда вопрос? операцией:</p>\n<pre><code>del lst[1]\n</code></pre>\n<p>вы удаляете элемент не только из lst, но и из d. Что бы сделать "
+        },
+        {
+            "value": "<p>Очень сложный вопрос )</p>\n<p>Все равно человека собеседует человек, у которого имеется своё представление о том, кто такой Senior. Для кого-то это чел, который знает как оценить сложность алгоритм"
+        },
+        {
+            "value": "<p>Видимо, вы имеете в виду <code>lis[0]</code> или <code>int(lis[0])</code></p>\n<p>Из John W. Shipman &quot;Tkinter 8.4 reference: a GUI for Python&quot;:</p>\n<blockquote>\n<p>.curselection()</p>\n<p><"
+        },
+        {
+            "value": "<p>Молодой человек, не там ищете. Надо заниматься не тем, что вам <strong>сейчас</strong> кажется перспективным, а тем, к чему у вас лежит сердце или что у вас лучше получается.</p>\n<p>Простой пример:"
+        },
+        {
+            "value": "<p>для начала надо удалить то, что вы успели «разложить» по файловой системе:</p>\n\n<pre><code>$ sudo make uninstall\n</code></pre>\n\n<p>затем удалить собранное:</p>\n\n<pre><code>$ make clean\n</code></pre"
+        },
+        {
+            "value": "<p>Метод save() сохраняет объект и дальше с этим объектом можно работать.</p>\n<pre><code>&gt;&gt;&gt; b2 = Blog(name='Cheddar Talk', tagline='Thoughts on cheese.')\n&gt;&gt;&gt; b2.id     # Returns Non"
+        },
+        {
+            "value": "<p>Вот твоя регулярка:</p>\n<pre><code>re.compile(u'\\W+?', re.UNICODE)\n</code></pre>\n<p>Прочитать что значит, можно <a href=\"http://www.intuit.ru/department/pl/python/6/4.html\">тут</a>.</p>"
+        },
+        {
+            "value": "<pre><code>module = __import__(config[\"pagedir\"].replace(\"/\", \".\") + params[\"id\"], fromlist=True)\nprint module.page\n</code></pre>"
+        },
+        {
+            "value": "<pre><code>pip install libsamplerate\n</code></pre>"
+        },
+        {
+            "value": "<p>если мне память не изменяет и не спит с другим *.ISO это самый обычный zip архиф с мета данными в виде файлика внутри, а значит python модули zlib и zipfile вам помогут решить свою задачу.. </p>"
+        },
+        {
+            "value": "<p>Лучше создать новый массив-список и копировать элементы туда, чем менять старый. Вообще есть много способов фильтровать массивы. Пример: отбираем все строки, непосредственно следующие за строкой, о"
+        },
+        {
+            "value": "<p>Например, <a href=\"http://www.speech.kth.se/snack/\">The Snack Sound Toolkit</a> </p>\n<pre><code>sound = Sound() \nsound.read('sound.mp3') \nsound.play()\n</code></pre>"
+        },
+        {
+            "value": "<pre><code>def insdot(s):\n    def w(s):\n        if len(s) == 1:\n            return [s]\n        else:\n            return map(lambda x: s[0]+x, w(s[1:])) + map(lambda x: s[0]+'.'+x, w(s[1:]))\n    return"
+        },
+        {
+            "value": "<p>Попробуйте так:</p>\n<pre><code>&gt;&gt;&gt; sys.path.append('C:\\\\DjangoPJ\\\\Acosta')\n</code></pre>"
+        },
+        {
+            "value": "<p><a href=\"http://habrahabr.ru/blogs/python/137089/\">Статья по анализу скорости работы различных методов замены подстроки в Python</a></p>"
+        },
+        {
+            "value": "<p>Есть отличное место - <a href=\"http://www.lfd.uci.edu/~gohlke/pythonlibs/\">Unofficial Windows Binaries for Python Extension Packages</a>, его поддержкой занимается некий <a href=\"http://www.lfd.uci"
+        },
+        {
+            "value": "<pre><code>f = open(\"file{0}{1}.txt\".format(i,j), \"wb\")\n</code></pre>"
+        },
+        {
+            "value": "<p>Если под виджетом имеется ввиду модуль, то:</p>\n<pre><code>import module_name\nhelp(module_name)\n</code></pre>"
+        },
+        {
+            "value": "<pre><code>for c in l.values():\n    print(c)\n</code></pre>\n<p><strong>UPD</strong>.</p>\n<pre><code>import os\nimport subprocess\n\nl = {'a':'google.com', 'b':'ya.ru', 'd':'blogspot.com'}\n\nfor key, host i"
+        },
+        {
+            "value": "<pre><code>from Tkinter import *\nl = Listbox(parent)\nl.configure(state=DISABLED)\nl.configure(state=NORMAL)\n</code></pre>\n<p>Или <code>l.config(state=</code></p>\n<p>Ну а если надо запретить отдельный э"
+        },
+        {
+            "value": "<p>Плохо читали документацию: <a href=\"http://docs.python.org/release/3.2/library/urllib.request.html\">20.5. urllib.request — Extensible library for opening URLs</a></p>\n<blockquote>\n<p><code>data</co"
+        },
+        {
+            "value": "<p>Разобрался.</p>\n\n<p>Просто в MinGW были убраны некоторые опции, такие как <code>-mno-cygwin</code>. Проблема решается комментированием требуемых опций в файле <code>cygwinccompiler.py</code>.</p>\n"
+        },
+        {
+            "value": "<p>Что-нибудь типа <code>getattr(self, 'out{0}'.format(i)).setText(u'Обшибка')</code>, где i -- номер метки (1-out1, 2-out2, 3-out3)</p>\n<p>Исправлено. После self ошибочно была точка.</p>\n<p>Комментар"
+        },
+        {
+            "value": "<p>Из библиотек для работы с HTTP наиболее удобной-человечной является <a href=\"http://docs.python-requests.org/en/latest/index.html\">Requests</a>.</p>\n<p>Там <a href=\"http://docs.python-requests.org/"
+        },
+        {
+            "value": "<p>Если вопрос концептуальный, то есть понятно как написать код, но непонятно куда его положить, то я бы посоветовал не прикручивать к парсеру функционал сохранения данных. \nМожно это сохранение сдела"
+        },
+        {
+            "value": "<p>Фигвам -- индейская национальная изба. По докам, в PhotoImage можно использовать форматы .gif, .pgm, .ppm. В книге не написано, но base64-кодированный gif оно проглотило (вместо параметра file -- п"
+        },
+        {
+            "value": "<p>Прежде всего в файле, в котором Вы используете русские символы, укажите системе, что кодировка по умолчанию UTF-8.\nЭто делается при помощи строки:</p>\n<pre><code># -*- coding: utf-8 -*-\n</code></pr"
+        },
+        {
+            "value": "<p>С помощью Tkinter.</p>\n\n<p>Добавить в буфер обмена</p>\n\n<pre><code>from tkinter import Tk\n\ntk = Tk()\ntk.withdraw()\ntk.clipboard_clear()\ntk.clipboard_append('This is clipboard contents.')\ntk.update("
+        },
+        {
+            "value": "<p>pygame, можно прикупить еще книгу Майкла Доусона для старта.</p>"
+        },
+        {
+            "value": "<p>Здравствуйте, делается это просто:</p>\n<pre><code>#нужный для этого функционал находится в _winreg (в python3 он называется winreg)\nfrom _winreg import *\n\n#открываем нужную ветку\n#HKEY_CURRENT_USER"
+        },
+        {
+            "value": "<p>могу немного ошибиться за все версии python не ручаюсь, но в каждой версии python стоит своя версия компилятора и при попытке импорта модуля скомпилированного другой версией python вылезает ошибка:"
+        },
+        {
+            "value": "<p>Ничего. А точнее вы все делаете правильно. Сам на этом накололся, когда делал через хайстэк автокомплит в поиске.\nWhoosh просто \"полнотекстовый\" поиск с минимальной морфологией. Для поиска вхождени"
+        },
+        {
+            "value": "<p>Код не работает, т.к. инструкция <code>del</code> не удаляет элемент, а уменьшает число ссылок на него на 1, <code>del a</code> означает, что нужно уменьшить число ссылок на элемент списка, на кото"
+        }
+    ]
+}

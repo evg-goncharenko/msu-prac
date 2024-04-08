@@ -1,0 +1,244 @@
+{
+    "answers": [
+        {
+            "value": "<p>К сожалению не знаю библиотеку beautiful soap , но знаю как решить вашу проблему регекспами.</p>\n<p>допустим весь хтмль код у вас содержится в переменной <strong>html</strong></p>\n<pre><code>import"
+        },
+        {
+            "value": "<p>Разобрался, но не могу закрыть свой вопрос, т.к. не хватает очков. :)</p>\n<p>В Ubuntu 11.04 библиотеки находятся в новом месте.</p>\n<pre><code>$ sudo ln -s /usr/lib/i386-linux-gnu/libfreetype.so /u"
+        },
+        {
+            "value": "<p>Надо верить Питону. \nВаш объект <strong>itemDesc</strong> имеет тип <strong>NoneType</strong>. Для него нет метода <strong>replace</strong>\nВы пишите, что в переменной находится html код, но видимо"
+        },
+        {
+            "value": "<p>Дело все в том, что python воспринимает глобальные переменные c маленьким \"но\". Если вы надумали ее изменять, тогда будьте добры использовать <code>global</code>. Если же нет, то и так работает.</p"
+        },
+        {
+            "value": "<p>Немного непонятен вопрос. Имеется ввиду заполнить начальными данными, взятыми откуда-то?<br>\nТогда так:</p>\n<pre><code>def smth(request):\n\n    # Ключи словаря соответствуют именам полей заполняемой"
+        },
+        {
+            "value": "<p>Нет, по ссылке приведен код виджета, который может быть использован для поля в любой форме (в том числе и в админке). Для его использования нужно только передать его в параметре widget для нужных п"
+        },
+        {
+            "value": "<blockquote>\n<p>The geturl() method returns the real\nURL of the page. In some cases, the\nHTTP server redirects a client to\nanother URL. The urlopen() function\nhandles this transparently, but in\nsome c"
+        },
+        {
+            "value": "<p>(Для полноты) Функции в Пайтоне — объекты первого класса, и хранятся в одном пространстве имен с переменными. Соответственно, <code>eval</code> тут не нужен — можно решить все чуть более «в лоб» — "
+        },
+        {
+            "value": "<p>Если вы хотите, чтобы это делалось мгновенно на странице, то только javascript. Вешаете обработчик на первое поле, как только его содержимое совпадает с нужным шаблоном заполняем второе поле необхо"
+        },
+        {
+            "value": "<p>Заинтересовало, спросил гугла.\n<a href=\"http://www.johnny-lin.com/cdat_tips/tips_pylang/path.html\" rel=\"nofollow noreferrer\">http://www.johnny-lin.com/cdat_tips/tips_pylang/path.html</a></p>\n\n<p>На"
+        },
+        {
+            "value": "<p>Как я понимаю строка состоит из \"оборудование\" \"Домен\" \"IP\", если так то мы можем сделать так</p>\n<pre><code>s = \"Dlink DES-3028 orb.001.prolet.151.sa1 10.0.0.78\"\nprint s.split(' ')[-2]\n</code></pr"
+        },
+        {
+            "value": "<p>Особенность интерфейса <code>cvCanny</code> в <code>openCV</code> такова, что эта функция просто преобразует исходное изображение в изображение с размеченными контурами объектов. <em>Но здесь важно"
+        },
+        {
+            "value": "<p>На самом деле в питоне существует такая вещь, как GIL, глобальная блокировка интерпретатора. Чтобы поток мог выполнять операции, нужно захватить GIL, поэтому  в один момент времени не может выполня"
+        },
+        {
+            "value": "<p>Разобрался проблема была в том что</p>\n<pre><code>exclude = ('user', )\n</code></pre>\n<p>совсем убирает поле из формы(я думал что только не отображает)\nудалил эту строку и написал</p>\n<pre><code> if"
+        },
+        {
+            "value": "<pre><code>fil.write(sw.ip_sw, name_adr, sw.ports_up, sw.ports_down, sw.ports_up+sw.ports_down)\n</code></pre>\n<p>Синтаксис нарушен. У <code>write</code> один параметр.</p>"
+        },
+        {
+            "value": "<p>Если я правильно понял, то вам нужно при выборе из выпадающего списка swname динамически изменять значения для выбора в выпадающем списке vlan. В таком случае необходимо повесить в js-коде обработч"
+        },
+        {
+            "value": "<p>Используйте inspect: </p>\n\n<pre><code>import inspect  \ndef t(a, b, c):  \n    pass  \n\ninspect.getargspec(t)  \n</code></pre>\n\n<p>Пример вывода:  </p>\n\n<pre><code>ArgSpec(args=['a', 'b', 'c'], varargs"
+        },
+        {
+            "value": "<p>Всмысле, авторизация в БД идёт не по логину:паролю из settings.py? Ну напишите, тогда sh скрипт для запуска пайчарма через <strong>su</strong> с юзером <strong>www-data</strong> типа</p>\n<pre><code"
+        },
+        {
+            "value": "<pre><code>f=open(filename)  \nfiletostr=f.read()  \nf.close()  \nresult=[int(k.split(\":=\")[1].strip()) for k in filetostr.split(\";\")]\n</code></pre>\n<p>Возможно, Вам поможет этот простой пример.<br>\n</p>"
+        },
+        {
+            "value": "<p>Возможно, не совсем правильно понял вопрос но:<br>\nЗадайте какой-нибудь метод для формы, которая будет менять лэйбл по ключу поля в атрибуте fields<br>\n</p>\n<pre><code>class SClientsForm(ModelForm)"
+        },
+        {
+            "value": "<p>Нет, это невозможно, и об этом написано в доках.</p>"
+        },
+        {
+            "value": "<p>Простой пример парсера, используются библиотеки Grab и PyQuery</p>\n<pre><code>from grab import Grab\nfrom pyquery import PyQuery as pq\nimport re\n\nNEWS_COUNT = 10\ndef loadPage(url):\n    g = Grab()\n  "
+        },
+        {
+            "value": "<p>А так?</p>\n<pre><code>from django.core.cache import cache\n\nkey = 'key'\ndata = cache.get(key)\n\nif data is None:\n    # update cache now...\n    cache.set(data, key, 3600)\n</code></pre>"
+        },
+        {
+            "value": "<p>Напишите свой <a href=\"https://docs.djangoproject.com/en/dev/howto/custom-template-tags/\">templatetag</a></p>"
+        },
+        {
+            "value": "<p>Если это веб-страница, посмотрите, какой метод передачи данных использует форма авторизации (скорее всего, POST), отправьте данные HTTP-запросом через urllib2, с полученным HTML делайте что хотите."
+        },
+        {
+            "value": "<p><a href=\"http://code.google.com/p/modwsgi/downloads/list\">http://code.google.com/p/modwsgi/downloads/list</a></p>"
+        },
+        {
+            "value": "<p>Если вы пишете код и в чем-то не уверены, что следуете стандарту - поставьте пакет pep8 - <a href=\"http://pypi.python.org/pypi/pep8\">http://pypi.python.org/pypi/pep8</a>. В нем есть скрипт, который"
+        },
+        {
+            "value": "<p>400 Bad Request (Плохой запрос) Означает, что сервер обнаружил в запросе клиента синтаксическую ошибку.</p>\n\n<p>Там по моему нужно не <code>user</code>, a <code>username</code>.</p>\n"
+        },
+        {
+            "value": "<p>Селениумом можно вполне успешно скролить страницу через джаваскрипт</p>\n\n<pre><code>WebDriver driver = new FirefoxDriver();\nJavascriptExecutor jse = (JavascriptExecutor)driver;\njse.executeScript(\"w"
+        },
+        {
+            "value": "<p>Вариантов несколько:</p>\n<pre><code>f.write(\"\\n\".join(list).join(\"\\n\"));\n</code></pre>\n<hr>\n<pre><code>for item in list:\n    f.write(\"%s\\n\" % item)\n</code></pre>\n<hr>\n<pre><code>import pickle\n# Хор"
+        },
+        {
+            "value": "<p>Используются стандартные спецификаторы, к примеру для вывода числа с плавающей точкой используется %f, к нему можно указать и точность, в Вашем коде будет так:</p>\n<pre><code>f.write(\"%.20f\" % item"
+        },
+        {
+            "value": "<pre><code>    #!/usr/bin/env python\n\n    import subprocess\n    from Queue import Queue\n    from threading import Thread\n    import MySQLdb\n    import time\n    from datetime import datetime\n\n    num_t"
+        },
+        {
+            "value": "<p>Для начала, наверное, нужно освоить основы Питона (Питон - язык многосторонний), а потом уже переходить к специальным разделам.</p>"
+        },
+        {
+            "value": "<p>Попробуйте <code>sympy.oo</code> вместо <code>oo</code>.</p>"
+        },
+        {
+            "value": "<ul>\n<li>Простые геометрические фигуры достаточно просто рисовать и анимировать в <a href=\"http://vpython.org/webdoc/visual/VisualIntro.html\">VPython</a> (Python + 3D графика).</li>\n<li>Хорошие 2D и 3"
+        },
+        {
+            "value": "<pre><code>raw_input()\n</code></pre>"
+        },
+        {
+            "value": "<p>Покажите сгенерированный django - sql запрос. Создайте (вручную) в базе индекс на поле <code>useraction.date</code>.</p>"
+        },
+        {
+            "value": "<p>Ubuntu server 11.10, Python 2.7.2 при корректной документированной установке пакета<br>\n</p>\n<pre><code>$python setup.py install\n</code></pre>\n<p>Установилось в <code>/usr/local/lib/python2.7/dist-"
+        },
+        {
+            "value": "<p>В папке scripts инсталляции Python есть скрипт uic (или pyuic), который конвертирует .ui файлы в питоновский код</p>"
+        },
+        {
+            "value": "<p>Самый классный способ научиться программировать на ЛЮБОМ ЯП - придумать себе задачу, и решить ее на выбранном ЯП.</p>"
+        },
+        {
+            "value": "<p>Ну намудрили ...  </p>\n\n<pre><code>result = list(data)\n</code></pre>\n"
+        },
+        {
+            "value": "<p>в начало файла добавить #coding: utf-8\nнапример</p>\n<pre><code>#!/usr/bin/python\n#coding: utf-8\n\nprint 'Hello!' # тестовый комментарий по-русски\n</code></pre>"
+        },
+        {
+            "value": "<p>Возможно не совсем в тему, но...\nЗадавался я ранее теми же вопросами что и Вы. Раньше использовал py2exe потом сверху проходился RARом для запаковки в один бинарник. Работало, но кривовато - требов"
+        },
+        {
+            "value": "<p>А там ее теперь <a href=\"http://docs.python.org/dev/library/string.html#module-string\">нет</a> в этом модуле. Теперь правильно писать так:</p>\n<pre><code>import string\nsong = \"The rain in Spain...\""
+        },
+        {
+            "value": "<p>Возможно так:</p>\n<pre><code>from Tkinter import *\n\nclass Application(Frame):\n    def say_hi(self):\n        self.label[\"text\"] = \"hi there, everyone!\"\n\n    def createWidgets(self):\n        self.f1 "
+        },
+        {
+            "value": "<p>Для этих целей в <code>python</code> предназначен механизм <a href=\"http://wiki.python.org/moin/PythonDecorators\" rel=\"nofollow noreferrer\"><strong>декораторов.</strong></a></p>\n\n<p><em>Пример испо"
+        },
+        {
+            "value": "<p>Использовал spynner и под виндоус и под линуксом, работает одинаково. Подводные камни в самом spynner, камней в запуске его нет.</p>"
+        },
+        {
+            "value": "<pre><code>import random\n\nprint random.random()\n</code></pre>"
+        },
+        {
+            "value": "<p>Если я правильно понял, вам нужен некий аналог multimap из C++. В python такого нет, но\nможно просто использовать dict, который хранит списки:</p>\n<pre><code>import collections\nfrom collections imp"
+        },
+        {
+            "value": "<p>Решил проблему используя не pack(), а place()</p>\n<pre><code>insert.place(anchor=NW)\n</code></pre>"
+        },
+        {
+            "value": "<p>Из документации по соответствующему <code>QueuePool</code>:</p>\n<blockquote>\n<p><strong>pool_size</strong> – The size of the pool to be maintained, defaults to 5. This is the largest number of conn"
+        },
+        {
+            "value": "<p>Попробуй стандартную библиотеку <a href=\"http://docs.python.org/library/code.html#code.InteractiveConsole\">code</a>.</p>"
+        },
+        {
+            "value": "<pre><code>s.find(u'Н')\n</code></pre>"
+        },
+        {
+            "value": "<p>Если Вы точно знаете, что работать всегда будете с шестизначными числами, действительно можете воспользоваться \"%\". Пример:</p>\n<pre><code>a = 5050\ns = \"%06d\" % a\n</code></pre>\n<p>После чего s == \""
+        },
+        {
+            "value": "<p>Ну что же Вы не задаете поисковикам соответствующий запрос? Вот вам статья 2008 г.: <a href=\"http://blog.artus.ru/ataki-protiv-sajtov/\">атаки против сайтов</a>.</p>"
+        },
+        {
+            "value": "<pre><code>from string import maketrans\n\ndef replace_text(text, valc):\n    \"\"\"\n    &gt;&gt;&gt; text = 'abcdefg'\n    &gt;&gt;&gt; valc = {'a': 1, 'g': 2}\n    &gt;&gt;&gt; print replace_text(text, valc"
+        },
+        {
+            "value": "<p>По первой части. Советую pyinstaller - \"компилирует\" в один исполняемый файл. На мой взляд этот вариант самый лучший. Установка проста:</p>\n<pre><code>python setup.py install\npython Configure.py\n</"
+        },
+        {
+            "value": "<blockquote>\n<p><a href=\"http://docs.python.org/reference/datamodel.html#object.__del__\"><code>__del__</code></a> - это метод, вызывающийся в\nслучае, если на соответствующий объект\nне остается ссылок."
+        },
+        {
+            "value": "<pre><code>self.ui.textEdit.append(i)\n</code></pre>"
+        },
+        {
+            "value": "<pre><code>policy = [tuple(o) for o in res2]\n</code></pre>"
+        },
+        {
+            "value": "<p><a href=\"http://deluge-torrent.org/\">Deluge</a> - Python</p>\n<p><a href=\"http://www.transmissionbt.com/\">Transmission</a> - C, C++, GTK+, Qt</p>\n<p><a href=\"http://ktorrent.org/\">KTorrent</a> - C, "
+        },
+        {
+            "value": "<p>С недавних пор, с версии 1.1.0, если быть точным, команда PySide начала делать прекомпилированные бинарники для windows/python 3.2. Взять можно <a href=\"http://qt-project.org/wiki/PySide_Binaries_W"
+        },
+        {
+            "value": "<p>cx_Freeze\nhttp://cx-freeze.sourceforge.net/</p>"
+        },
+        {
+            "value": "<pre><code>import wrap from textwrap\n\n':'.join(wrap(p, 2))\n</code></pre>\n<p>А так можно много способов придумать:</p>\n<pre><code>':'.join(re.split('(\\w{2})', p)[1::2])\n\n':'.join('%02x' % ord(b) for b "
+        },
+        {
+            "value": "<pre><code>list = [\"tra-ta-ta'123456'list-temp_bla-bla-bla.12\",\"pam-param'list_temp:opa'7'\",\"templa'list_tempte-0'23_.sr\"]\ndef action(string):\n    string = string.replace(\"'list_temp\",\"\")\n    return s"
+        },
+        {
+            "value": "<p>Воспользуйтесь модулем <a href=\"http://pypi.python.org/pypi/SendKeys\">SendKeys</a>.</p>\n<pre><code>import SendKeys\nSendKeys.SendKeys(\"\"\"\n    {LWIN}\n    {PAUSE .25}\n    r\n    Notepad.exe{ENTER}\n    "
+        },
+        {
+            "value": "<p>Возможен вариант двух генераторов, что сделает меньшим, конечно, только кол-во строк.</p>\n<p>Само выражение становится сложнее:</p>\n<p><code>x = [dbHandle.execute(sql.format(j1[0], mul_add)).fetcha"
+        },
+        {
+            "value": "<p>Думаю более приемлем вариант на русском, и как сказал \"Котик\" достаточно изучить Qt, например <a href=\"http://www.debugni.ru/index.php/qt45.html\">Книга Макса Шлее</a>.</p>"
+        },
+        {
+            "value": "<p><a href=\"http://code.google.com/p/gmpy/\">Проект GMPY</a> не устроит? Биндинги к gmp и mpfr.</p>"
+        },
+        {
+            "value": "<pre><code>если устранавливаете какие-то пакеты из архивов то вам просто необходимо установить утилиту easy install документация к ней есть..\nесли посредством инсталл пакетов - то там обычно просто на"
+        },
+        {
+            "value": "<pre><code>from django.shortcuts import redirect\n\ndef my_view(request):\n    ...\n    if res:\n        return redirect('http://yandex.ru/')\n    else:\n</code></pre>\n<p><a href=\"https://docs.djangoproject."
+        },
+        {
+            "value": "<p>Для одноразового прочтения - <a href=\"http://www.parashift.com/c++-faq-lite/\"><strong>C++ FAQ</strong></a>, сразу же после него <a href=\"http://yosefk.com/c++fqa/\"><strong>С++ FQA.</strong></a> </p"
+        },
+        {
+            "value": "<p>Использование списков отображения могло бы быть эффективно только лишь в том случае, когда вы <strong>действительно много</strong> раз подряд выводите <strong>один и тот же объект</strong>, но, ска"
+        },
+        {
+            "value": "<p>Если бы мы читали книги, то:</p>\n\n<p>Увидели бы это\n<img src=\"https://i.imgur.com/0XStx.png\" alt=\"alt text\"></p>\n\n<p>а так же это\n<img src=\"https://i.imgur.com/quNsA.png\" alt=\"alt text\"></p>\n\n<p>а "
+        },
+        {
+            "value": "<p>Решение в лоб:</p>\n<pre><code>s := raw_input()\nd = filter(None, s.split(\" \"))\n</code></pre>\n<p>теперь в d list вида ['23', '43', '45', '32', '12'].</p>\n<p>---- upd ----</p>\n<p>а ещё можно добавить "
+        },
+        {
+            "value": "<pre><code>import sys\n\ndef convert(a, b):\n    try:\n        a, b = float(a), float(b)\n    except:\n        return (None, None)\n    else:\n        return (a, b)\n\ndef my_input(s):\n    inp = raw_input('Ente"
+        },
+        {
+            "value": "<p>Можно еще так:</p>\n<pre><code>class TestModel(models.Model):   \n    image = models.ImageField(upload_to=lambda s, f: TestModel.getUploadPath(s, f),\\\n                              blank=True, verbos"
+        },
+        {
+            "value": "<p>есть понятие <a href=\"https://docs.djangoproject.com/en/dev/ref/templates/api/#rendering-a-context\">context processor</a>. То есть ты пишешь функции, суть которых всегда возвращать тебе определенны"
+        },
+        {
+            "value": "<pre><code>st = raw_input()\n\ntry:\n    st = float(st)\nexcept ValueError:\n    print 'not float'\nelse:\n    print 'float'\n</code></pre>"
+        },
+        {
+            "value": "<pre><code>data = request.POST\nmenu = dict(MyForm.CHOICES).get(data['menu'])\n</code></pre>"
+        }
+    ]
+}

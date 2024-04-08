@@ -3,7 +3,6 @@ import json
 import os
 
 def parse_large_json(file_path):
-    # Открытие файла для потоковой обработки
     with open(file_path, 'rb') as file:
         # Словарь для хранения вопросов и наилучших ответов
         qa_pairs = {}
@@ -19,12 +18,13 @@ def parse_large_json(file_path):
             if (post_tag is not None) and (post_tag.find('python') == -1):
                 continue
             if post_type == '1':  # Вопрос
-                qa_pairs[post['Id']] = [post['Title'] + ' ' + post['Body'], '']  # Инициализация с пустым ответом
+                # Инициализация с пустым ответом:
+                qa_pairs[post['Id']] = [post['Title'] + ' ' + post['Body'], '']
             elif post_type == '2':  # Ответ
                 parent_id = post.get('ParentId')
                 score = int(post.get('Score', 0))
                 
-                # Обновляем лучший ответ, если текущий ответ имеет больший score
+                # Обновляем лучший ответ, если текущий ответ имеет больший score:
                 if parent_id in qa_pairs:
                     _, current_max_score = answers_max_scores.get(parent_id, ('', 0))
                     if score > current_max_score:
@@ -71,17 +71,6 @@ file_path = os.path.realpath(__file__)
 # script_dir - полный путь до posts.json
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
-
 final_pairs = parse_large_json(script_dir + '/posts_short.json')
 
-data = {}
-data['people'] = []
-data['people'].append({
-    'name': 'Scott',
-    'website': 'pythonist.ru',
-    'from': 'Nebraska'
-})
-
 print('Создание и запись файлов прошла успешно')
-
-
